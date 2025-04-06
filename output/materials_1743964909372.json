@@ -1,0 +1,58 @@
+{
+  "material_quantities": {
+    "foundation_and_structure": {
+      "concrete_cubic_meters": 0,
+      "rebar_kilograms": 0,
+      "formwork_square_meters": 0
+    },
+    "walls": {
+      "internal": {
+        "drywall_square_meters": 0,
+        "insulation_square_meters": 0,
+        "paint_liters": 0
+      },
+      "external": {
+        "brick_square_meters": 0,
+        "mortar_kilograms": 0,
+        "paint_liters": 0
+      }
+    },
+    "flooring": {
+      "concrete_cubic_meters": 0,
+      "tile_square_meters": 0,
+      "carpet_square_meters": 0
+    },
+    "ceiling": {
+      "drywall_square_meters": 0,
+      "paint_liters": 0
+    },
+    "roofing": {
+      "roof_tiles_square_meters": 0,
+      "roof_felt_square_meters": 0,
+      "roof_battens_meters": 0
+    },
+    "doors_and_windows": {
+      "doors_units": 0,
+      "windows_square_meters": 0
+    },
+    "finishes": {
+      "paint_liters": 0,
+      "tiles_square_meters": 0,
+      "skirting_board_meters": 0
+    },
+    "electrical": {
+      "cable_meters": 0,
+      "sockets_units": 0,
+      "switches_units": 0
+    },
+    "plumbing": {
+      "pipe_meters": 0,
+      "fittings_units": 0,
+      "sanitary_fixtures_units": 0
+    },
+    "hvac": {
+      "ductwork_meters": 0,
+      "units_units": 0
+    }
+  }
+}

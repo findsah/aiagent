@@ -1,649 +1,536 @@
 {
   "architectural_analysis": {
-    "response": {
-      "room_analysis": [
-        {
-          "name": "Living Room",
-          "internal_dimensions": {
-            "length": 6.4,
-            "width": 3.4,
-            "height": 2.4
-          },
-          "external_dimensions": {
-            "length": 6.8,
-            "width": 3.8,
-            "height": 2.4
-          },
-          "floor_area": {
-            "internal": 21.76,
-            "external": 25.84
-          },
-          "wall_surface_area": {
-            "internal": 47.04,
-            "external": 51.84
-          },
-          "ceiling_area": 21.76,
-          "skirting_board_length": 19.6
-        },
+    "analysis_results": {
+      "rooms": [
         {
           "name": "Kitchen",
-          "internal_dimensions": {
-            "length": 3.6,
-            "width": 2.7,
-            "height": 2.4
-          },
-          "external_dimensions": {
-            "length": 4,
-            "width": 3.1,
-            "height": 2.4
-          },
+          "internal_dimensions": "4.2m x 3.5m x 2.4m",
+          "external_dimensions": "4.6m x 3.9m x 2.4m",
           "floor_area": {
-            "internal": 9.72,
-            "external": 12.4
+            "internal": 14.7,
+            "external": 17.94
           },
-          "wall_surface_area": {
-            "internal": 29.88,
-            "external": 33.84
-          },
-          "ceiling_area": 9.72,
-          "skirting_board_length": 12.6
+          "wall_surface_area": 72.48,
+          "ceiling_area": 14.7,
+          "skirting_board_length": 15.4
         },
         {
-          "name": "Bedroom 2",
-          "internal_dimensions": {
-            "length": 5.8,
-            "width": 3.1,
-            "height": 2.4
-          },
-          "external_dimensions": {
-            "length": 6.2,
-            "width": 3.5,
-            "height": 2.4
-          },
+          "name": "Living Room",
+          "internal_dimensions": "6.0m x 4.5m x 2.4m",
+          "external_dimensions": "6.4m x 4.9m x 2.4m",
           "floor_area": {
-            "internal": 17.98,
-            "external": 21.7
+            "internal": 27,
+            "external": 31.36
           },
-          "wall_surface_area": {
-            "internal": 43.32,
-            "external": 48.24
+          "wall_surface_area": 106.56,
+          "ceiling_area": 27,
+          "skirting_board_length": 21
+        },
+        {
+          "name": "Dining Area",
+          "internal_dimensions": "4.0m x 3.8m x 2.4m",
+          "external_dimensions": "4.4m x 4.2m x 2.4m",
+          "floor_area": {
+            "internal": 15.2,
+            "external": 18.48
           },
-          "ceiling_area": 17.98,
-          "skirting_board_length": 17.8
+          "wall_surface_area": 83.52,
+          "ceiling_area": 15.2,
+          "skirting_board_length": 15.6
         },
         {
           "name": "Bathroom",
-          "internal_dimensions": {
-            "length": 6.9,
-            "width": 3.2,
-            "height": 2.4
-          },
-          "external_dimensions": {
-            "length": 7.3,
-            "width": 3.6,
-            "height": 2.4
-          },
+          "internal_dimensions": "2.5m x 2.0m x 2.4m",
+          "external_dimensions": "2.9m x 2.4m x 2.4m",
           "floor_area": {
-            "internal": 22.08,
-            "external": 26.28
+            "internal": 5,
+            "external": 6.96
           },
-          "wall_surface_area": {
-            "internal": 48.96,
-            "external": 54.72
-          },
-          "ceiling_area": 22.08,
-          "skirting_board_length": 20.2
+          "wall_surface_area": 33.12,
+          "ceiling_area": 5,
+          "skirting_board_length": 9
         },
         {
-          "name": "Dining Room",
-          "internal_dimensions": {
-            "length": 4.8,
-            "width": 4.3,
-            "height": 2.4
-          },
-          "external_dimensions": {
-            "length": 5.2,
-            "width": 4.7,
-            "height": 2.4
-          },
+          "name": "Hallway",
+          "internal_dimensions": "5.0m x 1.5m x 2.4m",
+          "external_dimensions": "5.4m x 1.9m x 2.4m",
           "floor_area": {
-            "internal": 20.64,
-            "external": 24.44
+            "internal": 7.5,
+            "external": 10.26
           },
-          "wall_surface_area": {
-            "internal": 44.64,
-            "external": 50.16
-          },
-          "ceiling_area": 20.64,
-          "skirting_board_length": 16.2
-        },
-        {
-          "name": "Office",
-          "internal_dimensions": {
-            "length": 4,
-            "width": 4.6,
-            "height": 2.4
-          },
-          "external_dimensions": {
-            "length": 4.4,
-            "width": 5,
-            "height": 2.4
-          },
-          "floor_area": {
-            "internal": 18.4,
-            "external": 22
-          },
-          "wall_surface_area": {
-            "internal": 41.28,
-            "external": 47.04
-          },
-          "ceiling_area": 18.4,
-          "skirting_board_length": 17.2
+          "wall_surface_area": 48.24,
+          "ceiling_area": 7.5,
+          "skirting_board_length": 13
         }
       ],
-      "total_building_dimensions": {
-        "width": "Estimate Required",
-        "length": "Estimate Required",
-        "height": 2.4
-      },
-      "total_floor_area": {
-        "internal": 110.58,
-        "external": "Estimate Required"
-      },
-      "total_wall_area": {
-        "internal": 255.12,
-        "external": "Estimate Required"
-      },
-      "volume_calculations": {
-        "internal_volume": 265.392,
-        "external_volume": "Estimate Required"
+      "total_building": {
+        "dimensions": "19.4m x 9.9m x 2.4m",
+        "floor_area": {
+          "internal": 69.4,
+          "external": 85.02
+        },
+        "wall_area": {
+          "internal": 343.92,
+          "external": 379.2
+        },
+        "volume": {
+          "internal": 166.56,
+          "external": 204.048
+        }
       }
     }
   },
   "materials_quantities": {
-    "response": {
+    "material_quantities": {
       "foundation_materials": {
         "concrete": {
-          "quantity": 185.76,
+          "quantity": 23.4,
           "unit": "cubic meters",
-          "purpose": "To create the foundation slab and footings for structural support"
+          "location": "foundation",
+          "purpose": "structural support"
         },
         "rebar": {
-          "quantity": 6910,
+          "quantity": 800,
           "unit": "kilograms",
-          "purpose": "Reinforcement for the concrete foundation slab and footings"
+          "location": "foundation",
+          "purpose": "reinforcement"
         }
       },
       "structural_materials": {
         "bricks": {
-          "quantity": 26250,
-          "unit": "number",
-          "purpose": "Building external and internal walls"
-        },
-        "timber": {
-          "quantity": 300,
-          "unit": "cubic meters",
-          "purpose": "Structural frames and roofing support"
+          "quantity": 7400,
+          "unit": "pieces",
+          "location": "external walls",
+          "purpose": "wall construction"
         },
         "blocks": {
-          "quantity": 4200,
-          "unit": "number",
-          "purpose": "Supplementary structural and non-load bearing walls"
+          "quantity": 5500,
+          "unit": "pieces",
+          "location": "internal walls",
+          "purpose": "wall construction"
+        },
+        "timber": {
+          "quantity": 4300,
+          "unit": "linear meters",
+          "location": "roof and frame",
+          "purpose": "structural framing"
         }
       },
       "finishing_materials": {
-        "rooms": [
-          {
-            "name": "Living Room",
-            "flooring": {
-              "hardwood": {
-                "quantity": 21.76,
-                "unit": "square meters"
-              }
-            },
-            "wall_coverings": {
-              "paint": {
-                "quantity": 47.04,
-                "unit": "square meters"
-              }
-            },
-            "ceiling_treatments": {
-              "plaster": {
-                "quantity": 21.76,
-                "unit": "square meters"
-              }
+        "flooring": {
+          "kitchen": {
+            "porcelain tiles": {
+              "quantity": 14.7,
+              "unit": "square meters",
+              "purpose": "flooring"
             }
           },
-          {
-            "name": "Kitchen",
-            "flooring": {
-              "tiles": {
-                "quantity": 9.72,
-                "unit": "square meters"
-              }
-            },
-            "wall_coverings": {
-              "tiles": {
-                "quantity": 15,
-                "unit": "square meters"
-              },
-              "paint": {
-                "quantity": 14.88,
-                "unit": "square meters"
-              }
-            },
-            "ceiling_treatments": {
-              "plaster": {
-                "quantity": 9.72,
-                "unit": "square meters"
-              }
+          "living_room": {
+            "hardwood floor": {
+              "quantity": 27,
+              "unit": "square meters",
+              "purpose": "flooring"
             }
           },
-          {
-            "name": "Bedroom 2",
-            "flooring": {
-              "carpet": {
-                "quantity": 17.98,
-                "unit": "square meters"
-              }
-            },
-            "wall_coverings": {
-              "wallpaper": {
-                "quantity": 43.32,
-                "unit": "square meters"
-              }
-            },
-            "ceiling_treatments": {
-              "plaster": {
-                "quantity": 17.98,
-                "unit": "square meters"
-              }
+          "dining_area": {
+            "porcelain tiles": {
+              "quantity": 15.2,
+              "unit": "square meters",
+              "purpose": "flooring"
             }
           },
-          {
-            "name": "Bathroom",
-            "flooring": {
-              "tiles": {
-                "quantity": 22.08,
-                "unit": "square meters"
-              }
-            },
-            "wall_coverings": {
-              "tiles": {
-                "quantity": 48.96,
-                "unit": "square meters"
-              }
-            },
-            "ceiling_treatments": {
-              "water-resistant paint": {
-                "quantity": 22.08,
-                "unit": "square meters"
-              }
+          "bathroom": {
+            "ceramic tiles": {
+              "quantity": 5,
+              "unit": "square meters",
+              "purpose": "flooring"
             }
           },
-          {
-            "name": "Dining Room",
-            "flooring": {
-              "laminate": {
-                "quantity": 20.64,
-                "unit": "square meters"
-              }
-            },
-            "wall_coverings": {
-              "paint": {
-                "quantity": 44.64,
-                "unit": "square meters"
-              }
-            },
-            "ceiling_treatments": {
-              "plaster": {
-                "quantity": 20.64,
-                "unit": "square meters"
-              }
-            }
-          },
-          {
-            "name": "Office",
-            "flooring": {
-              "carpet": {
-                "quantity": 18.4,
-                "unit": "square meters"
-              }
-            },
-            "wall_coverings": {
-              "paint": {
-                "quantity": 41.28,
-                "unit": "square meters"
-              }
-            },
-            "ceiling_treatments": {
-              "plaster": {
-                "quantity": 18.4,
-                "unit": "square meters"
-              }
+          "hallway": {
+            "laminate": {
+              "quantity": 7.5,
+              "unit": "square meters",
+              "purpose": "flooring"
             }
           }
-        ]
+        },
+        "wall_coverings": {
+          "paint": {
+            "kitchen": {
+              "quantity": 72.48,
+              "unit": "square meters",
+              "purpose": "wall painting"
+            },
+            "living_room": {
+              "quantity": 106.56,
+              "unit": "square meters",
+              "purpose": "wall painting"
+            },
+            "dining_area": {
+              "quantity": 83.52,
+              "unit": "square meters",
+              "purpose": "wall painting"
+            },
+            "hallway": {
+              "quantity": 48.24,
+              "unit": "square meters",
+              "purpose": "wall painting"
+            }
+          },
+          "tiles": {
+            "bathroom": {
+              "quantity": 33.12,
+              "unit": "square meters",
+              "purpose": "wall tiling"
+            }
+          }
+        },
+        "ceiling_treatments": {
+          "plasterboard": {
+            "overall_ceiling": {
+              "quantity": 69.4,
+              "unit": "square meters",
+              "purpose": "ceiling finishing"
+            }
+          }
+        }
       },
       "fixtures_and_fittings": {
-        "sanitaryware": {
-          "kitchen_sinks": 1,
-          "toilets": 2,
-          "shower_units": 1,
-          "bathtubs": 1
+        "kitchen_cabinets": {
+          "quantity": 6,
+          "unit": "unit",
+          "room": "kitchen",
+          "purpose": "storage"
         },
-        "lighting": {
-          "LED_downlights": {
-            "quantity": 35,
-            "unit": "number"
+        "bathroom_fixtures": {
+          "toilet": {
+            "quantity": 1,
+            "room": "bathroom",
+            "purpose": "sanitary"
           },
-          "pendant_lights": {
-            "quantity": 5,
-            "unit": "number"
+          "shower": {
+            "quantity": 1,
+            "room": "bathroom",
+            "purpose": "sanitary"
+          },
+          "sink": {
+            "quantity": 1,
+            "room": "bathroom",
+            "purpose": "sanitary"
           }
         }
       },
       "electrical_components": {
-        "wiring": {
-          "length": 1500,
-          "unit": "meters"
+        "light_switches": {
+          "quantity": 10,
+          "unit": "pieces",
+          "rooms": [
+            "kitchen",
+            "living_room",
+            "dining_area",
+            "bathroom",
+            "hallway"
+          ],
+          "purpose": "control lighting"
         },
-        "switches": {
-          "quantity": 20,
-          "unit": "number"
-        },
-        "outlets": {
+        "power_outlets": {
           "quantity": 40,
-          "unit": "number"
+          "unit": "pieces",
+          "rooms": [
+            "kitchen",
+            "living_room",
+            "dining_area",
+            "bathroom",
+            "hallway"
+          ],
+          "purpose": "power supply"
         }
       },
       "plumbing_components": {
         "pipes": {
-          "length": 200,
-          "unit": "meters"
+          "quantity": 120,
+          "unit": "linear meters",
+          "location": "entire house",
+          "purpose": "water distribution and waste removal"
         },
-        "connectors": {
-          "quantity": 100,
-          "unit": "number"
+        "fittings": {
+          "quantity": 65,
+          "unit": "pieces",
+          "location": "connection points",
+          "purpose": "joining and sealing pipes"
         }
       }
     }
   },
   "task_breakdown": {
-    "taskBreakdown": [
+    "tasks": [
       {
-        "Task ID": "001",
-        "Name": "Site Preparation",
-        "Construction Stage": "Pre-construction",
-        "Description": "Clearing the site, setting up fencing and temporary utilities.",
-        "Estimated Duration (days)": 10,
-        "Required Labor": {
-          "person-days": 50,
-          "specific_trades": [
-            "general laborer"
-          ]
+        "task_id": "1",
+        "name": "Site Preparation",
+        "stage": "Site Preparation",
+        "description": "Clear the site of vegetation, debris, and other obstructions. Establish site boundaries and levels, set up site services. Prepare for initial site inspections.",
+        "duration": "4",
+        "required_labor": {
+          "general_laborers": "8 person-days",
+          "site_supervisor": "4 person-days"
         },
-        "Dependencies": [],
-        "Materials Used": [],
-        "Quality Control Requirements": "Ensure site is cleared according to plan, with all debris removed.",
-        "Room/location specific details": "Whole site"
+        "dependencies": [],
+        "materials_used": [],
+        "quality_control_requirements": "Verify that site has been cleared and properly leveled. Confirm that all necessary utilities and site services are properly installed.",
+        "room_location": "Entire site"
       },
       {
-        "Task ID": "002",
-        "Name": "Foundation and Footing",
-        "Construction Stage": "Foundation",
-        "Description": "Excavation and pouring of concrete for foundation and footing including placement of rebar.",
-        "Estimated Duration (days)": 15,
-        "Required Labor": {
-          "person-days": 75,
-          "specific_trades": [
-            "excavator",
-            "concrete worker"
-          ]
+        "task_id": "2",
+        "name": "Foundation Excavation",
+        "stage": "Foundations",
+        "description": "Excavation for the foundation according to specified depth and dimensions following engineering plans.",
+        "duration": "3",
+        "required_labor": {
+          "excavator": "2 person-days",
+          "general_laborers": "10 person-days"
         },
-        "Dependencies": [
-          "001"
+        "dependencies": [
+          "1"
         ],
-        "Materials Used": [
+        "materials_used": [],
+        "quality_control_requirements": "Ensure depth and dimensions meet structural requirements as per the engineering drawings.",
+        "room_location": "Foundation area"
+      },
+      {
+        "task_id": "3",
+        "name": "Foundation Construction",
+        "stage": "Foundations",
+        "description": "Lay down and secure the rebar framework, followed by concrete pouring to form the foundation.",
+        "duration": "5",
+        "required_labor": {
+          "concrete_workers": "12 person-days",
+          "reinforcing_ironworkers": "6 person-days"
+        },
+        "dependencies": [
+          "2"
+        ],
+        "materials_used": [
           {
             "material": "Concrete",
-            "quantity": "185.76 cubic meters"
+            "quantity": "23.4 cubic meters"
           },
           {
             "material": "Rebar",
-            "quantity": "6910 kilograms"
+            "quantity": "800 kilograms"
           }
         ],
-        "Quality Control Requirements": "Concrete mix and rebar placement must meet structural engineering specifications.",
-        "Room/location specific details": "Whole building foundation"
+        "quality_control_requirements": "Ensure all reinforcement bars are securely tied and concrete is vibrated properly to avoid air gaps.",
+        "room_location": "Foundation area"
       },
       {
-        "Task ID": "003",
-        "Name": "Structural Framing",
-        "Construction Stage": "Superstructure",
-        "Description": "Construction of structural frames using timber, including roof trusses.",
-        "Estimated Duration (days)": 30,
-        "Required Labor": {
-          "person-days": 180,
-          "specific_trades": [
-            "carpenter",
-            "framer"
-          ]
+        "task_id": "4",
+        "name": "Structural Wall Construction",
+        "stage": "Superstructure",
+        "description": "Build external and internal walls using bricks and blocks. Includes setting up door and window frames.",
+        "duration": "10",
+        "required_labor": {
+          "bricklayers": "16 person-days",
+          "helpers": "16 person-days"
         },
-        "Dependencies": [
-          "002"
+        "dependencies": [
+          "3"
         ],
-        "Materials Used": [
-          {
-            "material": "Timber",
-            "quantity": "300 cubic meters"
-          }
-        ],
-        "Quality Control Requirements": "Frames and trusses must align with architectural plans and structural integrity requirements.",
-        "Room/location specific details": "Entire building"
-      },
-      {
-        "Task ID": "004",
-        "Name": "Wall Construction",
-        "Construction Stage": "Superstructure",
-        "Description": "Building internal and external walls using bricks and blocks.",
-        "Estimated Duration (days)": 40,
-        "Required Labor": {
-          "person-days": 200,
-          "specific_trades": [
-            "mason",
-            "bricklayer"
-          ]
-        },
-        "Dependencies": [
-          "003"
-        ],
-        "Materials Used": [
+        "materials_used": [
           {
             "material": "Bricks",
-            "quantity": "26250 number"
+            "quantity": "7400 pieces"
           },
           {
             "material": "Blocks",
-            "quantity": "4200 number"
+            "quantity": "5500 pieces"
           }
         ],
-        "Quality Control Requirements": "Walls must be level and meet designated wall thickness and height as per plans.",
-        "Room/location specific details": "All rooms"
+        "quality_control_requirements": "Check that all walls are vertical and level with correct dimensions and openings for doors and windows.",
+        "room_location": "External and internal walls"
       },
       {
-        "Task ID": "005",
-        "Name": "Roof Installation",
-        "Construction Stage": "Roofing",
-        "Description": "Installation of roofing materials and ensuring waterproofing.",
-        "Estimated Duration (days)": 20,
-        "Required Labor": {
-          "person-days": 80,
-          "specific_trades": [
-            "roofer"
-          ]
+        "task_id": "5",
+        "name": "Roof Framing and Covering",
+        "stage": "Superstructure",
+        "description": "Construct the roof frame using timber, followed by roofing materials to cover the structure securely.",
+        "duration": "8",
+        "required_labor": {
+          "carpenters": "14 person-days",
+          "roofers": "10 person-days"
         },
-        "Dependencies": [
-          "004"
+        "dependencies": [
+          "4"
         ],
-        "Materials Used": [],
-        "Quality Control Requirements": "Roof must be properly secured and leak-proof.",
-        "Room/location specific details": "Entire building"
+        "materials_used": [
+          {
+            "material": "Timber",
+            "quantity": "4300 linear meters"
+          }
+        ],
+        "quality_control_requirements": "Ensure that the roof frame is structurally sound and the roofing material is properly installed and waterproof.",
+        "room_location": "Roof area"
       },
       {
-        "Task ID": "006",
-        "Name": "Plumbing Installation",
-        "Construction Stage": "Systems Installation",
-        "Description": "Installation of all plumbing systems, including pipes and connections, as well as bathroom and kitchen fixtures.",
-        "Estimated Duration (days)": 15,
-        "Required Labor": {
-          "person-days": 75,
-          "specific_trades": [
-            "plumber"
-          ]
+        "task_id": "6",
+        "name": "Plumbing Installation",
+        "stage": "Utility Systems",
+        "description": "Install all pipes and fittings for water distribution and waste removal throughout the house.",
+        "duration": "7",
+        "required_labor": {
+          "plumbers": "10 person-days",
+          "helpers": "7 person-days"
         },
-        "Dependencies": [
-          "004"
+        "dependencies": [
+          "4"
         ],
-        "Materials Used": [
+        "materials_used": [
           {
             "material": "Pipes",
-            "quantity": "200 meters"
+            "quantity": "120 linear meters"
           },
           {
-            "material": "Connectors",
-            "quantity": "100 number"
-          },
-          {
-            "material": "Kitchen sinks",
-            "quantity": "1 number"
-          },
-          {
-            "material": "Toilets",
-            "quantity": "2 number"
-          },
-          {
-            "material": "Shower units",
-            "quantity": "1 number"
-          },
-          {
-            "material": "Bathtubs",
-            "quantity": "1 number"
+            "material": "Fittings",
+            "quantity": "65 pieces"
           }
         ],
-        "Quality Control Requirements": "All fixtures must be installed correctly and tested for leaks.",
-        "Room/location specific details": "Kitchen and bathrooms"
+        "quality_control_requirements": "All piping must be pressure tested for leaks and comply with local building codes.",
+        "room_location": "Entire house"
       },
       {
-        "Task ID": "007",
-        "Name": "Electrical Installation",
-        "Construction Stage": "Systems Installation",
-        "Description": "Wiring of the entire house, including installation of switches and outlets.",
-        "Estimated Duration (days)": 15,
-        "Required Labor": {
-          "person-days": 75,
-          "specific_trades": [
-            "electrician"
-          ]
+        "task_id": "7",
+        "name": "Electrical Installation",
+        "stage": "Utility Systems",
+        "description": "Install all necessary wiring, outlets, and switches for the electrical supply throughout the house.",
+        "duration": "6",
+        "required_labor": {
+          "electricians": "10 person-days",
+          "helpers": "6 person-days"
         },
-        "Dependencies": [
-          "004"
+        "dependencies": [
+          "4"
         ],
-        "Materials Used": [
+        "materials_used": [
           {
-            "material": "Wiring",
-            "quantity": "1500 meters"
+            "material": "Light switches",
+            "quantity": "10 pieces"
           },
           {
-            "material": "Switches",
-            "quantity": "20 number"
-          },
-          {
-            "material": "Outlets",
-            "quantity": "40 number"
+            "material": "Power outlets",
+            "quantity": "40 pieces"
           }
         ],
-        "Quality Control Requirements": "Wiring must comply with electrical safety regulations and all fixtures must be tested.",
-        "Room/location specific details": "All rooms"
+        "quality_control_requirements": "Ensure compliance with electrical safety standards and building codes. Testing for correct functioning and safety.",
+        "room_location": "Entire house"
       },
       {
-        "Task ID": "008",
-        "Name": "Interior Finishing",
-        "Construction Stage": "Finishing",
-        "Description": "Applying wall finishes such as paint, wallpaper, tiles in specific rooms as well as ceiling treatments and floor installation.",
-        "Estimated Duration (days)": 25,
-        "Required Labor": {
-          "person-days": 125,
-          "specific_trades": [
-            "painter",
-            "carpet layer",
-            "tiler",
-            "plasterer"
-          ]
+        "task_id": "8",
+        "name": "Interior Wall Painting",
+        "stage": "Finishing",
+        "description": "Apply paint to the interior walls in various rooms according to color schemes and paint types specified.",
+        "duration": "4",
+        "required_labor": {
+          "painters": "12 person-days",
+          "helpers": "4 person-days"
         },
-        "Dependencies": [
-          "005",
-          "006",
-          "007"
+        "dependencies": [
+          "6",
+          "7"
         ],
-        "Materials Used": [
+        "materials_used": [
           {
-            "material": "Hardwood flooring",
-            "quantity": "21.76 square meters"
+            "material": "Paint",
+            "quantity": "310.8 square meters"
+          }
+        ],
+        "quality_control_requirements": "Check for consistent paint coverage, correct color matching, and neat finishes around edges.",
+        "room_location": "All rooms"
+      },
+      {
+        "task_id": "9",
+        "name": "Flooring Installation",
+        "stage": "Finishing",
+        "description": "Install different types of flooring materials in specified rooms including ceramic preparation and fitting.",
+        "duration": "5",
+        "required_labor": {
+          "floor installers": "12 person-days",
+          "helpers": "5 person-days"
+        },
+        "dependencies": [
+          "8"
+        ],
+        "materials_used": [
+          {
+            "material": "Porcelain tiles",
+            "quantity": "29.9 square meters"
           },
           {
-            "material": "Carpet",
-            "quantity": "36.38 square meters"
+            "material": "Hardwood floor",
+            "quantity": "27.0 square meters"
           },
           {
-            "material": "Tiles",
-            "quantity": "80.76 square meters"
+            "material": "Ceramic tiles",
+            "quantity": "5.0 square meters"
           },
           {
             "material": "Laminate",
-            "quantity": "20.64 square meters"
-          },
-          {
-            "material": "Paint",
-            "quantity": "190.16 square meters"
-          },
-          {
-            "material": "Wallpaper",
-            "quantity": "43.32 square meters"
-          },
-          {
-            "material": "Plaster",
-            "quantity": "108.12 square meters"
-          },
-          {
-            "material": "Water-resistant paint",
-            "quantity": "22.08 square meters"
+            "quantity": "7.5 square meters"
           }
         ],
-        "Quality Control Requirements": "Finishes must be even and free of defects, colors and materials should match the selections in the design specifications.",
-        "Room/location specific details": "All rooms"
+        "quality_control_requirements": "Floors must be level and properly aligned. Tiles should be evenly spaced and securely set.",
+        "room_location": "Specific rooms per flooring type"
       },
       {
-        "Task ID": "009",
-        "Name": "Final Inspection and Cleanup",
-        "Construction Stage": "Completion",
-        "Description": "A thorough inspection of the construction work to ensure everything is up to code followed by a detailed cleaning.",
-        "Estimated Duration (days)": 5,
-        "Required Labor": {
-          "person-days": 25,
-          "specific_trades": [
-            "inspector",
-            "cleaning crew"
-          ]
+        "task_id": "10",
+        "name": "Fixture and Cabinet Installation",
+        "stage": "Finishing",
+        "description": "Install all kitchen cabinets, bathroom fixtures, and fittings.",
+        "duration": "3",
+        "required_labor": {
+          "carpenters": "6 person-days",
+          "plumbers": "3 person-days"
         },
-        "Dependencies": [
-          "008"
+        "dependencies": [
+          "9"
         ],
-        "Materials Used": [],
-        "Quality Control Requirements": "Achieve final approval from building inspector.",
-        "Room/location specific details": "Whole building"
+        "materials_used": [
+          {
+            "material": "Kitchen cabinets",
+            "quantity": "6 units"
+          },
+          {
+            "material": "Toilet",
+            "quantity": "1"
+          },
+          {
+            "material": "Shower",
+            "quantity": "1"
+          },
+          {
+            "material": "Sink",
+            "quantity": "1"
+          }
+        ],
+        "quality_control_requirements": "Inspect installations for secure fitting and proper function. Ensure all cabinets and fixtures are level and properly aligned.",
+        "room_location": "Kitchen and bathroom"
+      },
+      {
+        "task_id": "11",
+        "name": "Final Inspection and Cleanup",
+        "stage": "Completion",
+        "description": "Perform final inspections to comply with local regulations. Final cleanup of the construction site.",
+        "duration": "2",
+        "required_labor": {
+          "general_laborers": "4 person-days",
+          "site_supervisor": "2 person-days"
+        },
+        "dependencies": [
+          "10"
+        ],
+        "materials_used": [],
+        "quality_control_requirements": "Ensure the building meets all local building codes and regulatory requirements. Prepare and clear the site for occupancy.",
+        "room_location": "Entire house"
       }
     ]
   },
-  "generated_at": "2025-04-06T14:43:01.159Z"
+  "generated_at": "2025-04-06T19:10:00.903Z"
 }

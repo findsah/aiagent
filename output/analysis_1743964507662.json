@@ -1,0 +1,46 @@
+{
+  "architectural_analysis": {
+    "building_analysis": {
+      "total_internal_dimensions": {
+        "length": "N/A",
+        "width": "N/A",
+        "height": "N/A"
+      },
+      "total_external_dimensions": {
+        "length": "N/A",
+        "width": "N/A",
+        "height": "N/A"
+      },
+      "total_floor_area": {
+        "internal": "N/A",
+        "external": "N/A"
+      },
+      "total_wall_surface_area": "N/A",
+      "total_ceiling_area": "N/A",
+      "total_volume": "N/A"
+    },
+    "room_details": [
+      {
+        "name": "N/A",
+        "internal_dimensions": {
+          "length": "N/A",
+          "width": "N/A",
+          "height": "N/A"
+        },
+        "external_dimensions": {
+          "length": "N/A",
+          "width": "N/A",
+          "height": "N/A"
+        },
+        "floor_area": {
+          "internal": "N/A",
+          "external": "N/A"
+        },
+        "wall_surface_area": "N/A",
+        "ceiling_area": "N/A",
+        "volume": "N/A",
+        "skirting_board_length": "N/A"
+      }
+    ]
+  }
+}

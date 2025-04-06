@@ -4,7 +4,7 @@
 
 ### 1. Input Processing Layer
 - **Document Uploader**
-  - Handles PDF and PNG uploads
+  -  Handles multiple PDF and PNG uploads
   - Validates file formats and sizes
   - Prepares files for processing
 
@@ -27,7 +27,7 @@
   - Calibrates scale based on drawing information
 
 - **Measurement Extraction System**
-  - Calculates real-world measurements from scaled drawings
+  - Calculates real-world measurements from scaled drawings with length and height
   - Processes dimension annotations
   - Handles different unit systems (metric/imperial)
   - Validates measurements for consistency
@@ -69,7 +69,7 @@
   - Communicates with Suddeco backend
   - Synchronizes extracted data
   - Updates project information
-  - Retrieves reference data (tasks, materials)
+  - Retrieves reference data ( area / rooms ,stages ,tasks, materials and quantities)
 
 - **User Interface Components**
   - Displays processing status

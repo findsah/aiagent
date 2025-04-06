@@ -1,0 +1,71 @@
+{
+  "constructionStages": [
+    {
+      "stageName": "Site Preparation",
+      "tasks": []
+    },
+    {
+      "stageName": "Foundation",
+      "tasks": [
+        {
+          "taskId": "foundation_1",
+          "taskName": "Pouring Concrete",
+          "description": "Pouring concrete for the foundation",
+          "estimatedDuration": "0 days",
+          "requiredLabor": {
+            "personDays": "0",
+            "trades": [
+              "Concrete Workers"
+            ]
+          },
+          "dependencies": [],
+          "materialsUsed": [
+            "concrete_cubic_meters"
+          ],
+          "qualityControlRequirements": "Ensure the concrete is evenly spread and has the correct thickness",
+          "roomLocation": "N/A"
+        }
+      ]
+    },
+    {
+      "stageName": "Structure",
+      "tasks": []
+    },
+    {
+      "stageName": "Walls",
+      "tasks": []
+    },
+    {
+      "stageName": "Roofing",
+      "tasks": []
+    },
+    {
+      "stageName": "Windows and Doors",
+      "tasks": []
+    },
+    {
+      "stageName": "Electrical",
+      "tasks": []
+    },
+    {
+      "stageName": "Plumbing",
+      "tasks": []
+    },
+    {
+      "stageName": "HVAC",
+      "tasks": []
+    },
+    {
+      "stageName": "Interior Finishes",
+      "tasks": []
+    },
+    {
+      "stageName": "Exterior Finishes",
+      "tasks": []
+    },
+    {
+      "stageName": "Final Inspection and Handover",
+      "tasks": []
+    }
+  ]
+}

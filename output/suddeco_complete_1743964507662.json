@@ -1,0 +1,63 @@
+{
+  "generated_at": "2025-04-06T18:35:22.409Z",
+  "file_info": {
+    "name": "Architect Tech Pack Binder_Rev03 3.pdf",
+    "path": "C:\\Users\\syeda\\Music\\attachments\\drawings\\uploads\\1743964507426_Architect Tech Pack Binder_Rev03 3.pdf",
+    "type": "pdf",
+    "timestamp": 1743964507662
+  },
+  "architectural_analysis": {
+    "architectural_analysis": {
+      "building_analysis": {
+        "total_internal_dimensions": {
+          "length": "N/A",
+          "width": "N/A",
+          "height": "N/A"
+        },
+        "total_external_dimensions": {
+          "length": "N/A",
+          "width": "N/A",
+          "height": "N/A"
+        },
+        "total_floor_area": {
+          "internal": "N/A",
+          "external": "N/A"
+        },
+        "total_wall_surface_area": "N/A",
+        "total_ceiling_area": "N/A",
+        "total_volume": "N/A"
+      },
+      "room_details": [
+        {
+          "name": "N/A",
+          "internal_dimensions": {
+            "length": "N/A",
+            "width": "N/A",
+            "height": "N/A"
+          },
+          "external_dimensions": {
+            "length": "N/A",
+            "width": "N/A",
+            "height": "N/A"
+          },
+          "floor_area": {
+            "internal": "N/A",
+            "external": "N/A"
+          },
+          "wall_surface_area": "N/A",
+          "ceiling_area": "N/A",
+          "volume": "N/A",
+          "skirting_board_length": "N/A"
+        }
+      ]
+    }
+  },
+  "materials_quantities": {
+    "error": "Insufficient data",
+    "message": "The provided architectural analysis does not contain sufficient data to calculate material quantities. Please provide valid measurements for all relevant dimensions."
+  },
+  "construction_tasks": {
+    "error": "Insufficient data",
+    "message": "The provided architectural analysis does not contain sufficient data to generate a comprehensive construction task breakdown. Please provide valid measurements for all relevant dimensions and material quantities."
+  }
+}
