@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suddeco AI Drawing Processor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            padding-top: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+        .upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 50px;
+            text-align: center;
+            margin-bottom: 30px;
+            background-color: #f8f9fa;
+            transition: all 0.3s;
+        }
+        .upload-area:hover, .upload-area.dragover {
+            border-color: #0d6efd;
+            background-color: #f1f8ff;
+        }
+        .upload-icon {
+            font-size: 48px;
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+        .result-section {
+            display: none;
+            margin-top: 30px;
+        }
+        .tab-content {
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+        .progress-container {
+            display: none;
+            margin: 30px 0;
+        }
+        .measurement-card {
+            margin-bottom: 15px;
+        }
+        .task-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .task-item:last-child {
+            border-bottom: none;
+        }
+        .material-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .material-item:last-child {
+            border-bottom: none;
+        }
+        .stage-header {
+            background-color: #f1f8ff;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        #projectDescription {
+            white-space: pre-line;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Suddeco AI Drawing Processor</h1>
+            <p class="text-muted">Upload architectural and structural drawings to extract measurements, identify tasks, and calculate quantities</p>
+        </div>
+
+        <div class="upload-container">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">
+                    <i class="bi bi-cloud-arrow-up"></i>
+                </div>
+                <h3>Upload Drawings</h3>
+                <p>Drag and drop PDF or PNG files here, or click to browse</p>
+                <input type="file" id="fileInput" class="d-none" accept=".pdf,.png">
+                <button class="btn btn-primary mt-3" id="browseButton">Browse Files</button>
+            </div>
+        </div>
+
+        <div class="progress-container" id="progressContainer">
+            <h4 class="mb-3">Processing Drawing...</h4>
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+            </div>
+            <p class="text-center mt-2" id="progressStatus">Initializing...</p>
+        </div>
+
+        <div class="result-section" id="resultSection">
+            <ul class="nav nav-tabs" id="resultTabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#overviewTab">Overview</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#measurementsTab">Measurements</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#tasksTab">Tasks & Materials</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#exportsTab">Exports</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="overviewTab">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4>Project Description</h4>
+                            <div class="card">
+                                <div class="card-body">
+                                    <p id="projectDescription"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <h4>Summary</h4>
+                            <div class="card">
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Drawing Scale
+                                            <span class="badge bg-primary rounded-pill" id="drawingScale">1:100</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Total Rooms
+                                            <span class="badge bg-primary rounded-pill" id="totalRooms">0</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Total Tasks
+                                            <span class="badge bg-primary rounded-pill" id="totalTasks">0</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            Total Materials
+                                            <span class="badge bg-primary rounded-pill" id="totalMaterials">0</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="measurementsTab">
+                    <h4>Extracted Measurements</h4>
+                    <div class="row" id="measurementsContainer">
+                        <!-- Measurements will be populated here -->
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tasksTab">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Tasks by Stage</h4>
+                            <div id="tasksContainer">
+                                <!-- Tasks will be populated here -->
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Materials</h4>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div id="materialsContainer">
+                                        <!-- Materials will be populated here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="exportsTab">
+                    <h4>Export Files</h4>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-file-earmark-spreadsheet" style="font-size: 48px; color: #28a745;"></i>
+                                    <h5 class="mt-3">CSV Export</h5>
+                                    <p>Measurements and room data in CSV format</p>
+                                    <a href="#" class="btn btn-outline-success" id="csvDownload">Download CSV</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-file-earmark-code" style="font-size: 48px; color: #0d6efd;"></i>
+                                    <h5 class="mt-3">JSON Export</h5>
+                                    <p>Complete project data in JSON format</p>
+                                    <a href="#" class="btn btn-outline-primary" id="jsonDownload">Download JSON</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-file-earmark-excel" style="font-size: 48px; color: #198754;"></i>
+                                    <h5 class="mt-3">Excel Report</h5>
+                                    <p>Comprehensive project report in Excel format</p>
+                                    <a href="#" class="btn btn-outline-success" id="excelDownload">Download Excel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('fileInput');
+            const browseButton = document.getElementById('browseButton');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.querySelector('.progress-bar');
+            const progressStatus = document.getElementById('progressStatus');
+            const resultSection = document.getElementById('resultSection');
+            
+            // Setup file upload
+            browseButton.addEventListener('click', () => {
+                fileInput.click();
+            });
+            
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                if (e.dataTransfer.files.length) {
+                    handleFile(e.dataTransfer.files[0]);
+                }
+            });
+            
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length) {
+                    handleFile(fileInput.files[0]);
+                }
+            });
+            
+            function handleFile(file) {
+                // Check file type
+                const validTypes = ['application/pdf', 'image/png'];
+                if (!validTypes.includes(file.type)) {
+                    alert('Please upload a PDF or PNG file');
+                    return;
+                }
+                
+                // Show progress
+                uploadArea.style.display = 'none';
+                progressContainer.style.display = 'block';
+                
+                // Create form data
+                const formData = new FormData();
+                formData.append('drawing', file);
+                
+                // Simulate upload and processing (in a real app, this would be an actual fetch)
+                simulateProcessing(file.name);
+            }
+            
+            function simulateProcessing(fileName) {
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 5;
+                    progressBar.style.width = `${progress}%`;
+                    
+                    if (progress < 30) {
+                        progressStatus.textContent = 'Uploading drawing...';
+                    } else if (progress < 60) {
+                        progressStatus.textContent = 'Analyzing drawing content...';
+                    } else if (progress < 85) {
+                        progressStatus.textContent = 'Extracting measurements and annotations...';
+                    } else {
+                        progressStatus.textContent = 'Generating project data...';
+                    }
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            progressContainer.style.display = 'none';
+                            resultSection.style.display = 'block';
+                            displaySampleResults(fileName);
+                        }, 500);
+                    }
+                }, 100);
+            }
+            
+            function displaySampleResults(fileName) {
+                // Sample data - in a real app this would come from the backend
+                const sampleData = {
+                    projectDescription: "This project involves the construction of a two-story residential building with a total floor area of approximately 210 square meters. The ground floor features an open-plan living area, kitchen, dining space, utility room, and guest bathroom. The first floor contains three bedrooms (one master with en-suite), a family bathroom, and a small office space. The construction utilizes a traditional brick and block cavity wall system with concrete foundations. The roof is a standard pitched design with concrete tiles. Windows are specified as double-glazed aluminum frames. Interior walls are standard stud partitions with plasterboard finish.",
+                    scale: "1:50",
+                    measurements: [
+                        { room: "Living Room", dimension: "Length", value: "6.2", unit: "m", area: "24.8" },
+                        { room: "Living Room", dimension: "Width", value: "4.0", unit: "m", area: "24.8" },
+                        { room: "Kitchen", dimension: "Length", value: "4.5", unit: "m", area: "15.75" },
+                        { room: "Kitchen", dimension: "Width", value: "3.5", unit: "m", area: "15.75" },
+                        { room: "Master Bedroom", dimension: "Length", value: "5.0", unit: "m", area: "20.0" },
+                        { room: "Master Bedroom", dimension: "Width", value: "4.0", unit: "m", area: "20.0" },
+                        { room: "Bedroom 2", dimension: "Length", value: "4.2", unit: "m", area: "14.7" },
+                        { room: "Bedroom 2", dimension: "Width", value: "3.5", unit: "m", area: "14.7" },
+                        { room: "Bathroom", dimension: "Length", value: "2.8", unit: "m", area: "5.6" },
+                        { room: "Bathroom", dimension: "Width", value: "2.0", unit: "m", area: "5.6" }
+                    ],
+                    stages: [
+                        { id: 1, name: "Foundation" },
+                        { id: 2, name: "Structural Work" },
+                        { id: 3, name: "Roofing" },
+                        { id: 4, name: "Electrical & Plumbing" },
+                        { id: 5, name: "Interior Finishing" }
+                    ],
+                    tasks: [
+                        { id: 101, name: "Excavation and site preparation", stage: "Foundation", quantity: 1, unit: "lot", laborHours: 24, materialCost: 1200 },
+                        { id: 102, name: "Concrete foundation pouring", stage: "Foundation", quantity: 45, unit: "m³", laborHours: 32, materialCost: 5400 },
+                        { id: 201, name: "Brick and block wall construction", stage: "Structural Work", quantity: 120, unit: "m²", laborHours: 80, materialCost: 7200 },
+                        { id: 202, name: "First floor joists and flooring", stage: "Structural Work", quantity: 85, unit: "m²", laborHours: 40, materialCost: 4250 },
+                        { id: 301, name: "Roof truss installation", stage: "Roofing", quantity: 1, unit: "lot", laborHours: 24, materialCost: 3600 },
+                        { id: 302, name: "Roof tile installation", stage: "Roofing", quantity: 110, unit: "m²", laborHours: 32, materialCost: 5500 },
+                        { id: 401, name: "Electrical wiring", stage: "Electrical & Plumbing", quantity: 1, unit: "lot", laborHours: 40, materialCost: 3200 },
+                        { id: 402, name: "Plumbing installation", stage: "Electrical & Plumbing", quantity: 1, unit: "lot", laborHours: 32, materialCost: 2800 },
+                        { id: 501, name: "Plastering", stage: "Interior Finishing", quantity: 320, unit: "m²", laborHours: 64, materialCost: 3840 },
+                        { id: 502, name: "Painting", stage: "Interior Finishing", quantity: 320, unit: "m²", laborHours: 48, materialCost: 2560 }
+                    ],
+                    materials: [
+                        { id: 1001, name: "Concrete", quantity: 45, unit: "m³", costPerUnit: 120, totalCost: 5400 },
+                        { id: 1002, name: "Bricks", quantity: 4800, unit: "pcs", costPerUnit: 0.75, totalCost: 3600 },
+                        { id: 1003, name: "Concrete blocks", quantity: 1200, unit: "pcs", costPerUnit: 3, totalCost: 3600 },
+                        { id: 1004, name: "Roof tiles", quantity: 2200, unit: "pcs", costPerUnit: 2.5, totalCost: 5500 },
+                        { id: 1005, name: "Timber", quantity: 120, unit: "m", costPerUnit: 30, totalCost: 3600 },
+                        { id: 1006, name: "Plasterboard", quantity: 160, unit: "sheets", costPerUnit: 12, totalCost: 1920 },
+                        { id: 1007, name: "Paint", quantity: 80, unit: "L", costPerUnit: 20, totalCost: 1600 },
+                        { id: 1008, name: "Electrical cable", quantity: 500, unit: "m", costPerUnit: 2, totalCost: 1000 }
+                    ]
+                };
+                
+                // Update overview tab
+                document.getElementById('projectDescription').textContent = sampleData.projectDescription;
+                document.getElementById('drawingScale').textContent = sampleData.scale;
+                document.getElementById('totalRooms').textContent = new Set(sampleData.measurements.map(m => m.room)).size;
+                document.getElementById('totalTasks').textContent = sampleData.tasks.length;
+                document.getElementById('totalMaterials').textContent = sampleData.materials.length;
+                
+                // Update measurements tab
+                const measurementsContainer = document.getElementById('measurementsContainer');
+                measurementsContainer.innerHTML = '';
+                
+                // Group measurements by room
+                const roomGroups = {};
+                sampleData.measurements.forEach(m => {
+                    if (!roomGroups[m.room]) {
+                        roomGroups[m.room] = [];
+                    }
+                    roomGroups[m.room].push(m);
+                });
+                
+                // Create cards for each room
+                Object.keys(roomGroups).forEach(room => {
+                    const measurements = roomGroups[room];
+                    const area = measurements.find(m => m.dimension === "Width").area;
+                    
+                    const card = document.createElement('div');
+                    card.className = 'col-md-4 measurement-card';
+                    card.innerHTML = `
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>${room}</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">Area: ${area} m²</p>
+                                <ul class="list-group list-group-flush">
+                                    ${measurements.map(m => `
+                                        <li class="list-group-item">
+                                            ${m.dimension}: ${m.value} ${m.unit}
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                    measurementsContainer.appendChild(card);
+                });
+                
+                // Update tasks tab
+                const tasksContainer = document.getElementById('tasksContainer');
+                tasksContainer.innerHTML = '';
+                
+                // Group tasks by stage
+                const stageGroups = {};
+                sampleData.tasks.forEach(task => {
+                    if (!stageGroups[task.stage]) {
+                        stageGroups[task.stage] = [];
+                    }
+                    stageGroups[task.stage].push(task);
+                });
+                
+                // Create task lists for each stage
+                Object.keys(stageGroups).forEach(stage => {
+                    const tasks = stageGroups[stage];
+                    
+                    const stageElement = document.createElement('div');
+                    stageElement.innerHTML = `
+                        <div class="stage-header">${stage}</div>
+                        <div class="list-group">
+                            ${tasks.map(task => `
+                                <div class="task-item">
+                                    <div class="d-flex justify-content-between">
+                                        <strong>${task.name}</strong>
+                                        <span>${task.quantity} ${task.unit}</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between text-muted">
+                                        <small>Labor: ${task.laborHours} hours</small>
+                                        <small>Material: £${task.materialCost}</small>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    tasksContainer.appendChild(stageElement);
+                });
+                
+                // Update materials tab
+                const materialsContainer = document.getElementById('materialsContainer');
+                materialsContainer.innerHTML = '';
+                
+                // Create material list
+                sampleData.materials.forEach(material => {
+                    const materialElement = document.createElement('div');
+                    materialElement.className = 'material-item';
+                    materialElement.innerHTML = `
+                        <div>
+                            <strong>${material.name}</strong>
+                            <div class="text-muted">${material.quantity} ${material.unit}</div>
+                        </div>
+                        <div class="text-end">
+                            <div>£${material.totalCost}</div>
+                            <small class="text-muted">£${material.costPerUnit} per ${material.unit}</small>
+                        </div>
+                    `;
+                    materialsContainer.appendChild(materialElement);
+                });
+                
+                // Set up download links (these would point to actual files in a real app)
+                document.getElementById('csvDownload').href = '#';
+                document.getElementById('jsonDownload').href = '#';
+                document.getElementById('excelDownload').href = '#';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+{
+  "Room Measurements": {
+    "Kitchen": {
+      "Dimensions": "4.2m x 3.5m",
+      "Area": 14.7
+    },
+    "Living Room": {
+      "Dimensions": "6.0m x 4.5m",
+      "Area": 27.0
+    },
+    "Dining Area": {
+      "Dimensions": "4.0m x 3.8m",
+      "Area": 15.2
+    },
+    "Bathroom": {
+      "Dimensions": "2.5m x 2.0m",
+      "Area": 5.0
+    },
+    "Hallway": {
+      "Dimensions": "5.0m x 1.5m",
+      "Area": 7.5
+    }
+  },
+  "Total Floor Area": {
+    "Sum of Areas": 69.4
+  },
+  "Wall Measurements": {
+    "Total Linear Meters": 44.8,
+    "Details": {
+      "External Wall Length": "Sum of the perimeter of all rooms + 2 times the wall thickness of each wall segment",
+      "Internal Wall Length": "Sum of the lengths of walls shared between two rooms + wall thickness"
+    }
+  },
+  "Required Materials Estimation": {
+    "Walls": {
+      "Bricks or Blocks": "Based on wall thickness, height, and total length",
+      "Plaster": "Covers both sides of every wall",
+      "Paint": "Approximate area of wall surfaces to be painted"
+    },
+    "Flooring": {
+      "Materials": "Sum of room areas for tiles, carpet, wood, etc."
+    },
+    "Ceiling": {
+      "Drywall or Plaster": "Total floor area"
+    },
+    "Doors": {
+      "Standard Size": "0.9m width, calculated according to openings marked in plan"
+    },
+    "Windows": {
+      "Standard Size": "1.2m width, calculated according to the openings marked in plan"
+    }
+  },
+  "Construction Tasks Identification": [
+    "Foundation work",
+    "Wall construction (including load-bearing and non-load-bearing)",
+    "Electrical installation (including placements for outlets and light fixtures)",
+    "Plumbing installation (for kitchen and bathroom)",
+    "Ceiling treatments",
+    "Installation of windows and doors",
+    "Flooring installation",
+    "Interior finishing (including plastering, painting, and installation of fixtures)",
+    "Exterior finishing"
+  ]
+}

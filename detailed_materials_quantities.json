@@ -1,0 +1,122 @@
+{
+  "construction_estimation": {
+    "foundation_materials": {
+      "concrete": {
+        "quantity": "35.40",
+        "unit": "cubic meters",
+        "location": "Foundation",
+        "purpose": "To form the slab and footings of the building"
+      },
+      "rebar": {
+        "quantity": "950",
+        "unit": "kilograms",
+        "location": "Foundation",
+        "purpose": "Reinforcement for the concrete foundation"
+      }
+    },
+    "structural_materials": {
+      "bricks": {
+        "quantity": "9000",
+        "unit": "units",
+        "location": "Wall construction",
+        "purpose": "To build internal and external walls"
+      },
+      "cement_blocks": {
+        "quantity": "1500",
+        "unit": "units",
+        "location": "External walls",
+        "purpose": "To build external wall structures for added insulation"
+      },
+      "timber": {
+        "quantity": "5000",
+        "unit": "linear meters",
+        "location": "Roof and structural framing",
+        "purpose": "For roof trusses and framing supports"
+      }
+    },
+    "finishing_materials": {
+      "flooring": {
+        "kitchen": {
+          "type": "ceramic tiles",
+          "quantity": "14.7",
+          "unit": "square meters"
+        },
+        "living_room": {
+          "type": "laminate",
+          "quantity": "27",
+          "unit": "square meters"
+        },
+        "dining_area": {
+          "type": "hardwood",
+          "quantity": "15.2",
+          "unit": "square meters"
+        },
+        "bathroom": {
+          "type": "waterproof vinyl",
+          "quantity": "5",
+          "unit": "square meters"
+        },
+        "hallway": {
+          "type": "stone tiles",
+          "quantity": "7.5",
+          "unit": "square meters"
+        }
+      },
+      "wall_coverings": {
+        "paint": {
+          "total_quantity": "320",
+          "unit": "liters",
+          "comments": "Assuming two coats for all internal walls"
+        },
+        "tiles": {
+          "bathroom": {
+            "quantity": "25.92",
+            "unit": "square meters"
+          }
+        }
+      },
+      "ceiling_treatments": {
+        "plasterboard": {
+          "total_quantity": "195.94",
+          "unit": "square meters"
+        }
+      }
+    },
+    "fixtures_and_fittings": {
+      "door_handles": {
+        "quantity": "12",
+        "unit": "units"
+      },
+      "cabinets": {
+        "kitchen": {
+          "quantity": "8",
+          "unit": "units"
+        }
+      }
+    },
+    "electrical_components": {
+      "outlets": {
+        "quantity": "24",
+        "unit": "units"
+      },
+      "light_fixtures": {
+        "quantity": "12",
+        "unit": "units"
+      }
+    },
+    "plumbing_components": {
+      "sinks": {
+        "quantity": "3",
+        "unit": "units"
+      },
+      "toilets": {
+        "quantity": "2",
+        "unit": "units"
+      },
+      "bathtubs": {
+        "quantity": "1",
+        "unit": "units"
+      }
+    }
+  }
+}

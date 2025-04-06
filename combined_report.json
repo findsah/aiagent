@@ -1,0 +1,258 @@
+{
+  "architectural_analysis": {
+    "Room Measurements": {
+      "Kitchen": {
+        "Dimensions": "4.2m x 3.5m",
+        "Area": 14.7
+      },
+      "Living Room": {
+        "Dimensions": "6.0m x 4.5m",
+        "Area": 27
+      },
+      "Dining Area": {
+        "Dimensions": "4.0m x 3.8m",
+        "Area": 15.2
+      },
+      "Bathroom": {
+        "Dimensions": "2.5m x 2.0m",
+        "Area": 5
+      },
+      "Hallway": {
+        "Dimensions": "5.0m x 1.5m",
+        "Area": 7.5
+      }
+    },
+    "Total Floor Area": {
+      "Sum of Areas": 69.4
+    },
+    "Wall Measurements": {
+      "Total Linear Meters": 44.8,
+      "Details": {
+        "External Wall Length": "Sum of the perimeter of all rooms + 2 times the wall thickness of each wall segment",
+        "Internal Wall Length": "Sum of the lengths of walls shared between two rooms + wall thickness"
+      }
+    },
+    "Required Materials Estimation": {
+      "Walls": {
+        "Bricks or Blocks": "Based on wall thickness, height, and total length",
+        "Plaster": "Covers both sides of every wall",
+        "Paint": "Approximate area of wall surfaces to be painted"
+      },
+      "Flooring": {
+        "Materials": "Sum of room areas for tiles, carpet, wood, etc."
+      },
+      "Ceiling": {
+        "Drywall or Plaster": "Total floor area"
+      },
+      "Doors": {
+        "Standard Size": "0.9m width, calculated according to openings marked in plan"
+      },
+      "Windows": {
+        "Standard Size": "1.2m width, calculated according to the openings marked in plan"
+      }
+    },
+    "Construction Tasks Identification": [
+      "Foundation work",
+      "Wall construction (including load-bearing and non-load-bearing)",
+      "Electrical installation (including placements for outlets and light fixtures)",
+      "Plumbing installation (for kitchen and bathroom)",
+      "Ceiling treatments",
+      "Installation of windows and doors",
+      "Flooring installation",
+      "Interior finishing (including plastering, painting, and installation of fixtures)",
+      "Exterior finishing"
+    ]
+  },
+  "materials_quantities": {
+    "Concrete": {
+      "Foundation": 10
+    },
+    "Bricks/Blocks": {
+      "Quantity": 5000
+    },
+    "Drywall/Plasterboard": {
+      "Total_Square_Meters": 69.4
+    },
+    "Flooring": {
+      "Kitchen": 14.7,
+      "Living_Room": 27,
+      "Dining_Area": 15.2,
+      "Bathroom": 5,
+      "Hallway": 7.5
+    },
+    "Paint": {
+      "Liters": 300
+    },
+    "Electrical_wiring": {
+      "Meters": 200
+    },
+    "Plumbing_pipes": {
+      "Meters": 50
+    }
+  },
+  "task_breakdown": {
+    "TaskBreakdown": {
+      "Initial and Site Preparation": [
+        {
+          "TaskName": "Site Clearance",
+          "Stage": "Site Preparation",
+          "EstimatedDuration": 3,
+          "RequiredLabor": 10,
+          "Dependencies": [],
+          "MaterialsUsed": []
+        },
+        {
+          "TaskName": "Foundation Excavation",
+          "Stage": "Site Preparation",
+          "EstimatedDuration": 3,
+          "RequiredLabor": 15,
+          "Dependencies": [
+            "Site Clearance"
+          ],
+          "MaterialsUsed": []
+        }
+      ],
+      "Foundation Work": [
+        {
+          "TaskName": "Pouring Concrete for Foundations",
+          "Stage": "Foundations",
+          "EstimatedDuration": 2,
+          "RequiredLabor": 15,
+          "Dependencies": [
+            "Foundation Excavation"
+          ],
+          "MaterialsUsed": [
+            "Concrete (10.0 cubic meters)"
+          ]
+        }
+      ],
+      "Structural Work": [
+        {
+          "TaskName": "Wall Construction",
+          "Stage": "Structural",
+          "EstimatedDuration": 10,
+          "RequiredLabor": 40,
+          "Dependencies": [
+            "Pouring Concrete for Foundations"
+          ],
+          "MaterialsUsed": [
+            "Bricks/Blocks (5000 units)"
+          ]
+        },
+        {
+          "TaskName": "Roof Installation",
+          "Stage": "Structural",
+          "EstimatedDuration": 5,
+          "RequiredLabor": 20,
+          "Dependencies": [
+            "Wall Construction"
+          ],
+          "MaterialsUsed": [
+            "Timber or Steel for Framework"
+          ]
+        }
+      ],
+      "Plumbing and Electrical": [
+        {
+          "TaskName": "Plumbing Installation",
+          "Stage": "Utilities",
+          "EstimatedDuration": 5,
+          "RequiredLabor": 20,
+          "Dependencies": [
+            "Wall Construction"
+          ],
+          "MaterialsUsed": [
+            "Plumbing pipes (50 meters)"
+          ]
+        },
+        {
+          "TaskName": "Electrical Installation",
+          "Stage": "Utilities",
+          "EstimatedDuration": 5,
+          "RequiredLabor": 15,
+          "Dependencies": [
+            "Wall Construction"
+          ],
+          "MaterialsUsed": [
+            "Electrical wiring (200 meters)"
+          ]
+        }
+      ],
+      "Interior and Exterior Works": [
+        {
+          "TaskName": "Drywall Installation",
+          "Stage": "Interior",
+          "EstimatedDuration": 4,
+          "RequiredLabor": 20,
+          "Dependencies": [
+            "Electrical Installation",
+            "Plumbing Installation"
+          ],
+          "MaterialsUsed": [
+            "Drywall/Plasterboard (69.4 square meters)"
+          ]
+        },
+        {
+          "TaskName": "Flooring Installation",
+          "Stage": "Interior",
+          "EstimatedDuration": 6,
+          "RequiredLabor": 25,
+          "Dependencies": [
+            "Drywall Installation"
+          ],
+          "MaterialsUsed": [
+            "Flooring (Total of all rooms)"
+          ]
+        },
+        {
+          "TaskName": "Painting Interior Walls",
+          "Stage": "Interior",
+          "EstimatedDuration": 5,
+          "RequiredLabor": 15,
+          "Dependencies": [
+            "Drywall Installation"
+          ],
+          "MaterialsUsed": [
+            "Paint (300 liters)"
+          ]
+        },
+        {
+          "TaskName": "Window and Door Installation",
+          "Stage": "Interior",
+          "EstimatedDuration": 3,
+          "RequiredLabor": 12,
+          "Dependencies": [
+            "Drywall Installation"
+          ],
+          "MaterialsUsed": [
+            "Windows and Doors"
+          ]
+        }
+      ],
+      "Finishing and Cleanup": [
+        {
+          "TaskName": "Exterior Finishing",
+          "Stage": "Finishing",
+          "EstimatedDuration": 5,
+          "RequiredLabor": 15,
+          "Dependencies": [
+            "Painting Interior Walls",
+            "Window and Door Installation"
+          ],
+          "MaterialsUsed": []
+        },
+        {
+          "TaskName": "Site Cleanup and Landscaping",
+          "Stage": "Finishing",
+          "EstimatedDuration": 3,
+          "RequiredLabor": 10,
+          "Dependencies": [
+            "Exterior Finishing"
+          ],
+          "MaterialsUsed": []
+        }
+      ]
+    }
+  },
+  "generated_at": "2025-04-06T13:22:23.676Z"
+}

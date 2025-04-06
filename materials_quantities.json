@@ -1,0 +1,26 @@
+{
+    "Concrete": {
+        "Foundation": 10.0 	},
+    "Bricks/Blocks": {
+      "Quantity": 5000
+    },
+    "Drywall/Plasterboard": {
+      "Total_Square_Meters": 69.4
+    },
+    "Flooring": {
+      "Kitchen": 14.7,
+      "Living_Room": 27.0,
+      "Dining_Area": 15.2,
+      "Bathroom": 5.0,
+      "Hallway": 7.5
+    },
+    "Paint": {
+      "Liters": 300
+    },
+    "Electrical_wiring": {
+      "Meters": 200
+    },
+    "Plumbing_pipes": {
+      "Meters": 50
+    }
+}

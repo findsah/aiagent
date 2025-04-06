@@ -1,0 +1,120 @@
+{
+  "TaskBreakdown": {
+    "Initial and Site Preparation": [
+      {
+        "TaskName": "Site Clearance",
+        "Stage": "Site Preparation",
+        "EstimatedDuration": 3,
+        "RequiredLabor": 10,
+        "Dependencies": [],
+        "MaterialsUsed": []
+      },
+      {
+        "TaskName": "Foundation Excavation",
+        "Stage": "Site Preparation",
+        "EstimatedDuration": 3,
+        "RequiredLabor": 15,
+        "Dependencies": ["Site Clearance"],
+        "MaterialsUsed": []
+      }
+    ],
+    "Foundation Work": [
+      {
+        "TaskName": "Pouring Concrete for Foundations",
+        "Stage": "Foundations",
+        "EstimatedDuration": 2,
+        "RequiredLabor": 15,
+        "Dependencies": ["Foundation Excavation"],
+        "MaterialsUsed": ["Concrete (10.0 cubic meters)"]
+      }
+    ],
+    "Structural Work": [
+      {
+        "TaskName": "Wall Construction",
+        "Stage": "Structural",
+        "EstimatedDuration": 10,
+        "RequiredLabor": 40,
+        "Dependencies": ["Pouring Concrete for Foundations"],
+        "MaterialsUsed": ["Bricks/Blocks (5000 units)"]
+      },
+      {
+        "TaskName": "Roof Installation",
+        "Stage": "Structural",
+        "EstimatedDuration": 5,
+        "RequiredLabor": 20,
+        "Dependencies": ["Wall Construction"],
+        "MaterialsUsed": ["Timber or Steel for Framework"]
+      }
+    ],
+    "Plumbing and Electrical": [
+      {
+        "TaskName": "Plumbing Installation",
+        "Stage": "Utilities",
+        "EstimatedDuration": 5,
+        "RequiredLabor": 20,
+        "Dependencies": ["Wall Construction"],
+        "MaterialsUsed": ["Plumbing pipes (50 meters)"]
+      },
+      {
+        "TaskName": "Electrical Installation",
+        "Stage": "Utilities",
+        "EstimatedDuration": 5,
+        "RequiredLabor": 15,
+        "Dependencies": ["Wall Construction"],
+        "MaterialsUsed": ["Electrical wiring (200 meters)"]
+      }
+    ],
+    "Interior and Exterior Works": [
+      {
+        "TaskName": "Drywall Installation",
+        "Stage": "Interior",
+        "EstimatedDuration": 4,
+        "RequiredLabor": 20,
+        "Dependencies": ["Electrical Installation", "Plumbing Installation"],
+        "MaterialsUsed": ["Drywall/Plasterboard (69.4 square meters)"]
+      },
+      {
+        "TaskName": "Flooring Installation",
+        "Stage": "Interior",
+        "EstimatedDuration": 6,
+        "RequiredLabor": 25,
+        "Dependencies": ["Drywall Installation"],
+        "MaterialsUsed": ["Flooring (Total of all rooms)"]
+      },
+      {
+        "TaskName": "Painting Interior Walls",
+        "Stage": "Interior",
+        "EstimatedDuration": 5,
+        "RequiredLabor": 15,
+        "Dependencies": ["Drywall Installation"],
+        "MaterialsUsed": ["Paint (300 liters)"]
+      },
+      {
+        "TaskName": "Window and Door Installation",
+        "Stage": "Interior",
+        "EstimatedDuration": 3,
+        "RequiredLabor": 12,
+        "Dependencies": ["Drywall Installation"],
+        "MaterialsUsed": ["Windows and Doors"]
+      }
+    ],
+    "Finishing and Cleanup": [
+      {
+        "TaskName": "Exterior Finishing",
+        "Stage": "Finishing",
+        "EstimatedDuration": 5,
+        "RequiredLabor": 15,
+        "Dependencies": ["Painting Interior Walls", "Window and Door Installation"],
+        "MaterialsUsed": []
+      },
+      {
+        "TaskName": "Site Cleanup and Landscaping",
+        "Stage": "Finishing",
+        "EstimatedDuration": 3,
+        "RequiredLabor": 10,
+        "Dependencies": ["Exterior Finishing"],
+        "MaterialsUsed": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suddeco Architectural Measurements Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .section {
+            margin-bottom: 30px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            background-color: #fff;
+        }
+        .room-section {
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        .material-section {
+            margin-bottom: 20px;
+            border-left: 4px solid #2ecc71;
+            padding-left: 15px;
+        }
+        .task-section {
+            margin-bottom: 20px;
+            border-left: 4px solid #e74c3c;
+            padding-left: 15px;
+        }
+        .header {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Suddeco Architectural Measurements Report</h1>
+            <p>Generated: <span id="generated-date"></span></p>
+        </div>
+
+        <div class="section">
+            <h2>Building Summary</h2>
+            
+            <h3>Total Building Dimensions</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Length</th>
+                        <th>Width</th>
+                        <th>Height</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Internal Dimensions</strong></td>
+                        <td id="internal-length"></td>
+                        <td id="internal-width"></td>
+                        <td id="internal-height"></td>
+                    </tr>
+                    <tr>
+                        <td><strong>External Dimensions</strong></td>
+                        <td id="external-length"></td>
+                        <td id="external-width"></td>
+                        <td id="external-height"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Total Areas</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Area Type</th>
+                        <th>Measurement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Internal Floor Area</td>
+                        <td id="internal-floor-area"></td>
+                    </tr>
+                    <tr>
+                        <td>External Floor Area</td>
+                        <td id="external-floor-area"></td>
+                    </tr>
+                    <tr>
+                        <td>Internal Wall Area</td>
+                        <td id="internal-wall-area"></td>
+                    </tr>
+                    <tr>
+                        <td>External Wall Area</td>
+                        <td id="external-wall-area"></td>
+                    </tr>
+                    <tr>
+                        <td>Total Ceiling Area</td>
+                        <td id="ceiling-area"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Total Volume</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Volume Type</th>
+                        <th>Measurement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Internal Volume</td>
+                        <td id="internal-volume"></td>
+                    </tr>
+                    <tr>
+                        <td>External Volume</td>
+                        <td id="external-volume"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2>Room Details</h2>
+            <div id="room-details"></div>
+        </div>
+
+        <div class="section">
+            <h2>Materials Summary</h2>
+            <div id="materials-summary"></div>
+        </div>
+
+        <div class="section">
+            <h2>Construction Tasks</h2>
+            <div id="construction-tasks"></div>
+        </div>
+    </div>
+
+    <script>
+        // Load the JSON data
+        fetch('suddeco_detailed_analysis.skson')
+            .then(response => response.json())
+            .then(data => {
+                // Populate generated date
+                document.getElementById('generated-date').textContent = new Date(data.generated_at).toLocaleString();
+                
+                // Building Summary
+                const buildingAnalysis = data.architectural_analysis.building_analysis;
+                
+                // Total Building Dimensions
+                document.getElementById('internal-length').textContent = buildingAnalysis.total_internal_dimensions.length;
+                document.getElementById('internal-width').textContent = buildingAnalysis.total_internal_dimensions.width;
+                document.getElementById('internal-height').textContent = buildingAnalysis.total_internal_dimensions.height;
+                
+                document.getElementById('external-length').textContent = buildingAnalysis.total_external_dimensions.length;
+                document.getElementById('external-width').textContent = buildingAnalysis.total_external_dimensions.width;
+                document.getElementById('external-height').textContent = buildingAnalysis.total_external_dimensions.height;
+                
+                // Total Areas
+                document.getElementById('internal-floor-area').textContent = buildingAnalysis.total_floor_area.internal;
+                document.getElementById('external-floor-area').textContent = buildingAnalysis.total_floor_area.external;
+                document.getElementById('internal-wall-area').textContent = buildingAnalysis.total_wall_area.internal;
+                document.getElementById('external-wall-area').textContent = buildingAnalysis.total_wall_area.external;
+                document.getElementById('ceiling-area').textContent = buildingAnalysis.total_ceiling_area;
+                
+                // Total Volume
+                document.getElementById('internal-volume').textContent = buildingAnalysis.total_volume.internal;
+                document.getElementById('external-volume').textContent = buildingAnalysis.total_volume.external;
+                
+                // Room Details
+                const roomDetails = document.getElementById('room-details');
+                data.architectural_analysis.room_details.forEach(room => {
+                    const roomSection = document.createElement('div');
+                    roomSection.className = 'room-section';
+                    
+                    roomSection.innerHTML = `
+                        <h3>${room.name}</h3>
+                        <h4>Dimensions</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Length</th>
+                                    <th>Width</th>
+                                    <th>Height</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Internal Dimensions</strong></td>
+                                    <td>${room.internal_dimensions.length}</td>
+                                    <td>${room.internal_dimensions.width}</td>
+                                    <td>${room.internal_dimensions.height}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>External Dimensions</strong></td>
+                                    <td>${room.external_dimensions.length}</td>
+                                    <td>${room.external_dimensions.width}</td>
+                                    <td>${room.external_dimensions.height}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h4>Areas</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Area Type</th>
+                                    <th>Measurement</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Internal Floor Area</td>
+                                    <td>${room.floor_area.internal}</td>
+                                </tr>
+                                <tr>
+                                    <td>External Floor Area</td>
+                                    <td>${room.floor_area.external}</td>
+                                </tr>
+                                <tr>
+                                    <td>Wall Surface Area</td>
+                                    <td>${room.wall_surface_area}</td>
+                                </tr>
+                                <tr>
+                                    <td>Ceiling Area</td>
+                                    <td>${room.ceiling_area}</td>
+                                </tr>
+                                <tr>
+                                    <td>Skirting Board Length</td>
+                                    <td>${room.skirting_board_length}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    `;
+                    
+                    roomDetails.appendChild(roomSection);
+                });
+                
+                // Materials Summary
+                const materialsSummary = document.getElementById('materials-summary');
+                const materials = data.materials_quantities;
+                
+                // Create sections for each material category
+                Object.keys(materials).forEach(category => {
+                    const materialSection = document.createElement('div');
+                    materialSection.className = 'material-section';
+                    
+                    let materialContent = `<h3>${category}</h3><table><thead><tr><th>Item</th><th>Quantity</th></tr></thead><tbody>`;
+                    
+                    // Handle different material category structures
+                    if (typeof materials[category] === 'object') {
+                        Object.keys(materials[category]).forEach(item => {
+                            const value = materials[category][item];
+                            materialContent += `<tr><td>${item}</td><td>${value}</td></tr>`;
+                        });
+                    } else {
+                        materialContent += `<tr><td>Quantity</td><td>${materials[category]}</td></tr>`;
+                    }
+                    
+                    materialContent += `</tbody></table>`;
+                    materialSection.innerHTML = materialContent;
+                    materialsSummary.appendChild(materialSection);
+                });
+                
+                // Construction Tasks
+                const constructionTasks = document.getElementById('construction-tasks');
+                const tasks = data.task_breakdown;
+                
+                // Create sections for each construction stage
+                Object.keys(tasks).forEach(stage => {
+                    const taskSection = document.createElement('div');
+                    taskSection.className = 'task-section';
+                    
+                    let taskContent = `<h3>${stage}</h3><table><thead><tr><th>Task Name</th><th>Duration (days)</th><th>Required Labor</th></tr></thead><tbody>`;
+                    
+                    tasks[stage].forEach(task => {
+                        taskContent += `<tr><td>${task.TaskName || task.taskName}</td><td>${task.EstimatedDuration || task.estimatedDuration}</td><td>${typeof task.RequiredLabor === 'object' ? JSON.stringify(task.RequiredLabor) : task.RequiredLabor}</td></tr>`;
+                    });
+                    
+                    taskContent += `</tbody></table>`;
+                    taskSection.innerHTML = taskContent;
+                    constructionTasks.appendChild(taskSection);
+                });
+            })
+            .catch(error => {
+                console.error('Error loading data:', error);
+                document.body.innerHTML = `<div class="container"><h1>Error loading data</h1><p>${error.message}</p></div>`;
+            });
+    </script>
+</body>
+</html>
