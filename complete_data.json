@@ -1,0 +1,185 @@
+{
+  "generated_at": "2025-04-06T15:07:31.882Z",
+  "file_info": {
+    "name": "Architect Tech Pack Binder_Rev03 3.pdf",
+    "path": "C:\\Users\\syeda\\Music\\attachments\\drawings\\uploads\\1743952013755_Architect Tech Pack Binder_Rev03 3.pdf",
+    "type": "pdf",
+    "timestamp": 1743952013922
+  },
+  "architectural_analysis": {
+    "architectural_analysis": {
+      "building_analysis": {
+        "total_internal_dimensions": {
+          "length": "0",
+          "width": "0",
+          "height": "0"
+        },
+        "total_external_dimensions": {
+          "length": "0",
+          "width": "0",
+          "height": "0"
+        },
+        "total_floor_area": {
+          "internal": "0",
+          "external": "0"
+        },
+        "total_wall_surface_area": "0",
+        "total_ceiling_area": "0",
+        "total_volume": "0"
+      },
+      "room_details": [
+        {
+          "name": "Room 1",
+          "internal_dimensions": {
+            "length": "0",
+            "width": "0",
+            "height": "0"
+          },
+          "external_dimensions": {
+            "length": "0",
+            "width": "0",
+            "height": "0"
+          },
+          "floor_area": {
+            "internal": "0",
+            "external": "0"
+          },
+          "wall_surface_area": "0",
+          "ceiling_area": "0",
+          "volume": "0",
+          "skirting_board_length": "0"
+        }
+      ]
+    }
+  },
+  "materials_quantities": {
+    "material_quantities": {
+      "foundation_and_structure": {
+        "concrete_cubic_meters": 0,
+        "rebar_kilograms": 0,
+        "formwork_square_meters": 0
+      },
+      "walls": {
+        "internal": {
+          "drywall_square_meters": 0,
+          "insulation_square_meters": 0,
+          "paint_liters": 0
+        },
+        "external": {
+          "brick_square_meters": 0,
+          "mortar_kilograms": 0,
+          "paint_liters": 0
+        }
+      },
+      "flooring": {
+        "concrete_cubic_meters": 0,
+        "tile_square_meters": 0,
+        "carpet_square_meters": 0
+      },
+      "ceiling": {
+        "drywall_square_meters": 0,
+        "paint_liters": 0
+      },
+      "roofing": {
+        "shingles_square_meters": 0,
+        "underlayment_square_meters": 0,
+        "roofing_nails_kilograms": 0
+      },
+      "doors_and_windows": {
+        "doors_units": 0,
+        "windows_square_meters": 0
+      },
+      "finishes": {
+        "paint_liters": 0,
+        "tiles_square_meters": 0,
+        "skirting_boards_meters": 0
+      },
+      "electrical": {
+        "wiring_meters": 0,
+        "outlets_units": 0,
+        "switches_units": 0
+      },
+      "plumbing": {
+        "pipes_meters": 0,
+        "faucets_units": 0,
+        "toilets_units": 0
+      },
+      "hvac": {
+        "ductwork_meters": 0,
+        "vents_units": 0,
+        "units_units": 0
+      }
+    }
+  },
+  "construction_tasks": {
+    "constructionStages": [
+      {
+        "stageName": "Site Preparation",
+        "tasks": []
+      },
+      {
+        "stageName": "Foundation",
+        "tasks": [
+          {
+            "taskId": "foundation_1",
+            "taskName": "Pouring Concrete",
+            "description": "Pouring concrete for the foundation",
+            "estimatedDuration": "0 days",
+            "requiredLabor": {
+              "personDays": "0",
+              "trades": [
+                "Concrete Workers"
+              ]
+            },
+            "dependencies": [],
+            "materialsUsed": [
+              "concrete_cubic_meters"
+            ],
+            "qualityControlRequirements": "Ensure the concrete is evenly spread and has the correct thickness",
+            "roomLocation": "N/A"
+          }
+        ]
+      },
+      {
+        "stageName": "Structure",
+        "tasks": []
+      },
+      {
+        "stageName": "Walls",
+        "tasks": []
+      },
+      {
+        "stageName": "Roofing",
+        "tasks": []
+      },
+      {
+        "stageName": "Windows and Doors",
+        "tasks": []
+      },
+      {
+        "stageName": "Electrical",
+        "tasks": []
+      },
+      {
+        "stageName": "Plumbing",
+        "tasks": []
+      },
+      {
+        "stageName": "HVAC",
+        "tasks": []
+      },
+      {
+        "stageName": "Interior Finishes",
+        "tasks": []
+      },
+      {
+        "stageName": "Exterior Finishes",
+        "tasks": []
+      },
+      {
+        "stageName": "Final Inspection and Handover",
+        "tasks": []
+      }
+    ]
+  }
+}

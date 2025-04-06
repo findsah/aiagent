@@ -1,180 +1,233 @@
 {
-  "ConstructionTaskBreakdown": [
+  "taskBreakdown": [
     {
-      "TaskID": "001",
+      "Task ID": "001",
       "Name": "Site Preparation",
-      "ConstructionStage": "Pre-construction",
-      "Description": "Clear the site, set up temporary site facilities, and secure the area.",
-      "DurationDays": 10,
-      "RequiredLabor": {
-        "GeneralLabor": 10
+      "Construction Stage": "Pre-construction",
+      "Description": "Clearing the site, setting up fencing and temporary utilities.",
+      "Estimated Duration (days)": 10,
+      "Required Labor": {
+        "person-days": 50,
+        "specific_trades": ["general laborer"]
       },
       "Dependencies": [],
-      "MaterialsUsed": [],
-      "QualityControlRequirements": "Ensure the site is cleared according to local regulations."
+      "Materials Used": [],
+      "Quality Control Requirements": "Ensure site is cleared according to plan, with all debris removed.",
+      "Room/location specific details": "Whole site"
     },
     {
-      "TaskID": "002",
-      "Name": "Foundation",
-      "ConstructionStage": "Foundation",
-      "Description": "Excavate for foundation, set up formwork, lay rebar and pour concrete.",
-      "DurationDays": 15,
-      "RequiredLabor": {
-        "Excavators": 5,
-        "ConcreteWorkers": 10,
-        "Carpenters": 5
+      "Task ID": "002",
+      "Name": "Foundation and Footing",
+      "Construction Stage": "Foundation",
+      "Description": "Excavation and pouring of concrete for foundation and footing including placement of rebar.",
+      "Estimated Duration (days)": 15,
+      "Required Labor": {
+        "person-days": 75,
+        "specific_trades": ["excavator", "concrete worker"]
       },
-      "Dependencies": [
-        "001"
-      ],
-      "MaterialsUsed": [
+      "Dependencies": ["001"],
+      "Materials Used": [
         {
-          "Material": "Concrete",
-          "Quantity": "35.40 cubic meters"
+          "material": "Concrete",
+          "quantity": "185.76 cubic meters"
         },
         {
-          "Material": "Rebar",
-          "Quantity": "950 kilograms"
+          "material": "Rebar",
+          "quantity": "6910 kilograms"
         }
       ],
-      "QualityControlRequirements": "Ensure all footings and foundation elements meet structural specifications.",
-      "RoomLocation": "Foundation"
+      "Quality Control Requirements": "Concrete mix and rebar placement must meet structural engineering specifications.",
+      "Room/location specific details": "Whole building foundation"
     },
     {
-      "TaskID": "003",
+      "Task ID": "003",
+      "Name": "Structural Framing",
+      "Construction Stage": "Superstructure",
+      "Description": "Construction of structural frames using timber, including roof trusses.",
+      "Estimated Duration (days)": 30,
+      "Required Labor": {
+        "person-days": 180,
+        "specific_trades": ["carpenter", "framer"]
+      },
+      "Dependencies": ["002"],
+      "Materials Used": [
+        {
+          "material": "Timber",
+          "quantity": "300 cubic meters"
+        }
+      ],
+      "Quality Control Requirements": "Frames and trusses must align with architectural plans and structural integrity requirements.",
+      "Room/location specific details": "Entire building"
+    },
+    {
+      "Task ID": "004",
       "Name": "Wall Construction",
-      "ConstructionStage": "Structure",
-      "Description": "Build internal and external brick walls including cement block construction for external walls.",
-      "DurationDays": 25,
-      "RequiredLabor": {
-        "Masons": 10,
-        "Laborers": 10
+      "Construction Stage": "Superstructure",
+      "Description": "Building internal and external walls using bricks and blocks.",
+      "Estimated Duration (days)": 40,
+      "Required Labor": {
+        "person-days": 200,
+        "specific_trades": ["mason", "bricklayer"]
       },
-      "Dependencies": [
-        "002"
-      ],
-      "MaterialsUsed": [
+      "Dependencies": ["003"],
+      "Materials Used": [
         {
-          "Material": "Bricks",
-          "Quantity": "9000 units"
+          "material": "Bricks",
+          "quantity": "26250 number"
         },
         {
-          "Material": "Cement Blocks",
-          "Quantity": "1500 units"
+          "material": "Blocks",
+          "quantity": "4200 number"
         }
       ],
-      "QualityControlRequirements": "Ensure walls are level and plumb; joints and mortar meet the specified strength.",
-      "RoomLocation": "Entire Building"
+      "Quality Control Requirements": "Walls must be level and meet designated wall thickness and height as per plans.",
+      "Room/location specific details": "All rooms"
     },
     {
-      "TaskID": "004",
-      "Name": "Roof & Framing",
-      "ConstructionStage": "Roof",
-      "Description": "Install timber frame for roof and other necessary supports.",
-      "DurationDays": 20,
-      "RequiredLabor": {
-        "Carpenters": 10,
-        "Helpers": 8
+      "Task ID": "005",
+      "Name": "Roof Installation",
+      "Construction Stage": "Roofing",
+      "Description": "Installation of roofing materials and ensuring waterproofing.",
+      "Estimated Duration (days)": 20,
+      "Required Labor": {
+        "person-days": 80,
+        "specific_trades": ["roofer"]
       },
-      "Dependencies": [
-        "003"
-      ],
-      "MaterialsUsed": [
-        {
-          "Material": "Timber",
-          "Quantity": "5000 linear meters"
-        }
-      ],
-      "QualityControlRequirements": "Check all wooden elements are safely installed and treated for weather and insects.",
-      "RoomLocation": "Roof"
+      "Dependencies": ["004"],
+      "Materials Used": [],
+      "Quality Control Requirements": "Roof must be properly secured and leak-proof.",
+      "Room/location specific details": "Entire building"
     },
     {
-      "TaskID": "005",
-      "Name": "Mechanical, Electrical, and Plumbing",
-      "ConstructionStage": "MEP",
-      "Description": "Installations of plumbing, electrical systems, and heating according to codes.",
-      "DurationDays": 15,
-      "RequiredLabor": {
-        "Electricians": 5,
-        "Plumbers": 5,
-        "HVAC Technicians": 3
+      "Task ID": "006",
+      "Name": "Plumbing Installation",
+      "Construction Stage": "Systems Installation",
+      "Description": "Installation of all plumbing systems, including pipes and connections, as well as bathroom and kitchen fixtures.",
+      "Estimated Duration (days)": 15,
+      "Required Labor": {
+        "person-days": 75,
+        "specific_trades": ["plumber"]
       },
-      "Dependencies": [
-        "004"
-      ],
-      "MaterialsUsed": [
+      "Dependencies": ["004"],
+      "Materials Used": [
         {
-          "Material": "Sinks",
-          "Quantity": "3 units"
+          "material": "Pipes",
+          "quantity": "200 meters"
         },
         {
-          "Material": "Toilets",
-          "Quantity": "2 units"
+          "material": "Connectors",
+          "quantity": "100 number"
         },
         {
-          "Material": "Bathtubs",
-          "Quantity": "1 unit"
+          "material": "Kitchen sinks",
+          "quantity": "1 number"
+        },
+        {
+          "material": "Toilets",
+          "quantity": "2 number"
+        },
+        {
+          "material": "Shower units",
+          "quantity": "1 number"
+        },
+        {
+          "material": "Bathtubs",
+          "quantity": "1 number"
         }
       ],
-      "QualityControlRequirements": "Ensure all installations meet local building codes. Test all systems.",
-      "RoomLocation": "Entire Building"
+      "Quality Control Requirements": "All fixtures must be installed correctly and tested for leaks.",
+      "Room/location specific details": "Kitchen and bathrooms"
     },
     {
-      "TaskID": "006",
+      "Task ID": "007",
+      "Name": "Electrical Installation",
+      "Construction Stage": "Systems Installation",
+      "Description": "Wiring of the entire house, including installation of switches and outlets.",
+      "Estimated Duration (days)": 15,
+      "Required Labor": {
+        "person-days": 75,
+        "specific_trades": ["electrician"]
+      },
+      "Dependencies": ["004"],
+      "Materials Used": [
+        {
+          "material": "Wiring",
+          "quantity": "1500 meters"
+        },
+        {
+          "material": "Switches",
+          "quantity": "20 number"
+        },
+        {
+          "material": "Outlets",
+          "quantity": "40 number"
+        }
+      ],
+      "Quality Control Requirements": "Wiring must comply with electrical safety regulations and all fixtures must be tested.",
+      "Room/location specific details": "All rooms"
+    },
+    {
+      "Task ID": "008",
       "Name": "Interior Finishing",
-      "ConstructionStage": "Finishing",
-      "Description": "Install drywall, ceiling treatments, floor and wall finishes in all rooms.",
-      "DurationDays": 30,
-      "RequiredLabor": {
-        "DrywallInstallers": 6,
-        "Painters": 6,
-        "Tilers": 4
+      "Construction Stage": "Finishing",
+      "Description": "Applying wall finishes such as paint, wallpaper, tiles in specific rooms as well as ceiling treatments and floor installation.",
+      "Estimated Duration (days)": 25,
+      "Required Labor": {
+        "person-days": 125,
+        "specific_trades": ["painter", "carpet layer", "tiler", "plasterer"]
       },
-      "Dependencies": [
-        "005"
-      ],
-      "MaterialsUsed": [
+      "Dependencies": ["005", "006", "007"],
+      "Materials Used": [
         {
-          "Material": "Plasterboard",
-          "Quantity": "195.94 square meters"
+          "material": "Hardwood flooring",
+          "quantity": "21.76 square meters"
         },
         {
-          "Material": "Paint",
-          "Quantity": "320 liters"
+          "material": "Carpet",
+          "quantity": "36.38 square meters"
+        },
+        {
+          "material": "Tiles",
+          "quantity": "80.76 square meters"
+        },
+        {
+          "material": "Laminate",
+          "quantity": "20.64 square meters"
+        },
+        {
+          "material": "Paint",
+          "quantity": "190.16 square meters"
+        },
+        {
+          "material": "Wallpaper",
+          "quantity": "43.32 square meters"
+        },
+        {
+          "material": "Plaster",
+          "quantity": "108.12 square meters"
+        },
+        {
+          "material": "Water-resistant paint",
+          "quantity": "22.08 square meters"
         }
       ],
-      "QualityControlRequirements": "Inspect finishes for quality and completeness.",
-      "RoomLocation": "Entire Building"
+      "Quality Control Requirements": "Finishes must be even and free of defects, colors and materials should match the selections in the design specifications.",
+      "Room/location specific details": "All rooms"
     },
     {
-      "TaskID": "007",
-      "Name": "Fixture Installation",
-      "ConstructionStage": "Fixture installation",
-      "Description": "Install lighting fixtures, cabinets, door handles and other fittings.",
-      "DurationDays": 10,
-      "RequiredLabor": {
-        "Carpenters": 4,
-        "Electricians": 4
+      "Task ID": "009",
+      "Name": "Final Inspection and Cleanup",
+      "Construction Stage": "Completion",
+      "Description": "A thorough inspection of the construction work to ensure everything is up to code followed by a detailed cleaning.",
+      "Estimated Duration (days)": 5,
+      "Required Labor": {
+        "person-days": 25,
+        "specific_trades": ["inspector", "cleaning crew"]
       },
-      "Dependencies": [
-        "006"
-      ],
-      "MaterialsUsed": [
-        {
-          "Material": "Light Fixtures",
-          "Quantity": "12 units"
-        },
-        {
-          "Material": "Cabinets",
-          "Quantity": "8 units"
-        },
-        {
-          "Material": "Door Handles",
-          "Quantity": "12 units"
-        }
-      ],
-      "QualityControlRequirements": "All fixtures to be securely fixed and fully operational.",
-      "RoomLocation": "Entire Building"
+      "Dependencies": ["008"],
+      "Materials Used": [],
+      "Quality Control Requirements": "Achieve final approval from building inspector.",
+      "Room/location specific details": "Whole building"
     }
   ]
 }

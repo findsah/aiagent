@@ -1,100 +1,94 @@
-# Suddeco AI Agent
+# Suddeco AI Drawing Processor
 
-An intelligent agent for processing architectural and structural engineering drawings to extract measurements, identify tasks, and calculate quantities for Suddeco software.
+An intelligent agent for dynamically processing architectural and structural engineering drawings to extract measurements, identify tasks, and calculate quantities for construction projects.
 
 ## Project Overview
 
-The Suddeco AI Agent is designed to assist with detailed architectural work by reading and extracting precise measurements and annotations from architectural drawings. It parses the extracted information into structured data formats (CSV, JSON, Excel) to support construction estimation, documentation, and integration with software development.
+The Suddeco AI Drawing Processor is designed to assist with detailed architectural work by analyzing and extracting precise measurements and annotations from architectural drawings. It dynamically processes the extracted information to generate comprehensive construction task breakdowns, materials quantities, and architectural analysis without any static measurements.
 
 ## Features
 
-- Upload and process architectural and structural engineering drawings (PDF, PNG)
-- Extract precise measurements according to architectural scale
-- Parse annotations and room specifications
-- Convert extracted data into structured formats
-- Generate project descriptions
-- Identify stages, tasks, materials, and quantities
+- Upload and process architectural and structural engineering drawings (PDF, DXF, DWG, JSON)
+- Dynamically extract precise measurements according to architectural scale
+- Generate detailed architectural analysis with room dimensions and areas
+- Calculate comprehensive materials quantities based on the analysis
+- Create detailed construction task breakdowns with dependencies and timelines
+- Convert extracted data into structured formats (JSON)
 - Integrate with OpenAI API for intelligent processing
 
 ## Project Structure
 
 ```
 suddeco-ai-agent/
-├── poc_implementation.js     # Main server implementation
-├── package.json              # Project dependencies
-├── public/                   # Frontend assets
-│   └── index.html            # Web interface
-├── data/                     # Reference data (create this directory)
-├── uploads/                  # Upload directory (created automatically)
-└── outputs/                  # Output files (created automatically)
+├── suddeco-agent.js        # Main server implementation
+├── package.json            # Project dependencies
+├── README.md               # Project documentation
+├── SUDDECO_AGENT_DOCUMENTATION.md # Detailed documentation
+├── uploads/                # Upload directory (created automatically)
+└── output/                 # Output files (created automatically)
 ```
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (v16 or higher)
+- Node.js (v14 or higher)
 - npm (Node Package Manager)
 
 ### Installation
 
-1. Clone this repository or extract the provided files
-2. Navigate to the project directory
-3. Install dependencies:
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/findsah/aiagent.git
+   ```
 
-```bash
-npm install
-```
+2. Navigate to the project directory:
+   ```bash
+   cd aiagent
+   ```
+
+3. Install dependencies:
+   ```bash
+   npm install express multer path fs openai cors
+   ```
 
 4. Create required directories:
+   ```bash
+   mkdir -p uploads output
+   ```
 
-```bash
-mkdir -p data uploads outputs
-```
-
-5. Set up your OpenAI API key as an environment variable (or it will use the one in the code):
-
-```bash
-# For Windows
-set OPENAI_API_KEY=your_api_key_here
-
-# For macOS/Linux
-export OPENAI_API_KEY=your_api_key_here
-```
+5. Add your OpenAI API key in the suddeco-agent.js file or set it as an environment variable.
 
 ### Running the Application
 
-Start the development server:
+Start the server:
 
 ```bash
-npm run dev
+node suddeco-agent.js
 ```
 
-The application will be available at http://localhost:3000
+The application will be available at http://localhost:8090
 
 ## Usage
 
-1. Open the application in your web browser
-2. Upload an architectural or structural drawing (PDF or PNG)
-3. The system will process the drawing and extract measurements, annotations, and other data
-4. View the extracted data in the various tabs
-5. Download the results in CSV, JSON, or Excel format
+1. Open the application in your web browser at http://localhost:8090
+2. Upload an architectural drawing (PDF, DXF, DWG, or JSON)
+3. The system will process the drawing and generate comprehensive reports
+4. View and download the analysis results, materials quantities, and construction tasks
 
-## Development Workflow
+## API Endpoints
 
-See the `development_workflow.md` file for a detailed development plan.
+### Process Drawing
 
-## Technical Architecture
+**Endpoint:** `POST /api/process`
 
-See the `technical_architecture.md` file for a detailed description of the system architecture.
+Upload a drawing file for processing.
 
-## POC Implementation Plan
+### Get Latest Analysis
 
-See the `poc_implementation_plan.md` file for details on the proof of concept implementation.
+**Endpoint:** `GET /api/latest`
 
-## Project Requirements
-
-See the `project_requirements.md` file for a detailed list of project requirements.
+Retrieve the latest processed drawing data.
 
 ## License
 

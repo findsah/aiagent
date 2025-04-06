@@ -1,0 +1,46 @@
+{
+  "architectural_analysis": {
+    "building_analysis": {
+      "total_internal_dimensions": {
+        "length": "0",
+        "width": "0",
+        "height": "0"
+      },
+      "total_external_dimensions": {
+        "length": "0",
+        "width": "0",
+        "height": "0"
+      },
+      "total_floor_area": {
+        "internal": "0",
+        "external": "0"
+      },
+      "total_wall_surface_area": "0",
+      "total_ceiling_area": "0",
+      "total_volume": "0"
+    },
+    "room_details": [
+      {
+        "name": "Room 1",
+        "internal_dimensions": {
+          "length": "0",
+          "width": "0",
+          "height": "0"
+        },
+        "external_dimensions": {
+          "length": "0",
+          "width": "0",
+          "height": "0"
+        },
+        "floor_area": {
+          "internal": "0",
+          "external": "0"
+        },
+        "wall_surface_area": "0",
+        "ceiling_area": "0",
+        "volume": "0",
+        "skirting_board_length": "0"
+      }
+    ]
+  }
+}

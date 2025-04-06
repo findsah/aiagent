@@ -225,12 +225,15 @@ async function generateTaskBreakdown(analysisResult, materialsResult) {
   }
 }
 
-async function main() {
+async function main(inputData = null) {
   try {
     console.log('Starting enhanced architectural analysis...');
     
+    // Use provided input data or fall back to the sample data
+    const architecturalData = inputData || enhancedArchitecturalData;
+    
     // Step 1: Analyze architectural data with detailed measurements
-    const analysisResult = await analyzeArchitecturalData(enhancedArchitecturalData);
+    const analysisResult = await analyzeArchitecturalData(architecturalData);
     console.log('\nDetailed Architectural Analysis Result:');
     console.log(analysisResult);
     fs.writeFileSync('./detailed_architectural_analysis.json', analysisResult);
@@ -255,17 +258,56 @@ async function main() {
       generated_at: new Date().toISOString()
     };
     
-    fs.writeFileSync('./detailed_combined_report.json', JSON.stringify(combinedReport, null, 2));
-    console.log('\nDetailed combined report saved to detailed_combined_report.json');
+    // Create output directory if it doesn't exist
+    const outputDir = './output';
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir);
+    }
+    
+    // Generate a timestamp for unique filenames
+    const timestamp = new Date().toISOString().replace(/:/g, '-').replace(/\..+/, '');
+    
+    // Save reports with timestamp
+    fs.writeFileSync(`${outputDir}/detailed_combined_report_${timestamp}.json`, JSON.stringify(combinedReport, null, 2));
+    console.log(`\nDetailed combined report saved to ${outputDir}/detailed_combined_report_${timestamp}.json`);
     
     // Save as SKSON file with construction industry standard format
+    fs.writeFileSync(`${outputDir}/suddeco_detailed_analysis_${timestamp}.skson`, JSON.stringify(combinedReport, null, 2));
+    console.log(`Detailed analysis also saved to ${outputDir}/suddeco_detailed_analysis_${timestamp}.skson`);
+    
+    // Also save the latest version without timestamp for easy access
     fs.writeFileSync('./suddeco_detailed_analysis.skson', JSON.stringify(combinedReport, null, 2));
     console.log('Detailed analysis also saved to suddeco_detailed_analysis.skson');
     
+    // Generate visualization report
+    const visualizationScript = path.join(__dirname, 'visualize_measurements.js');
+    if (fs.existsSync(visualizationScript)) {
+      console.log('Generating visualization report...');
+      require(visualizationScript);
+    }
+    
+    return {
+      analysisResult,
+      materialsResult,
+      taskBreakdown,
+      combinedReport
+    };
+    
   } catch (error) {
     console.error('Error in main function:', error);
+    throw error;
   }
 }
 
-// Run the main function
-main();
+// Export the functions for use in other modules
+module.exports = {
+  analyzeArchitecturalData,
+  generateMaterialsQuantities,
+  generateTaskBreakdown,
+  main
+};
+
+// If this script is run directly (not imported), execute the main function with sample data
+if (require.main === module) {
+  main();
+}

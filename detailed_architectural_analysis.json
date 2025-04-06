@@ -1,120 +1,161 @@
 {
-  "building_analysis": {
-    "total_internal_dimensions": {
-      "length": "21.7m", 	"width": "15.3m", 	"height": "2.4m"
-    },
-    "total_external_dimensions": {
-      "length": "22.1m",
-      "width": "15.7m",
-      "height": "2.4m"
+  "response": {
+    "room_analysis": [
+      {
+        "name": "Living Room",
+        "internal_dimensions": {
+          "length": 6.4,
+          "width": 3.4,
+          "height": 2.4
+        },
+        "external_dimensions": {
+          "length": 6.8,
+          "width": 3.8,
+          "height": 2.4
+        },
+        "floor_area": {
+          "internal": 21.76,
+          "external": 25.84
+        },
+        "wall_surface_area": {
+          "internal": 47.04,
+          "external": 51.84
+        },
+        "ceiling_area": 21.76,
+        "skirting_board_length": 19.6
+      },
+      {
+        "name": "Kitchen",
+        "internal_dimensions": {
+          "length": 3.6,
+          "width": 2.7,
+          "height": 2.4
+        },
+        "external_dimensions": {
+          "length": 4.0,
+          "width": 3.1,
+          "height": 2.4
+        },
+        "floor_area": {
+          "internal": 9.72,
+          "external": 12.4
+        },
+        "wall_surface_area": {
+          "internal": 29.88,
+          "external": 33.84
+        },
+        "ceiling_area": 9.72,
+        "skirting_board_length": 12.6
+      },
+      {
+        "name": "Bedroom 2",
+        "internal_dimensions": {
+          "length": 5.8,
+          "width": 3.1,
+          "height": 2.4
+        },
+        "external_dimensions": {
+          "length": 6.2,
+          "width": 3.5,
+          "height": 2.4
+        },
+        "floor_area": {
+          "internal": 17.98,
+          "external": 21.7
+        },
+        "wall_surface_area": {
+          "internal": 43.32,
+          "external": 48.24
+        },
+        "ceiling_area": 17.98,
+        "skirting_board_length": 17.8
+      },
+      {
+        "name": "Bathroom",
+        "internal_dimensions": {
+          "length": 6.9,
+          "width": 3.2,
+          "height": 2.4
+        },
+        "external_dimensions": {
+          "length": 7.3,
+          "width": 3.6,
+          "height": 2.4
+        },
+        "floor_area": {
+          "internal": 22.08,
+          "external": 26.28
+        },
+        "wall_surface_area": {
+          "internal": 48.96,
+          "external": 54.72
+        },
+        "ceiling_area": 22.08,
+        "skirting_board_length": 20.2
+      },
+      {
+        "name": "Dining Room",
+        "internal_dimensions": {
+          "length": 4.8,
+          "width": 4.3,
+          "height": 2.4
+        },
+        "external_dimensions": {
+          "length": 5.2,
+          "width": 4.7,
+          "height": 2.4
+        },
+        "floor_area": {
+          "internal": 20.64,
+          "external": 24.44
+        },
+        "wall_surface_area": {
+          "internal": 44.64,
+          "external": 50.16
+        },
+        "ceiling_area": 20.64,
+        "skirting_board_length": 16.2
+      },
+      {
+        "name": "Office",
+        "internal_dimensions": {
+          "length": 4.0,
+          "width": 4.6,
+          "height": 2.4
+        },
+        "external_dimensions": {
+          "length": 4.4,
+          "width": 5.0,
+          "height": 2.4
+        },
+        "floor_area": {
+          "internal": 18.4,
+          "external": 22.0
+        },
+        "wall_surface_area": {
+          "internal": 41.28,
+          "external": 47.04
+        },
+        "ceiling_area": 18.4,
+        "skirting_board_length": 17.2
+      }
+    ],
+    "total_building_dimensions": {
+      "width": "Estimate Required",
+      "length": "Estimate Required",
+      "height": 2.4
     },
     "total_floor_area": {
-      "internal": "185.58m²",
-      "external": "195.94m²"
+      "internal": 110.58,
+      "external": "Estimate Required"
     },
     "total_wall_area": {
-      "internal": "271.596m²",
-      "external": "278.184m²"
+      "internal": 255.12,
+      "external": "Estimate Required"
     },
-    "total_ceiling_area": "195.94m²",
-    "total_volume": {
-      "internal": "445.392m³",
-      "external": "470.256m³"
+    "volume_calculations": {
+      "internal_volume": 265.392,
+      "external_volume": "Estimate Required"
     }
-  },
-  "room_details": [
-    {
-      "name": "Kitchen",
-      "internal_dimensions": {
-        "length": "4.2m", "width": "3.5m", "height": "2.4m"
-      },
-      "external_dimensions": {
-        "length": "4.6m", "width": "3.9m", "height": "2.4m"
-      },
-      "floor_area": {
-        "internal": "14.7m²",
-        "external": "17.94m²"
-      },
-      "wall_surface_area": "39.12m²",
-      "ceiling_area": "17.94m²",
-      "skirting_board_length": "15.4m"
-    },
-    {
-      "name": "Living Room",
-      "internal_dimensions": {
-        "length": "6.0m", "width": "4.5m", "height": "2.4m"
-      },
-      "external_dimensions": {
-        "length": "6.4m", "width": "4.9m", "height": "2.4m"
-      },
-      "floor_area": {
-        "internal": "27m²",
-        "external": "31.36m²"
-      },
-      "wall_surface_area": "52.56m²",
-      "ceiling_area": "31.36m²",
-      "skirting_board_length": "21m"
-    },
-    {
-      "name": "Dining Area",
-      "internal_dimensions": {
-        "length": "4.0m", "width": "3.8m", "height": "2.4m"
-      },
-      "external_dimensions": {
-        "length": "4.4m", "width": "4.2m", "height": "2.4m"
-      },
-      "floor_area": {
-        "internal": "15.2m²",
-        "external": "18.48m²"
-      },
-      "wall_surface_area": "42.24m²",
-      "ceiling_area": "18.48m²",
-      "skirting_board_length": "15.6m"
-    },
-    {
-      "name": "Bathroom",
-      "internal_dimensions": {
-        "length": "2.5m", "width": "2.0m", "height": "2.4m"
-      },
-      "external_dimensions": {
-        "length": "2.9m", "width": "2.4m", "height": "2.4m"
-      },
-      "floor_area": {
-        "internal": "5m²",
-        "external": "6.96m²"
-      },
-      "wall_surface_area": "25.92m²",
-      "ceiling_area": "6.96m²",
-      "skirting_board_length": "9m"
-    },
-    {
-      "name": "Hallway",
-      "internal_dimensions": {
-        "length": "5.0m", "width": "1.5m", "height": "2.4m"
-      },
-      "external_dimensions": {
-        "length": "5.4m", "width": "1.9m", "height": "2.4m"
-      },
-      "floor_area": {
-        "internal": "7.5m²",
-        "external": "10.26m²"
-      },
-      "wall_surface_area": "31.92m²",
-      "ceiling_area": "10.26m²",
-      "skirting_board_length": "13m"
-    }
-  ],
-  "openings_details": {
-    "doors": {
-      "total_area": "11.34m²"
-    },
-    "windows": {
-      "total_area": "9.6m²"
-    }
-  },
-  "fixtures_details": {
-    "electrical_outlets": 24,
-    "light_fixtures": 12,
-    "plumbing_fixtures": 6
   }
 }
