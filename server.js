@@ -18,7 +18,7 @@ const {
 
 // Create Express app
 const app = express();
-const port = 3030; // Changed port to avoid conflicts
+const port = process.env.PORT || 3030; // Use environment port or default to 3030
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
@@ -450,7 +450,7 @@ app.post('/api/process-drawing', upload.single('drawing'), async (req, res) => {
         tasks: result.taskBreakdown,
         constructionPlan: constructionPlan,
         reportUrls: {
-          skson: `/output/suddeco_detailed_analysis_${result.timestamp}.skson`,
+          excel: `/output/${result.reportUrl || `suddeco_report_${result.timestamp}.xlsx`}`,
           text: '/suddeco_measurements_report.txt',
           html: '/measurements_report.html',
           constructionPlan: constructionPlan?.reportUrl ? `/output/${constructionPlan.reportUrl}` : null
@@ -484,7 +484,7 @@ app.post('/upload', upload.single('drawing'), async (req, res) => {
     res.json({
       success: true,
       message: 'Drawing processed successfully',
-      reportUrl: `/output/suddeco_detailed_analysis_${result.timestamp}.skson`,
+      reportUrl: `/output/${result.reportUrl || `suddeco_report_${result.timestamp}.xlsx`}`,
       visualizationUrl: '/suddeco_measurements_report.txt',
       htmlReportUrl: '/measurements_report.html'
     });

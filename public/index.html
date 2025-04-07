@@ -366,7 +366,7 @@
                         document.getElementById('download-text-report-btn').style.display = 'none'; // Hide text report for multiple files
                     } else {
                         // Update for single file
-                        document.getElementById('skson-report-link').href = `/output/${data.data.reports.skson}`;
+                        document.getElementById('skson-report-link').href = data.data.reportUrls.excel;
                         document.getElementById('download-text-report-btn').style.display = 'block';
                     }
                     
