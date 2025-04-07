@@ -1,0 +1,526 @@
+{
+  "architectural_analysis": {
+    "Building_Analysis": {
+      "Rooms": [
+        {
+          "Name": "Living Room",
+          "Internal_Dimensions": {
+            "Length": "4.0m",
+            "Width": "3.9m",
+            "Height": "2.4m"
+          },
+          "External_Dimensions": {
+            "Length": "4.4m",
+            "Width": "4.3m",
+            "Height": "2.4m"
+          },
+          "Floor_Area": {
+            "Internal": "15.6m^2",
+            "External": "18.92m^2"
+          },
+          "Wall_Surface_Area": "34.56m^2",
+          "Ceiling_Area": "15.6m^2",
+          "Skirting_Board_Length": "15.8m"
+        },
+        {
+          "Name": "Kitchen",
+          "Internal_Dimensions": {
+            "Length": "3.7m",
+            "Width": "3.3m",
+            "Height": "2.4m"
+          },
+          "External_Dimensions": {
+            "Length": "4.1m",
+            "Width": "3.7m",
+            "Height": "2.4m"
+          },
+          "Floor_Area": {
+            "Internal": "12.21m^2",
+            "External": "15.17m^2"
+          },
+          "Wall_Surface_Area": "31.92m^2",
+          "Ceiling_Area": "12.21m^2",
+          "Skirting_Board_Length": "14.0m"
+        },
+        {
+          "Name": "Bedroom 2",
+          "Internal_Dimensions": {
+            "Length": "5.3m",
+            "Width": "4.4m",
+            "Height": "2.4m"
+          },
+          "External_Dimensions": {
+            "Length": "5.7m",
+            "Width": "4.8m",
+            "Height": "2.4m"
+          },
+          "Floor_Area": {
+            "Internal": "23.32m^2",
+            "External": "27.36m^2"
+          },
+          "Wall_Surface_Area": "49.44m^2",
+          "Ceiling_Area": "23.32m^2",
+          "Skirting_Board_Length": "19.4m"
+        },
+        {
+          "Name": "Bathroom",
+          "Internal_Dimensions": {
+            "Length": "5.2m",
+            "Width": "4.0m",
+            "Height": "2.4m"
+          },
+          "External_Dimensions": {
+            "Length": "5.6m",
+            "Width": "4.4m",
+            "Height": "2.4m"
+          },
+          "Floor_Area": {
+            "Internal": "20.8m^2",
+            "External": "24.64m^2"
+          },
+          "Wall_Surface_Area": "46.56m^2",
+          "Ceiling_Area": "20.8m^2",
+          "Skirting_Board_Length": "18.4m"
+        },
+        {
+          "Name": "Dining Room",
+          "Internal_Dimensions": {
+            "Length": "3.9m",
+            "Width": "3.5m",
+            "Height": "2.4m"
+          },
+          "External_Dimensions": {
+            "Length": "4.3m",
+            "Width": "3.9m",
+            "Height": "2.4m"
+          },
+          "Floor_Area": {
+            "Internal": "13.65m^2",
+            "External": "16.77m^2"
+          },
+          "Wall_Surface_Area": "34.08m^2",
+          "Ceiling_Area": "13.65m^2",
+          "Skirting_Board_Length": "14.8m"
+        },
+        {
+          "Name": "Office",
+          "Internal_Dimensions": {
+            "Length": "3.1m",
+            "Width": "4.3m",
+            "Height": "2.4m"
+          },
+          "External_Dimensions": {
+            "Length": "3.5m",
+            "Width": "4.7m",
+            "Height": "2.4m"
+          },
+          "Floor_Area": {
+            "Internal": "13.33m^2",
+            "External": "16.45m^2"
+          },
+          "Wall_Surface_Area": "37.68m^2",
+          "Ceiling_Area": "13.33m^2",
+          "Skirting_Board_Length": "14.8m"
+        }
+      ],
+      "Total_Building_Dimensions": {
+        "Length": "29.9m",
+        "Width": "24.5m",
+        "Height": "2.4m"
+      },
+      "Total_Floor_Area": {
+        "Internal": "98.91m^2",
+        "External": "119.51m^2"
+      },
+      "Total_Wall_Area": {
+        "Internal": "234.24m^2",
+        "External": "183.44m^2"
+      },
+      "Volume_Calculations": {
+        "Internal": "237.38m^3",
+        "External": "286.82m^3"
+      }
+    }
+  },
+  "materials_quantities": {
+    "Material_Estimates": {
+      "Foundation_Materials": {
+        "Concrete": {
+          "Quantity": "20.0",
+          "Unit": "cubic_meters",
+          "Purpose": "Foundation slab and footings"
+        },
+        "Rebar": {
+          "Quantity": "1200",
+          "Unit": "kg",
+          "Purpose": "Reinforcement for foundation slab and footings"
+        }
+      },
+      "Structural_Materials": {
+        "Bricks": {
+          "Quantity": "20000",
+          "Unit": "pieces",
+          "Locations": [
+            "External Walls",
+            "Internal Walls"
+          ],
+          "Purpose": "Wall construction"
+        },
+        "Cement": {
+          "Quantity": "150",
+          "Unit": "bags",
+          "Purpose": "Mortar and plaster"
+        },
+        "Sand": {
+          "Quantity": "10",
+          "Unit": "cubic_meters",
+          "Purpose": "Mortar and plaster preparation"
+        }
+      },
+      "Finishing_Materials": {
+        "Flooring": {
+          "Living Room": {
+            "Type": "Hardwood",
+            "Quantity": "16",
+            "Unit": "square_meters"
+          },
+          "Kitchen": {
+            "Type": "Tiles",
+            "Quantity": "13",
+            "Unit": "square_meters"
+          },
+          "Bedroom 2": {
+            "Type": "Carpet",
+            "Quantity": "24",
+            "Unit": "square_meters"
+          },
+          "Bathroom": {
+            "Type": "Waterproof Tiles",
+            "Quantity": "21",
+            "Unit": "square_meters"
+          },
+          "Dining Room": {
+            "Type": "Laminate",
+            "Quantity": "14",
+            "Unit": "square_meters"
+          },
+          "Office": {
+            "Type": "Vinyl",
+            "Quantity": "14",
+            "Unit": "square_meters"
+          }
+        },
+        "Wall_Coverings": {
+          "Paint": {
+            "Quantity": "263.24",
+            "Unit": "liters",
+            "Locations": [
+              "All Internal Walls"
+            ],
+            "Purpose": "Wall Finishing"
+          },
+          "Tiles": {
+            "Quantity": "333",
+            "Unit": "square_meters",
+            "Locations": [
+              "Kitchen Walls",
+              "Bathroom Walls"
+            ],
+            "Purpose": "Durable & moisture-resistant wall finish"
+          }
+        },
+        "Ceiling_Treatments": {
+          "Plasterboard": {
+            "Quantity": "98.91",
+            "Unit": "square_meters",
+            "Locations": [
+              "All Ceilings"
+            ],
+            "Purpose": "Ceiling covering and finishing"
+          }
+        }
+      },
+      "Fixtures_and_Fittings": {
+        "Light_Fittings": {
+          "Quantity": "20",
+          "Unit": "pieces",
+          "Locations": "All Rooms",
+          "Purpose": "Lighting"
+        },
+        "Door_Handles": {
+          "Quantity": "12",
+          "Unit": "pieces",
+          "Locations": "Interior Doors",
+          "Purpose": "Door operation"
+        },
+        "Faucets": {
+          "Quantity": "5",
+          "Unit": "pieces",
+          "Locations": "Bathroom and Kitchen",
+          "Purpose": "Water access"
+        }
+      },
+      "Electrical_Components": {
+        "Wire": {
+          "Quantity": "600",
+          "Unit": "meters",
+          "Purpose": "Wiring of entire building"
+        },
+        "Switches": {
+          "Quantity": "30",
+          "Unit": "pieces",
+          "Locations": "All Rooms",
+          "Purpose": "Control electrical devices"
+        },
+        "Sockets": {
+          "Quantity": "50",
+          "Unit": "pieces",
+          "Locations": "All Rooms",
+          "Purpose": "Power supply points"
+        }
+      },
+      "Plumbing_Components": {
+        "Pipes": {
+          "Quantity": "300",
+          "Unit": "meters",
+          "Purpose": "Water distribution and waste removal"
+        },
+        "Fittings": {
+          "Quantity": "80",
+          "Unit": "pieces",
+          "Purpose": "Make connections between pipes"
+        }
+      }
+    }
+  },
+  "task_breakdown": {
+    "Construction_Project_Plan": {
+      "Stages": [
+        {
+          "Stage_ID": "01",
+          "Stage_Name": "Foundation and Footings",
+          "Tasks": [
+            {
+              "Task_ID": "01-01",
+              "Construction_Stage": "Foundation and Footings",
+              "Task_Name": "Excavation for Foundation",
+              "Description": "Digging the ground to prepare for the foundation based on external dimensions of the building.",
+              "Estimated_Duration": "3",
+              "Required_Labor": {
+                "Excavator_Operator": "3 person-days",
+                "Laborer": "6 person-days"
+              },
+              "Dependencies": [],
+              "Materials_Used": [],
+              "Quality_Control_Requirements": "Ensure depth and width meet structural requirements.",
+              "Room/Location_Details": "Entire building perimeter"
+            },
+            {
+              "Task_ID": "01-02",
+              "Construction_Stage": "Foundation and Footings",
+              "Task_Name": "Laying Foundation Rebar",
+              "Description": "Installing reinforcement bars within the excavated foundation.",
+              "Estimated_Duration": "2",
+              "Required_Labor": {
+                "Steelworker": "4 person-days"
+              },
+              "Dependencies": [
+                "01-01"
+              ],
+              "Materials_Used": [
+                {
+                  "Material": "Rebar",
+                  "Quantity": "1200 kg"
+                }
+              ],
+              "Quality_Control_Requirements": "Verify alignment and secure connections as per engineering specifications.",
+              "Room/Location_Details": "Entire building perimeter"
+            },
+            {
+              "Task_ID": "01-03",
+              "Construction_Stage": "Foundation and Footings",
+              "Task_Name": "Pouring Concrete",
+              "Description": "Pouring concrete into the foundation and footing molds over the rebar setup.",
+              "Estimated_Duration": "1",
+              "Required_Labor": {
+                "Concrete_Worker": "8 person-days"
+              },
+              "Dependencies": [
+                "01-02"
+              ],
+              "Materials_Used": [
+                {
+                  "Material": "Concrete",
+                  "Quantity": "20 cubic meters"
+                }
+              ],
+              "Quality_Control_Requirements": "Ensure even distribution and proper curing environment.",
+              "Room/Location_Details": "Entire building perimeter"
+            }
+          ]
+        },
+        {
+          "Stage_ID": "02",
+          "Stage_Name": "Structural Framework",
+          "Tasks": [
+            {
+              "Task_ID": "02-01",
+              "Construction_Stage": "Structural Framework",
+              "Task_Name": "Masonry for External and Internal Walls",
+              "Description": "Constructing external and internal walls using bricks and mortar.",
+              "Estimated_Duration": "10",
+              "Required_Labor": {
+                "Mason": "30 person-days",
+                "Helper": "10 person-days"
+              },
+              "Dependencies": [
+                "01-03"
+              ],
+              "Materials_Used": [
+                {
+                  "Material": "Bricks",
+                  "Quantity": "20000 pieces"
+                },
+                {
+                  "Material": "Cement",
+                  "Quantity": "75 bags"
+                },
+                {
+                  "Material": "Sand",
+                  "Quantity": "5 cubic meters"
+                }
+              ],
+              "Quality_Control_Requirements": "Wall straightness, uniform mortar joints, and proper curing.",
+              "Room/Location_Details": "All designated rooms as per architectural analysis"
+            }
+          ]
+        },
+        {
+          "Stage_ID": "03",
+          "Stage_Name": "Roofing and Ceiling",
+          "Tasks": [
+            {
+              "Task_ID": "03-01",
+              "Construction_Stage": "Roofing and Ceiling",
+              "Task_Name": "Ceiling Framework Installation",
+              "Description": "Installation of ceiling framework using metal or wooden trusses.",
+              "Estimated_Duration": "3",
+              "Required_Labor": {
+                "Carpenter": "6 person-days"
+              },
+              "Dependencies": [
+                "02-01"
+              ],
+              "Materials_Used": [],
+              "Quality_Control_Requirements": "Check for level and load capacity.",
+              "Room/Location_Details": "All designated rooms"
+            },
+            {
+              "Task_ID": "03-02",
+              "Construction_Stage": "Roofing and Ceiling",
+              "Task_Name": "Attaching Plasterboard for Ceilings",
+              "Description": "Securing plasterboard to the ceiling framework.",
+              "Estimated_Duration": "4",
+              "Required_Labor": {
+                "Drywall_Installer": "8 person-days"
+              },
+              "Dependencies": [
+                "03-01"
+              ],
+              "Materials_Used": [
+                {
+                  "Material": "Plasterboard",
+                  "Quantity": "98.91 square meters"
+                }
+              ],
+              "Quality_Control_Requirements": "Ensure smooth finish and proper fastening to supports.",
+              "Room/Location_Details": "All designated rooms"
+            }
+          ]
+        },
+        {
+          "Stage_ID": "04",
+          "Stage_Name": "Finishing",
+          "Tasks": [
+            {
+              "Task_ID": "04-01",
+              "Construction_Stage": "Finishing",
+              "Task_Name": "Flooring Installation",
+              "Description": "Installation of different types of flooring materials in specified rooms.",
+              "Estimated_Duration": "5",
+              "Required_Labor": {
+                "Flooring_Specialist": "10 person-days"
+              },
+              "Dependencies": [
+                "03-02"
+              ],
+              "Materials_Used": [
+                {
+                  "Material": "Hardwood",
+                  "Quantity": "16 square meters",
+                  "Location": "Living Room"
+                },
+                {
+                  "Material": "Tiles",
+                  "Quantity": "13 square meters",
+                  "Location": "Kitchen"
+                },
+                {
+                  "Material": "Carpet",
+                  "Quantity": "24 square meters",
+                  "Location": "Bedroom 2"
+                },
+                {
+                  "Material": "Waterproof Tiles",
+                  "Quantity": "21 square meters",
+                  "Location": "Bathroom"
+                },
+                {
+                  "Material": "Laminate",
+                  "Quantity": "14 square meters",
+                  "Location": "Dining Room"
+                },
+                {
+                  "Material": "Vinyl",
+                  "Quantity": "14 square meters",
+                  "Location": "Office"
+                }
+              ],
+              "Quality_Control_Requirements": "Ensure even surface and proper material adhesion.",
+              "Room/Location_Details": "Specific to each room as listed"
+            },
+            {
+              "Task_ID": "04-02",
+              "Construction_Stage": "Finishing",
+              "Task_Name": "Painting and Wall Finishing",
+              "Description": "Application of paint and tiles on designated walls.",
+              "Estimated_Duration": "7",
+              "Required_Labor": {
+                "Painter": "10 person-days",
+                "Tiler": "5 person-days"
+              },
+              "Dependencies": [
+                "04-01"
+              ],
+              "Materials_Used": [
+                {
+                  "Material": "Paint",
+                  "Quantity": "263.24 liters",
+                  "Location": "All Internal Walls"
+                },
+                {
+                  "Material": "Tiles",
+                  "Quantity": "333 square meters",
+                  "Location": "Kitchen Walls, Bathroom Walls"
+                }
+              ],
+              "Quality_Control_Requirements": "Consistent color application and correct grouting process for tiles.",
+              "Room/Location_Details": "Specific to each room as listed"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "generated_at": "2025-04-06T20:06:46.502Z"
+}

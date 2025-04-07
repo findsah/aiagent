@@ -1,0 +1,660 @@
+{
+  "architectural_analysis": {
+    "analysis_results": {
+      "rooms_analysis": [
+        {
+          "name": "Living Room",
+          "internal_dimensions": {
+            "length": "4.4m",
+            "width": "3.4m",
+            "height": "2.4m"
+          },
+          "external_dimensions": {
+            "length": "4.8m",
+            "width": "3.8m",
+            "height": "2.4m"
+          },
+          "floor_area": {
+            "internal": "14.96m²",
+            "external": "18.24m²"
+          },
+          "wall_surface_area": {
+            "internal": "37.44m²",
+            "external": "41.76m²"
+          },
+          "ceiling_area": "14.96m²",
+          "skirting_board_length": "15.6m"
+        },
+        {
+          "name": "Kitchen",
+          "internal_dimensions": {
+            "length": "3.9m",
+            "width": "4.4m",
+            "height": "2.4m"
+          },
+          "external_dimensions": {
+            "length": "4.3m",
+            "width": "4.8m",
+            "height": "2.4m"
+          },
+          "floor_area": {
+            "internal": "17.16m²",
+            "external": "20.64m²"
+          },
+          "wall_surface_area": {
+            "internal": "39.36m²",
+            "external": "44.64m²"
+          },
+          "ceiling_area": "17.16m²",
+          "skirting_board_length": "16.6m"
+        },
+        {
+          "name": "Bedroom 2",
+          "internal_dimensions": {
+            "length": "6.8m",
+            "width": "4.1m",
+            "height": "2.4m"
+          },
+          "external_dimensions": {
+            "length": "7.2m",
+            "width": "4.5m",
+            "height": "2.4m"
+          },
+          "floor_area": {
+            "internal": "27.88m²",
+            "external": "32.4m²"
+          },
+          "wall_surface_area": {
+            "internal": "52.56m²",
+            "external": "58.56m²"
+          },
+          "ceiling_area": "27.88m²",
+          "skirting_board_length": "21.8m"
+        },
+        {
+          "name": "Bathroom",
+          "internal_dimensions": {
+            "length": "4.8m",
+            "width": "3.2m",
+            "height": "2.4m"
+          },
+          "external_dimensions": {
+            "length": "5.2m",
+            "width": "3.6m",
+            "height": "2.4m"
+          },
+          "floor_area": {
+            "internal": "15.36m²",
+            "external": "18.72m²"
+          },
+          "wall_surface_area": {
+            "internal": "38.88m²",
+            "external": "44.16m²"
+          },
+          "ceiling_area": "15.36m²",
+          "skirting_board_length": "16m"
+        },
+        {
+          "name": "Dining Room",
+          "internal_dimensions": {
+            "length": "6.3m",
+            "width": "3.8m",
+            "height": "2.4m"
+          },
+          "external_dimensions": {
+            "length": "6.7m",
+            "width": "4.2m",
+            "height": "2.4m"
+          },
+          "floor_area": {
+            "internal": "23.94m²",
+            "external": "28.14m²"
+          },
+          "wall_surface_area": {
+            "internal": "48.24m²",
+            "external": "54.48m²"
+          },
+          "ceiling_area": "23.94m²",
+          "skirting_board_length": "20.2m"
+        },
+        {
+          "name": "Office",
+          "internal_dimensions": {
+            "length": "4.9m",
+            "width": "3.7m",
+            "height": "2.4m"
+          },
+          "external_dimensions": {
+            "length": "5.3m",
+            "width": "4.1m",
+            "height": "2.4m"
+          },
+          "floor_area": {
+            "internal": "18.13m²",
+            "external": "21.73m²"
+          },
+          "wall_surface_area": {
+            "internal": "41.04m²",
+            "external": "46.64m²"
+          },
+          "ceiling_area": "18.13m²",
+          "skirting_board_length": "16.2m"
+        },
+        {
+          "name": "Hallway",
+          "internal_dimensions": {
+            "length": "3.2m",
+            "width": "4.0m",
+            "height": "2.4m"
+          },
+          "external_dimensions": {
+            "length": "3.6m",
+            "width": "4.4m",
+            "height": "2.4m"
+          },
+          "floor_area": {
+            "internal": "12.8m²",
+            "external": "15.84m²"
+          },
+          "wall_surface_area": {
+            "internal": "34.56m²",
+            "external": "39.84m²"
+          },
+          "ceiling_area": "12.8m²",
+          "skirting_board_length": "14.4m"
+        }
+      ],
+      "total_building_dimensions": {
+        "width": "Estimate from individual external room widths plus potential overlaps and layout",
+        "length": "Estimate from individual external room lengths plus potential overlaps and layout",
+        "height": "2.4m"
+      },
+      "total_floor_area": {
+        "internal": "130.33m²",
+        "external": "155.73m²"
+      },
+      "total_wall_area": {
+        "internal": "291.68m²",
+        "external": "329.28m²"
+      },
+      "volume_calculations": {
+        "internal_volume": "312.79m³",
+        "external_volume": "373.75m³"
+      }
+    }
+  },
+  "materials_quantities": {
+    "material_requirements": {
+      "foundation_materials": {
+        "concrete": {
+          "quantity": "140m³",
+          "unit": "cubic meters",
+          "purpose": "To form the foundation slab and footings of the building",
+          "location": "Building Foundation"
+        },
+        "rebar": {
+          "quantity": "8000kg",
+          "unit": "kilograms",
+          "purpose": "Reinforcement for the foundation slab and footings",
+          "location": "Building Foundation"
+        }
+      },
+      "structural_materials": {
+        "bricks": {
+          "quantity": "25000",
+          "unit": "units",
+          "purpose": "Wall construction for external and some internal walls",
+          "location": "Building Walls"
+        },
+        "blocks": {
+          "quantity": "5000",
+          "unit": "units",
+          "purpose": "Wall construction for non-load bearing internal walls",
+          "location": "Internal Walls"
+        },
+        "timber": {
+          "quantity": "6000m",
+          "unit": "meters",
+          "purpose": "Structural supports, roof beams, door frames, and window frames",
+          "location": "Various Usage across Building"
+        }
+      },
+      "finishing_materials": {
+        "flooring": {
+          "Living Room": {
+            "laminate": {
+              "quantity": "15.5m²",
+              "unit": "square meters",
+              "purpose": "Floor finishing",
+              "location": "Living Room"
+            }
+          },
+          "Kitchen": {
+            "tiles": {
+              "quantity": "17.7m²",
+              "unit": "square meters",
+              "purpose": "Floor finishing",
+              "location": "Kitchen"
+            }
+          },
+          "Bedroom 2": {
+            "carpet": {
+              "quantity": "28.3m²",
+              "unit": "square meters",
+              "purpose": "Floor finishing",
+              "location": "Bedroom 2"
+            }
+          },
+          "Bathroom": {
+            "tiles": {
+              "quantity": "15.8m²",
+              "unit": "square meters",
+              "purpose": "Floor finishing (water resistant)",
+              "location": "Bathroom"
+            }
+          },
+          "Dining Room": {
+            "hardwood": {
+              "quantity": "24.4m²",
+              "unit": "square meters",
+              "purpose": "Floor finishing",
+              "location": "Dining Room"
+            }
+          },
+          "Office": {
+            "laminate": {
+              "quantity": "18.5m²",
+              "unit": "square meters",
+              "purpose": "Floor finishing",
+              "location": "Office"
+            }
+          },
+          "Hallway": {
+            "tiles": {
+              "quantity": "13.2m²",
+              "unit": "square meters",
+              "purpose": "Floor finishing (high traffic area)",
+              "location": "Hallway"
+            }
+          }
+        },
+        "wall_coverings": {
+          "paint": {
+            "quantity": "300L",
+            "unit": "liters",
+            "purpose": "Interior wall painting",
+            "rooms": [
+              "Living Room",
+              "Bedroom 2",
+              "Dining Room",
+              "Office",
+              "Hallway"
+            ]
+          },
+          "tiles": {
+            "quantity": "130m²",
+            "unit": "square meters",
+            "purpose": "Wall tiles for Kitchen and Bathroom",
+            "rooms": [
+              "Kitchen",
+              "Bathroom"
+            ]
+          }
+        },
+        "ceiling_treatments": {
+          "plasterboard": {
+            "quantity": "131m²",
+            "unit": "square meters",
+            "purpose": "Ceiling covering and finishing",
+            "location": "All Rooms"
+          }
+        }
+      },
+      "fixtures_and_fittings": {
+        "light_fixtures": {
+          "quantity": "30",
+          "unit": "units",
+          "purpose": "Lighting",
+          "location": "Various Rooms"
+        },
+        "door_hardware": {
+          "quantity": "20",
+          "unit": "units",
+          "purpose": "Doors installation and operation",
+          "location": "Various Rooms"
+        }
+      },
+      "electrical_components": {
+        "wiring": {
+          "quantity": "1000m",
+          "unit": "meters",
+          "purpose": "Electrical circuits throughout the building",
+          "location": "Building-wide"
+        },
+        "switches_and_sockets": {
+          "quantity": "75",
+          "unit": "units",
+          "purpose": "Operational points for electrical use",
+          "location": "Various Rooms"
+        }
+      },
+      "plumbing_components": {
+        "pipes": {
+          "quantity": "500m",
+          "unit": "meters",
+          "purpose": "Water supply and drainage",
+          "location": "Building-wide"
+        },
+        "fixtures": {
+          "quantity": "20",
+          "unit": "units",
+          "purpose": "Bathrooms and kitchen fixtures",
+          "location": "Bathroom and Kitchen"
+        }
+      }
+    }
+  },
+  "task_breakdown": {
+    "construction_phases": [
+      {
+        "phase": "Foundation",
+        "tasks": [
+          {
+            "task_id": "F1",
+            "task_name": "Site Preparation",
+            "description": "Clearing, grubbing, and leveling the site for foundation work.",
+            "duration": 5,
+            "labor": {
+              "total_person_days": 15,
+              "specific_trades": [
+                "General Labor"
+              ]
+            },
+            "dependencies": [],
+            "materials": [],
+            "quality_control_requirements": "Ensure site is clear of all vegetation, rocks, and debris. Level within specified tolerances.",
+            "room_location_details": "Entire Building Site"
+          },
+          {
+            "task_id": "F2",
+            "task_name": "Foundation Excavation",
+            "description": "Excavation for footings and foundation slab.",
+            "duration": 5,
+            "labor": {
+              "total_person_days": 20,
+              "specific_trades": [
+                "Excavator Operator",
+                "General Labor"
+              ]
+            },
+            "dependencies": [
+              "F1"
+            ],
+            "materials": [],
+            "quality_control_requirements": "Excavate to depths and dimensions as per the plan, avoid disturbance of base.",
+            "room_location_details": "Building Foundation"
+          },
+          {
+            "task_id": "F3",
+            "task_name": "Foundation Formwork and Rebar Installation",
+            "description": "Installing formwork and reinforcing bars for the foundation.",
+            "duration": 4,
+            "labor": {
+              "total_person_days": 28,
+              "specific_trades": [
+                "Formwork Carpenters",
+                "Ironworkers"
+              ]
+            },
+            "dependencies": [
+              "F2"
+            ],
+            "materials": {
+              "rebar": {
+                "quantity": "8000kg"
+              }
+            },
+            "quality_control_requirements": "Ensure formwork is of correct size and securely fastened. Rebar should be accurately placed as per structural design.",
+            "room_location_details": "Building Foundation"
+          },
+          {
+            "task_id": "F4",
+            "task_name": "Pouring Concrete",
+            "description": "Pour concrete into foundation formwork.",
+            "duration": 3,
+            "labor": {
+              "total_person_days": 24,
+              "specific_trades": [
+                "Concrete Workers"
+              ]
+            },
+            "dependencies": [
+              "F3"
+            ],
+            "materials": {
+              "concrete": {
+                "quantity": "140m³"
+              }
+            },
+            "quality_control_requirements": "Ensure concrete is mixed and poured to meet strength specifications. No voids or honeycombing.",
+            "room_location_details": "Building Foundation"
+          },
+          {
+            "task_id": "F5",
+            "task_name": "Curing Concrete",
+            "description": "Allow the poured concrete to cure to necessary strength.",
+            "duration": 28,
+            "labor": {
+              "total_person_days": 0,
+              "specific_trades": []
+            },
+            "dependencies": [
+              "F4"
+            ],
+            "materials": [],
+            "quality_control_requirements": "Maintain appropriate moisture and temperature levels during curing process.",
+            "room_location_details": "Building Foundation"
+          }
+        ]
+      },
+      {
+        "phase": "Framing and Structural Work",
+        "tasks": [
+          {
+            "task_id": "S1",
+            "task_name": "Wall Construction",
+            "description": "Building the external and internal walls using allocated bricks and blocks.",
+            "duration": 15,
+            "labor": {
+              "total_person_days": 45,
+              "specific_trades": [
+                "Bricklayers",
+                "Carpenters"
+              ]
+            },
+            "dependencies": [
+              "F5"
+            ],
+            "materials": {
+              "bricks": {
+                "quantity": "25000 units"
+              },
+              "blocks": {
+                "quantity": "5000 units"
+              }
+            },
+            "quality_control_requirements": "Walls must be vertical and joints staggered. Appropriate mortar mix and curing.",
+            "room_location_details": "All building walls as per plan"
+          },
+          {
+            "task_id": "S2",
+            "task_name": "Roof Framing",
+            "description": "Construct roof frames using the designated timber.",
+            "duration": 8,
+            "labor": {
+              "total_person_days": 24,
+              "specific_trades": [
+                "Carpenters"
+              ]
+            },
+            "dependencies": [
+              "S1"
+            ],
+            "materials": {
+              "timber": {
+                "quantity": "6000 meters"
+              }
+            },
+            "quality_control_requirements": "Ensure framing is correct to support loads. All joints secure and correctly aligned.",
+            "room_location_details": "Roof of the Building"
+          }
+        ]
+      },
+      {
+        "phase": "Finishes",
+        "tasks": [
+          {
+            "task_id": "FI1",
+            "task_name": "Plumbing Installation",
+            "description": "Install all plumbing fixtures and piping throughout the building.",
+            "duration": 10,
+            "labor": {
+              "total_person_days": 30,
+              "specific_trades": [
+                "Plumbers"
+              ]
+            },
+            "dependencies": [
+              "S2"
+            ],
+            "materials": {
+              "pipes": {
+                "quantity": "500 meters"
+              },
+              "fixtures": {
+                "quantity": "20 units"
+              }
+            },
+            "quality_control_requirements": "All installations must meet local plumbing codes. Tests for leaks and proper fixture operation.",
+            "room_location_details": "Bathrooms, Kitchen, and applicable utility areas"
+          },
+          {
+            "task_id": "FI2",
+            "task_name": "Electrical Wiring Installation",
+            "description": "Laying out and connecting electrical wiring throughout the building, including switches and sockets.",
+            "duration": 10,
+            "labor": {
+              "total_person_days": 30,
+              "specific_trades": [
+                "Electricians"
+              ]
+            },
+            "dependencies": [
+              "S2"
+            ],
+            "materials": {
+              "wiring": {
+                "quantity": "1000 meters"
+              },
+              "switches_and_sockets": {
+                "quantity": "75 units"
+              }
+            },
+            "quality_control_requirements": "All wiring must conform to electrical safety standards. Ensure coverage for all planned appliances and fixtures.",
+            "room_location_details": "Throughout the building"
+          },
+          {
+            "task_id": "FI3",
+            "task_name": "Interior Finishing",
+            "description": "Painting, installing floor and ceiling materials, and finishing interior trim.",
+            "duration": 12,
+            "labor": {
+              "total_person_days": 60,
+              "specific_trades": [
+                "Painters",
+                "Carpenters",
+                "Floor Installers"
+              ]
+            },
+            "dependencies": [
+              "FI1",
+              "FI2"
+            ],
+            "materials": {
+              "paint": {
+                "quantity": "300 liters"
+              },
+              "plasterboard": {
+                "quantity": "131m²"
+              },
+              "flooring": {
+                "quantity": {
+                  "Living Room": "15.5m² laminate",
+                  "Kitchen": "17.7m² tiles",
+                  "Bedroom 2": "28.3m² carpet",
+                  "Bathroom": "15.8m² tiles",
+                  "Dining Room": "24.4m² hardwood",
+                  "Office": "18.5m² laminate",
+                  "Hallway": "13.2m² tiles"
+                }
+              }
+            },
+            "quality_control_requirements": "Flooring fit and finish must be precise with no gaps. Paint coverage must be even with no visible brush marks.",
+            "room_location_details": "All rooms specified with finishes"
+          }
+        ]
+      },
+      {
+        "phase": "Final Touches and Inspection",
+        "tasks": [
+          {
+            "task_id": "FT1",
+            "task_name": "Installation of Fixtures and Fittings",
+            "description": "Installation of all remaining fixtures and fittings such as door hardware and light fixtures.",
+            "duration": 5,
+            "labor": {
+              "total_person_days": 15,
+              "specific_trades": [
+                "General Labor",
+                "Electricians"
+              ]
+            },
+            "dependencies": [
+              "FI3"
+            ],
+            "materials": {
+              "light_fixtures": {
+                "quantity": "30 units"
+              },
+              "door_hardware": {
+                "quantity": "20 units"
+              }
+            },
+            "quality_control_requirements": "Ensure all fittings are secure and operational.",
+            "room_location_details": "Various rooms as per the requirement"
+          },
+          {
+            "task_id": "FT2",
+            "task_name": "Final Inspection and Clean-Up",
+            "description": "Conduct final inspections to ensure compliance with local building codes and client specifications. Final clean-up of construction site.",
+            "duration": 3,
+            "labor": {
+              "total_person_days": 9,
+              "specific_trades": [
+                "Supervisors",
+                "General Labor"
+              ]
+            },
+            "dependencies": [
+              "FT1"
+            ],
+            "materials": [],
+            "quality_control_requirements": "Complete all items according to specifications and prepare documentation for final sign-off.",
+            "room_location_details": "Entire Building"
+          }
+        ]
+      }
+    ]
+  },
+  "generated_at": "2025-04-06T19:30:52.009Z"
+}

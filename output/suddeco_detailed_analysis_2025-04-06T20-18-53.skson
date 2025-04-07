@@ -1,0 +1,519 @@
+{
+  "architectural_analysis": {
+    "building_analysis": {
+      "wall_thickness": "0.2m",
+      "ceiling_height": "2.4m",
+      "total_building_dimensions": {
+        "width": "18.6m",
+        "length": "16.7m",
+        "height": "2.4m"
+      },
+      "total_floor_area": {
+        "internal": "87.27m^2",
+        "external": "117.61m^2"
+      },
+      "total_wall_area": {
+        "internal": "234.48m^2",
+        "external": "296.28m^2"
+      },
+      "volume_calculations": {
+        "internal_volume": "209.44m^3",
+        "external_volume": "282.26m^3"
+      }
+    },
+    "rooms": [
+      {
+        "name": "Living Room",
+        "internal_dimensions": {
+          "width": "4.8m",
+          "length": "3.9m",
+          "height": "2.4m"
+        },
+        "external_dimensions": {
+          "width": "5.2m",
+          "length": "4.3m",
+          "height": "2.4m"
+        },
+        "floor_area": {
+          "internal": "18.72m^2",
+          "external": "22.36m^2"
+        },
+        "wall_surface_area": {
+          "internal": "40.56m^2",
+          "external": "47.04m^2"
+        },
+        "ceiling_area": "18.72m^2",
+        "skirting_board_length": "16.2m"
+      },
+      {
+        "name": "Kitchen",
+        "internal_dimensions": {
+          "width": "4.0m",
+          "length": "3.1m",
+          "height": "2.4m"
+        },
+        "external_dimensions": {
+          "width": "4.4m",
+          "length": "3.5m",
+          "height": "2.4m"
+        },
+        "floor_area": {
+          "internal": "12.4m^2",
+          "external": "15.4m^2"
+        },
+        "wall_surface_area": {
+          "internal": "32.88m^2",
+          "external": "38.16m^2"
+        },
+        "ceiling_area": "12.4m^2",
+        "skirting_board_length": "14.2m"
+      },
+      {
+        "name": "Bedroom 2",
+        "internal_dimensions": {
+          "width": "3.2m",
+          "length": "4.0m",
+          "height": "2.4m"
+        },
+        "external_dimensions": {
+          "width": "3.6m",
+          "length": "4.4m",
+          "height": "2.4m"
+        },
+        "floor_area": {
+          "internal": "12.8m^2",
+          "external": "15.84m^2"
+        },
+        "wall_surface_area": {
+          "internal": "34.08m^2",
+          "external": "39.36m^2"
+        },
+        "ceiling_area": "12.8m^2",
+        "skirting_board_length": "14.4m"
+      },
+      {
+        "name": "Bathroom",
+        "internal_dimensions": {
+          "width": "4.9m",
+          "length": "3.4m",
+          "height": "2.4m"
+        },
+        "external_dimensions": {
+          "width": "5.3m",
+          "length": "3.8m",
+          "height": "2.4m"
+        },
+        "floor_area": {
+          "internal": "16.66m^2",
+          "external": "20.14m^2"
+        },
+        "wall_surface_area": {
+          "internal": "40.32m^2",
+          "external": "46.56m^2"
+        },
+        "ceiling_area": "16.66m^2",
+        "skirting_board_length": "16.6m"
+      },
+      {
+        "name": "Dining Room",
+        "internal_dimensions": {
+          "width": "3.7m",
+          "length": "6.7m",
+          "height": "2.4m"
+        },
+        "external_dimensions": {
+          "width": "4.1m",
+          "length": "7.1m",
+          "height": "2.4m"
+        },
+        "floor_area": {
+          "internal": "24.79m^2",
+          "external": "29.11m^2"
+        },
+        "wall_surface_area": {
+          "internal": "48.48m^2",
+          "external": "56.64m^2"
+        },
+        "ceiling_area": "24.79m^2",
+        "skirting_board_length": "20.8m"
+      }
+    ]
+  },
+  "materials_quantities": {
+    "material_quantities": {
+      "foundation_materials": {
+        "concrete": {
+          "quantity": "95.9",
+          "unit": "cubic meters",
+          "location": "whole building",
+          "purpose": "foundation slab based on external dimensions including wall thickness"
+        },
+        "rebar": {
+          "quantity": "5480",
+          "unit": "kg",
+          "location": "whole building",
+          "purpose": "reinforcement for foundation slab"
+        }
+      },
+      "structural_materials": {
+        "bricks": {
+          "quantity": "17840",
+          "unit": "pieces",
+          "location": "external walls",
+          "purpose": "for building the external structure"
+        },
+        "cement": {
+          "quantity": "8150",
+          "unit": "kg",
+          "location": "whole building",
+          "purpose": "for mortar and other cement works in structures"
+        }
+      },
+      "finishing_materials": {
+        "living_room": {
+          "flooring": {
+            "laminate": {
+              "quantity": "18.72",
+              "unit": "square meters"
+            }
+          },
+          "wall_coverings": {
+            "paint": {
+              "quantity": "40.56",
+              "unit": "square meters"
+            }
+          },
+          "ceiling_treatments": {
+            "plasterboard": {
+              "quantity": "18.72",
+              "unit": "square meters"
+            }
+          }
+        },
+        "kitchen": {
+          "flooring": {
+            "tiles": {
+              "quantity": "12.4",
+              "unit": "square meters"
+            }
+          },
+          "wall_coverings": {
+            "tiles": {
+              "quantity": "32.88",
+              "unit": "square meters"
+            }
+          },
+          "ceiling_treatments": {
+            "plasterboard": {
+              "quantity": "12.4",
+              "unit": "square meters"
+            }
+          }
+        },
+        "bedroom_2": {
+          "flooring": {
+            "carpet": {
+              "quantity": "12.8",
+              "unit": "square meters"
+            }
+          },
+          "wall_coverings": {
+            "wallpaper": {
+              "quantity": "34.08",
+              "unit": "square meters"
+            }
+          },
+          "ceiling_treatments": {
+            "plasterboard": {
+              "quantity": "12.8",
+              "unit": "square meters"
+            }
+          }
+        },
+        "bathroom": {
+          "flooring": {
+            "tiles": {
+              "quantity": "16.66",
+              "unit": "square meters"
+            }
+          },
+          "wall_coverings": {
+            "tiles": {
+              "quantity": "40.32",
+              "unit": "square meters"
+            }
+          },
+          "ceiling_treatments": {
+            "plasterboard": {
+              "quantity": "16.66",
+              "unit": "square meters"
+            }
+          }
+        },
+        "dining_room": {
+          "flooring": {
+            "wood": {
+              "quantity": "24.79",
+              "unit": "square meters"
+            }
+          },
+          "wall_coverings": {
+            "paint": {
+              "quantity": "48.48",
+              "unit": "square meters"
+            }
+          },
+          "ceiling_treatments": {
+            "plasterboard": {
+              "quantity": "24.79",
+              "unit": "square meters"
+            }
+          }
+        }
+      },
+      "fixtures_and_fittings": {
+        "light_fixtures": {
+          "living_room": {
+            "pendant_lights": "4",
+            "unit": "pieces"
+          },
+          "kitchen": {
+            "recessed_lights": "5",
+            "unit": "pieces"
+          },
+          "bedroom_2": {
+            "ceiling_light": "1",
+            "unit": "piece"
+          },
+          "bathroom": {
+            "wall_light": "2",
+            "unit": "pieces"
+          },
+          "dining_room": {
+            "chandelier": "1",
+            "unit": "piece"
+          }
+        }
+      },
+      "electrical_components": {
+        "wiring": {
+          "quantity": "1500",
+          "unit": "meters",
+          "location": "whole building",
+          "purpose": "to provide electricity to each room"
+        },
+        "switches": {
+          "quantity": "16",
+          "unit": "pieces",
+          "location": "various rooms"
+        },
+        "sockets": {
+          "quantity": "30",
+          "unit": "pieces",
+          "location": "various rooms"
+        }
+      },
+      "plumbing_components": {
+        "pipes": {
+          "quantity": "300",
+          "unit": "meters",
+          "location": "whole building"
+        },
+        "fittings": {
+          "quantity": "40",
+          "unit": "pieces",
+          "location": "bathroom and kitchen"
+        }
+      }
+    }
+  },
+  "task_breakdown": {
+    "construction_phases": [
+      {
+        "phase_id": "001",
+        "phase_name": "Site Preparation",
+        "tasks": [
+          {
+            "task_id": "001-01",
+            "name": "Site Clearing",
+            "description": "Clear the construction site of vegetation, debris, and existing structures, if any.",
+            "duration_days": 3,
+            "required_labor": {
+              "general_laborers": 6
+            },
+            "dependencies": [],
+            "materials": [],
+            "quality_control": "Ensure the site is cleared according to construction site plan and local regulations.",
+            "room_location": "Whole building"
+          },
+          {
+            "task_id": "001-02",
+            "name": "Site Levelling",
+            "description": "Level the plot to prepare for foundation work.",
+            "duration_days": 2,
+            "required_labor": {
+              "heavy_machinery_operators": 2,
+              "assistants": 4
+            },
+            "dependencies": [
+              "001-01"
+            ],
+            "materials": [],
+            "quality_control": "Verify level within allowable tolerances as per the engineering specifications.",
+            "room_location": "Whole building"
+          }
+        ]
+      },
+      {
+        "phase_id": "002",
+        "phase_name": "Foundation",
+        "tasks": [
+          {
+            "task_id": "002-01",
+            "name": "Foundation Excavation",
+            "description": "Excavate soil to the required depth for the foundation.",
+            "duration_days": 5,
+            "required_labor": {
+              "excavator_operators": 2,
+              "general_laborers": 4
+            },
+            "dependencies": [
+              "001-02"
+            ],
+            "materials": [],
+            "quality_control": "Ensure correct depth and dimensions based on foundation plans.",
+            "room_location": "Whole building"
+          },
+          {
+            "task_id": "002-02",
+            "name": "Pouring Concrete",
+            "description": "Pour concrete into the excavated foundation trenches.",
+            "duration_days": 2,
+            "required_labor": {
+              "concrete_workers": 5
+            },
+            "dependencies": [
+              "002-01"
+            ],
+            "materials_used": [
+              {
+                "concrete": {
+                  "quantity": "95.9",
+                  "unit": "cubic meters"
+                }
+              }
+            ],
+            "quality_control": "Ensure all concrete is properly mixed and poured to avoid air pockets and achieve required compaction and strength.",
+            "room_location": "Whole building"
+          },
+          {
+            "task_id": "002-03",
+            "name": "Rebar Installation",
+            "description": "Install reinforcing steel bars within the foundation concrete to ensure structural integrity.",
+            "duration_days": 1,
+            "required_labor": {
+              "rebar_workers": 3
+            },
+            "dependencies": [
+              "002-01"
+            ],
+            "materials_used": [
+              {
+                "rebar": {
+                  "quantity": "5480",
+                  "unit": "kg"
+                }
+              }
+            ],
+            "quality_control": "All rebar must be securely tied and positioned as per the structural engineer's design.",
+            "room_location": "Whole building"
+          }
+        ]
+      },
+      {
+        "phase_id": "003",
+        "phase_name": "Structural Work",
+        "tasks": [
+          {
+            "task_id": "003-01",
+            "name": "Wall Construction",
+            "description": "Construct external and internal walls using bricks and mortar.",
+            "duration_days": 10,
+            "required_labor": {
+              "bricklayers": 8,
+              "helpers": 4
+            },
+            "dependencies": [
+              "002-02",
+              "002-03"
+            ],
+            "materials_used": [
+              {
+                "bricks": {
+                  "quantity": "17840",
+                  "unit": "pieces"
+                },
+                "cement": {
+                  "quantity": "4150",
+                  "unit": "kg"
+                }
+              }
+            ],
+            "quality_control": "Ensure all walls are plumb and joints are correctly filled and smoothed.",
+            "room_location": "Whole building, specific wall areas as per room specifications"
+          }
+        ]
+      },
+      {
+        "phase_id": "004",
+        "phase_name": "Roofing",
+        "tasks": [
+          {
+            "task_id": "004-01",
+            "name": "Roof Framing",
+            "description": "Construct the roof framework to support roofing materials.",
+            "duration_days": 5,
+            "required_labor": {
+              "carpenters": 5
+            },
+            "dependencies": [
+              "003-01"
+            ],
+            "materials_used": [],
+            "Complete materials and specifics would be specified after considering roofing type and materials from further inputs.": "Ensure all framing is secure and meets local building codes.",
+            "room_location": "Whole building"
+          }
+        ]
+      },
+      {
+        "phase_id": "005",
+        "phase_name": "Finishing",
+        "tasks": [
+          {
+            "task_id": "005-01",
+            "name": "Flooring - Living Room",
+            "description": "Install laminate flooring in the living room.",
+            "duration_days": 1,
+            "required_labor": {
+              "flooring_specialists": 2
+            },
+            "dependencies": [
+              "003-01"
+            ],
+            "materials_used": [
+              {
+                "laminate": {
+                  "quantity": "18.72",
+                  "unit": "square meters"
+                }
+              }
+            ],
+            "quality_control": "Ensure flooring is evenly installed and fixed, free from gaps and defects.",
+            "room_location": "Living Room"
+          }
+        ]
+      }
+    ]
+  },
+  "generated_at": "2025-04-06T20:18:53.605Z"
+}

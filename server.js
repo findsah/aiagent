@@ -427,24 +427,14 @@ app.post('/api/process-drawing', upload.single('drawing'), async (req, res) => {
     let constructionPlan = null;
     
     try {
-      // Generate the construction task breakdown
-      const planResult = await generateConstructionTaskBreakdown(
-        result.analysisResult.architectural_analysis, 
-        result.analysisResult.materials_quantities
-      );
-      
-      // Calculate the project timeline
-      const timeline = calculateProjectTimeline(planResult.taskBreakdown);
-      
-      // Generate Gantt chart data
-      const ganttData = generateGanttChartData(planResult.taskBreakdown);
-      
+      // Use the consolidated agent functions for construction tasks
       constructionPlan = {
-        taskBreakdown: planResult.taskBreakdown,
-        timeline: timeline,
-        ganttChart: ganttData,
-        reportUrl: path.basename(planResult.outputPath)
+        taskBreakdown: result.taskBreakdown,
+        reportUrl: result.reportUrl
       };
+      
+      // The Excel report already contains all the necessary information
+      // including construction tasks, so we don't need to generate it again
     } catch (planError) {
       console.error('Error generating construction plan:', planError);
       constructionPlan = { error: planError.message };

@@ -1,169 +1,230 @@
 {
   "material_quantities": {
-    "foundation_materials": {
-      "concrete": {
-        "quantity": 23.4,
+    "Foundation": {
+      "Concrete": {
+        "quantity": 500.56,
         "unit": "cubic meters",
-        "location": "foundation",
-        "purpose": "structural support"
+        "purpose": "Foundation footing and slab"
       },
-      "rebar": {
+      "Rebar": {
+        "quantity": 2838,
+        "unit": "kg",
+        "purpose": "Reinforcement for concrete foundation"
+      }
+    },
+    "Structural": {
+      "Bricks": {
+        "quantity": 15500,
+        "unit": "pieces",
+        "purpose": "External and load-bearing walls"
+      },
+      "Cement blocks": {
+        "quantity": 3800,
+        "unit": "pieces",
+        "purpose": "Internal non-load-bearing walls"
+      },
+      "Timber": {
+        "quantity": 6.2,
+        "unit": "cubic meters",
+        "location": "Roof trusses and framing sections",
+        "purpose": "Structural support"
+      }
+    },
+    "Finishing_materials": {
+      "Living_Room": {
+        "Flooring": {
+          "type": "Laminate",
+          "quantity": 19.72,
+          "unit": "sqm",
+          "purpose": "Floor covering"
+        },
+        "Wall_coverings": {
+          "Paint": {
+            "quantity": 53.28,
+            "unit": "sqm",
+            "purpose": "Interior wall finishing"
+          }
+        },
+        "Ceiling_treatments": {
+          "Plasterboard": {
+            "quantity": 19.72,
+            "unit": "sqm",
+            "purpose": "Ceiling finishing"
+          }
+        }
+      },
+      "Kitchen": {
+        "Flooring": {
+          "type": "Tile",
+          "quantity": 33.32,
+          "unit": "sqm",
+          "purpose": "Floor covering"
+        },
+        "Wall_coverings": {
+          "Tiles": {
+            "quantity": 71.76,
+            "unit": "sqm",
+            "purpose": "Splashback and wall protection"
+          }
+        },
+        "Ceiling_treatments": {
+          "Plasterboard": {
+            "quantity": 33.32,
+            "unit": "sqm",
+            "purpose": "Ceiling finishing"
+          }
+        }
+      },
+      "Bedroom_2": {
+        "Flooring": {
+          "type": "Carpet",
+          "quantity": 22.5,
+          "unit": "sqm",
+          "purpose": "Floor covering"
+        },
+        "Wall_coverings": {
+          "Paint": {
+            "quantity": 61.68,
+            "unit": "sqm",
+            "purpose": "Interior wall finishing"
+          }
+        },
+        "Ceiling_treatments": {
+          "Plasterboard": {
+            "quantity": 22.5,
+            "unit": "sqm",
+            "purpose": "Ceiling finishing"
+          }
+        }
+      },
+      "Bathroom": {
+        "Flooring": {
+          "type": "Waterproof Tiles",
+          "quantity": 26.95,
+          "unit": "sqm",
+          "purpose": "Floor covering"
+        },
+        "Wall_coverings": {
+          "Waterproof Tiles": {
+            "quantity": 70.56,
+            "unit": "sqm",
+            "purpose": "Humidity protection"
+          }
+        },
+        "Ceiling_treatments": {
+          "Plasterboard": {
+            "quantity": 26.95,
+            "unit": "sqm",
+            "purpose": "Ceiling finishing"
+          }
+        }
+      },
+      "Dining_Room": {
+        "Flooring": {
+          "type": "Hardwood",
+          "quantity": 10.54,
+          "unit": "sqm",
+          "purpose": "Floor covering"
+        },
+        "Wall_coverings": {
+          "Paint": {
+            "quantity": 41.04,
+            "unit": "sqm",
+            "purpose": "Interior wall finishing"
+          }
+        },
+        "Ceiling_treatments": {
+          "Plasterboard": {
+            "quantity": 10.54,
+            "unit": "sqm",
+            "purpose": "Ceiling finishing"
+          }
+        }
+      },
+      "Office": {
+        "Flooring": {
+          "type": "Laminate",
+          "quantity": 14.85,
+          "unit": "sqm",
+          "purpose": "Floor covering"
+        },
+        "Wall_coverings": {
+          "Paint": {
+            "quantity": 52.32,
+            "unit": "sqm",
+            "purpose": "Interior wall finishing"
+          }
+        },
+        "Ceiling_treatments": {
+          "Plasterboard": {
+            "quantity": 14.85,
+            "unit": "sqm",
+            "purpose": "Ceiling finishing"
+          }
+        }
+      },
+      "Hallway": {
+        "Flooring": {
+          "type": "Tile",
+          "quantity": 19.47,
+          "unit": "sqm",
+          "purpose": "Floor covering"
+        },
+        "Wall_coverings": {
+          "Paint": {
+            "quantity": 60.72,
+            "unit": "sqm",
+            "purpose": "Interior wall finishing"
+          }
+        },
+        "Ceiling_treatments": {
+          "Plasterboard": {
+            "quantity": 19.47,
+            "unit": "sqm",
+            "purpose": "Ceiling finishing"
+          }
+        }
+      }
+    },
+    "Fixtures_and_fittings": {
+      "Electrical_outlets": {
+        "quantity": 28,
+        "unit": "pieces",
+        "purpose": "Power supply points"
+      },
+      "Light_fixtures": {
+        "quantity": 11,
+        "unit": "pieces",
+        "purpose": "Lighting fixtures installation"
+      }
+    },
+    "Electrical_components": {
+      "Wiring": {
         "quantity": 800,
-        "unit": "kilograms",
-        "location": "foundation",
-        "purpose": "reinforcement"
+        "unit": "meters",
+        "purpose": "Electrical circuits"
+      },
+      "Circuit_breakers": {
+        "quantity": 11,
+        "unit": "pieces",
+        "purpose": "Electrical safety and distribution"
       }
     },
-    "structural_materials": {
-      "bricks": {
-        "quantity": 7400,
+    "Plumbing_components": {
+      "Pipes": {
+        "quantity": 300,
+        "unit": "meters",
+        "purpose": "Water distribution and waste removal"
+      },
+      "Fittings": {
+        "quantity": 60,
         "unit": "pieces",
-        "location": "external walls",
-        "purpose": "wall construction"
+        "purpose": "Connections for water pipes"
       },
-      "blocks": {
-        "quantity": 5500,
+      "Sanitary_fixtures": {
+        "quantity": 7,
         "unit": "pieces",
-        "location": "internal walls",
-        "purpose": "wall construction"
-      },
-      "timber": {
-        "quantity": 4300,
-        "unit": "linear meters",
-        "location": "roof and frame",
-        "purpose": "structural framing"
-      }
-    },
-    "finishing_materials": {
-      "flooring": {
-        "kitchen": {
-          "porcelain tiles": {
-            "quantity": 14.7,
-            "unit": "square meters",
-            "purpose": "flooring"
-          }
-        },
-        "living_room": {
-          "hardwood floor": {
-            "quantity": 27.0,
-            "unit": "square meters",
-            "purpose": "flooring"
-          }
-        },
-        "dining_area": {
-          "porcelain tiles": {
-            "quantity": 15.2,
-            "unit": "square meters",
-            "purpose": "flooring"
-          }
-        },
-        "bathroom": {
-          "ceramic tiles": {
-            "quantity": 5.0,
-            "unit": "square meters",
-            "purpose": "flooring"
-          }
-        },
-        "hallway": {
-          "laminate": {
-            "quantity": 7.5,
-            "unit": "square meters",
-            "purpose": "flooring"
-          }
-        }
-      },
-      "wall_coverings": {
-        "paint": {
-          "kitchen": {
-            "quantity": 72.48,
-            "unit": "square meters",
-            "purpose": "wall painting"
-          },
-          "living_room": {
-            "quantity": 106.56,
-            "unit": "square meters",
-            "purpose": "wall painting"
-          },
-          "dining_area": {
-            "quantity": 83.52,
-            "unit": "square meters",
-            "purpose": "wall painting"
-          },
-          "hallway": {
-            "quantity": 48.24,
-            "unit": "square meters",
-            "purpose": "wall painting"
-          }
-        },
-        "tiles": {
-          "bathroom": {
-            "quantity": 33.12,
-            "unit": "square meters",
-            "purpose": "wall tiling"
-          }
-        }
-      },
-      "ceiling_treatments": {
-        "plasterboard": {
-          "overall_ceiling": {
-            "quantity": 69.4,
-            "unit": "square meters",
-            "purpose": "ceiling finishing"
-          }
-        }
-      }
-    },
-    "fixtures_and_fittings": {
-      "kitchen_cabinets": {
-        "quantity": 6,
-        "unit": "unit",
-        "room": "kitchen",
-        "purpose": "storage"
-      },
-      "bathroom_fixtures": {
-        "toilet": {
-          "quantity": 1,
-          "room": "bathroom",
-          "purpose": "sanitary"
-        },
-        "shower": {
-          "quantity": 1,
-          "room": "bathroom",
-          "purpose": "sanitary"
-        },
-        "sink": {
-          "quantity": 1,
-          "room": "bathroom",
-          "purpose": "sanitary"
-        }
-      }
-    },
-    "electrical_components": {
-      "light_switches": {
-        "quantity": 10,
-        "unit": "pieces",
-        "rooms": ["kitchen", "living_room", "dining_area", "bathroom", "hallway"],
-        "purpose": "control lighting"
-      },
-      "power_outlets": {
-        "quantity": 40,
-        "unit": "pieces",
-        "rooms": ["kitchen", "living_room", "dining_area", "bathroom", "hallway"],
-        "purpose": "power supply"
-      }
-    },
-    "plumbing_components": {
-      "pipes": {
-        "quantity": 120,
-        "unit": "linear meters",
-        "location": "entire house",
-        "purpose": "water distribution and waste removal"
-      },
-      "fittings": {
-        "quantity": 65,
-        "unit": "pieces",
-        "location": "connection points",
-        "purpose": "joining and sealing pipes"
+        "purpose": "Bathrooms and kitchen utilities"
       }
     }
   }

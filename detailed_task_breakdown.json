@@ -1,246 +1,167 @@
 {
-  "tasks": [
+  "Construction_Task_Breakdown": [
     {
-      "task_id": "1",
-      "name": "Site Preparation",
-      "stage": "Site Preparation",
-      "description": "Clear the site of vegetation, debris, and other obstructions. Establish site boundaries and levels, set up site services. Prepare for initial site inspections.",
-      "duration": "4",
-      "required_labor": {
-        "general_laborers": "8 person-days",
-        "site_supervisor": "4 person-days"
-      },
-      "dependencies": [],
-      "materials_used": [],
-      "quality_control_requirements": "Verify that site has been cleared and properly leveled. Confirm that all necessary utilities and site services are properly installed.",
-      "room_location": "Entire site"
+      "Task_ID": 1,
+      "Task_Name": "Site Preparation",
+      "Construction_Stage": "Preparation",
+      "Description": "Clearing the site, setting out building corners, and preparing for ground works.",
+      "Estimated_Duration": 5,
+      "Required_Labor": "25 person-days, including general laborers and a site engineer.",
+      "Dependencies": [],
+      "Materials_Used": [],
+      "Quality_Control_Requirements": "Ensure the site is cleared according to local regulations and layout preciseness.",
+      "Room_Location_Specific_Details": "Applies to entire building footprint."
     },
     {
-      "task_id": "2",
-      "name": "Foundation Excavation",
-      "stage": "Foundations",
-      "description": "Excavation for the foundation according to specified depth and dimensions following engineering plans.",
-      "duration": "3",
-      "required_labor": {
-        "excavator": "2 person-days",
-        "general_laborers": "10 person-days"
-      },
-      "dependencies": ["1"],
-      "materials_used": [],
-      "quality_control_requirements": "Ensure depth and dimensions meet structural requirements as per the engineering drawings.",
-      "room_location": "Foundation area"
-    },
-    {
-      "task_id": "3",
-      "name": "Foundation Construction",
-      "stage": "Foundations",
-      "description": "Lay down and secure the rebar framework, followed by concrete pouring to form the foundation.",
-      "duration": "5",
-      "required_labor": {
-        "concrete_workers": "12 person-days",
-        "reinforcing_ironworkers": "6 person-days"
-      },
-      "dependencies": ["2"],
-      "materials_used": [
+      "Task_ID": 2,
+      "Task_Name": "Foundation Work",
+      "Construction_Stage": "Foundation",
+      "Description": "Excavation for foundation, setting formworks, arranging rebar, pouring concrete, and curing.",
+      "Estimated_Duration": 10,
+      "Required_Labor": "50 person-days, including concrete workers and structural engineers.",
+      "Dependencies": [
+        {"Task_ID": 1}
+      ],
+      "Materials_Used": [
         {
-          "material": "Concrete",
-          "quantity": "23.4 cubic meters"
-        },
-        {
-          "material": "Rebar",
-          "quantity": "800 kilograms"
+          "Concrete": {
+            "quantity": 500.56,
+            "unit": "cubic meters"
+          },
+          "Rebar": {
+            "quantity": 2838,
+            "unit": "kg"
+          }
         }
       ],
-      "quality_control_requirements": "Ensure all reinforcement bars are securely tied and concrete is vibrated properly to avoid air gaps.",
-      "room_location": "Foundation area"
+      "Quality_Control_Requirements": "Concrete mix and rebar placement must meet structural engineering standards.",
+      "Room_Location_Specific_Details": "Applies to entire building footprint."
     },
     {
-      "task_id": "4",
-      "name": "Structural Wall Construction",
-      "stage": "Superstructure",
-      "description": "Build external and internal walls using bricks and blocks. Includes setting up door and window frames.",
-      "duration": "10",
-      "required_labor": {
-        "bricklayers": "16 person-days",
-        "helpers": "16 person-days"
-      },
-      "dependencies": ["3"],
-      "materials_used": [
+      "Task_ID": 3,
+      "Task_Name": "Superstructure Construction",
+      "Construction_Stage": "Superstructure",
+      "Description": "Erecting external and internal walls using bricks for the external and cement blocks for internal partitions.",
+      "Estimated_Duration": 15,
+      "Required_Labor": "75 person-days, including masons and laborers.",
+      "Dependencies": [
+        {"Task_ID": 2}
+      ],
+      "Materials_Used": [
         {
-          "material": "Bricks",
-          "quantity": "7400 pieces"
-        },
-        {
-          "material": "Blocks",
-          "quantity": "5500 pieces"
+          "Bricks": {
+            "quantity": 15500,
+            "unit": "pieces"
+          },
+          "Cement blocks": {
+            "quantity": 3800,
+            "unit": "pieces"
+          }
         }
       ],
-      "quality_control_requirements": "Check that all walls are vertical and level with correct dimensions and openings for doors and windows.",
-      "room_location": "External and internal walls"
+      "Quality_Control_Requirements": "Wall alignments, level, and plumb lines to be frequently checked.",
+      "Room_Location_Specific_Details": "Applies to all designated rooms."
     },
     {
-      "task_id": "5",
-      "name": "Roof Framing and Covering",
-      "stage": "Superstructure",
-      "description": "Construct the roof frame using timber, followed by roofing materials to cover the structure securely.",
-      "duration": "8",
-      "required_labor": {
-        "carpenters": "14 person-days",
-        "roofers": "10 person-days"
-      },
-      "dependencies": ["4"],
-      "materials_used": [
+      "Task_ID": 4,
+      "Task_Name": "Roof Construction",
+      "Construction_Stage": "Roofing",
+      "Description": "Installing timber roof trusses and framing sections.",
+      "Estimated_Duration": 8,
+      "Required_Labor": "32 person-days, including carpenters and laborers.",
+      "Dependencies": [
+        {"Task_ID": 3}
+      ],
+      "Materials_Used": [
         {
-          "material": "Timber",
-          "quantity": "4300 linear meters"
+          "Timber": {
+            "quantity": 6.2,
+            "unit": "cubic meters"
+          }
         }
       ],
-      "quality_control_requirements": "Ensure that the roof frame is structurally sound and the roofing material is properly installed and waterproof.",
-      "room_location": "Roof area"
+      "Quality_Control_Requirements": "All wooden elements to be treated for weather resistance and checked for load-bearing capacity.",
+      "Room_Location_Specific_Details": "Covers entire building."
     },
     {
-      "task_id": "6",
-      "name": "Plumbing Installation",
-      "stage": "Utility Systems",
-      "description": "Install all pipes and fittings for water distribution and waste removal throughout the house.",
-      "duration": "7",
-      "required_labor": {
-        "plumbers": "10 person-days",
-        "helpers": "7 person-days"
-      },
-      "dependencies": ["4"],  "materials_used": [
+      "Task_ID": 5,
+      "Task_Name": "Plumbing Installation",
+      "Construction_Stage": "Utilities",
+      "Description": "Installation of pipes, fittings, and sanitary fixtures for water distribution and waste removal.",
+      "Estimated_Duration": 7,
+      "Required_Labor": "21 person-days, including plumbers and helpers.",
+      "Dependencies": [
+        {"Task_ID": 3}
+      ],
+      "Materials_Used": [
         {
-          "material": "Pipes",
-          "quantity": "120 linear meters"
-        },
-        {
-          "material": "Fittings",
-          "quantity": "65 pieces"
+          "Pipes": {
+            "quantity": 300,
+            "unit": "meters"
+          },
+          "Fittings": {
+            "quantity": 60,
+            "unit": "pieces"
+          },
+          "Sanitary_fixtures": {
+            "quantity": 7,
+            "unit": "pieces"
+          }
         }
       ],
-      "quality_control_requirements": "All piping must be pressure tested for leaks and comply with local building codes.",
-      "room_location": "Entire house"
+      "Quality_Control_Requirements": "Pressure tests for leaks and compliance with health and safety standards.",
+      "Room_Location_Specific_Details": "Specific to bathrooms, kitchen, and any utility areas."
     },
     {
-      "task_id": "7",
-      "name": "Electrical Installation",
-      "stage": "Utility Systems",
-      "description": "Install all necessary wiring, outlets, and switches for the electrical supply throughout the house.",
-      "duration": "6",
-      "required_labor": {
-        "electricians": "10 person-days",
-        "helpers": "6 person-days"
-      },
-      "dependencies": ["4"],
-      "materials_used": [
+      "Task_ID": 6,
+      "Task_Name": "Electrical Installation",
+      "Construction_Stage": "Utilities",
+      "Description": "Wiring of electrical circuits, installation of circuit breakers, outlets, and light fixtures.",
+      "Estimated_Duration": 7,
+      "Required_Labor": "28 person-days, including electricians and helpers.",
+      "Dependencies": [
+        {"Task_ID": 3}
+      ],
+      "Materials_Used": [
         {
-          "material": "Light switches",
-          "quantity": "10 pieces"
-        },
-        {
-          "material": "Power outlets",
-          "quantity": "40 pieces"
+          "Wiring": {
+            "quantity": 800,
+            "unit": "meters"
+          },
+          "Circuit_breakers": {
+            "quantity": 11,
+            "unit": "pieces"
+          },
+          "Electrical_outlets": {
+            "quantity": 28,
+            "unit": "pieces"
+          },
+          "Light_fixtures": {
+            "quantity": 11,
+            "unit": "pieces"
+          }
         }
       ],
-      "quality_control_requirements": "Ensure compliance with electrical safety standards and building codes. Testing for correct functioning and safety.",
-      "room_location": "Entire house"
+      "Quality_Control_Requirements": "All installations to meet electrical safety codes.",
+      "Room_Location_Specific_Details": "Throughout all rooms, focusing on areas that need dedicated power supplies."
     },
     {
-      "task_id": "8",
-      "name": "Interior Wall Painting",
-      "stage": "Finishing",
-      "description": "Apply paint to the interior walls in various rooms according to color schemes and paint types specified.",
-      "duration": "4",
-      "required_labor": {
-        "painters": "12 person-days",
-        "helpers": "4 person-days"
-      },
-      "dependencies": ["6", "7"],
-      "materials_used": [
+      "Task_ID": 7,
+      "Task_Name": "Interior Finishing",
+      "Construction_Stage": "Finishing",
+      "Description": "Installation of flooring, wall coverings, and ceiling treatments in various rooms as specified in materials quantities.",
+      "Estimated_Duration": 20,
+      "Required_Labor": "100 person-days, including specialized trades for flooring, painting, and ceiling installation.",
+      "Dependencies": [
+        {"Task_ID": 3, "Task_ID": 4, "Task_ID": 5, "Task_ID": 6}
+      ],
+      "Materials_Used": [
         {
-          "material": "Paint",
-          "quantity": "310.8 square meters"  }],
-      "quality_control_requirements": "Check for consistent paint coverage, correct color matching, and neat finishes around edges.",
-      "room_location": "All rooms"
-    },
-    {
-      "task_id": "9",
-      "name": "Flooring Installation",
-      "stage": "Finishing",
-      "description": "Install different types of flooring materials in specified rooms including ceramic preparation and fitting.",
-      "duration": "5",
-      "required_labor": {
-        "floor installers": "12 person-days",
-        "helpers": "5 person-days"
-      },
-      "dependencies": ["8"],
-      "materials_used": [
-        {
-          "material": "Porcelain tiles",
-          "quantity": "29.9 square meters"
-        },
-        {
-          "material": "Hardwood floor",
-          "quantity": "27.0 square meters"
-        },
-        {
-          "material": "Ceramic tiles",
-          "quantity": "5.0 square meters"
-        },
-        {
-          "material": "Laminate",
-          "quantity": "7.5 square meters"
+          "Materials": "As per 'Materials Quantities' section based on each specific room."
         }
       ],
-      "quality_control_requirements": "Floors must be level and properly aligned. Tiles should be evenly spaced and securely set.",
-      "room_location": "Specific rooms per flooring type"
-    },
-    {
-      "task_id": "10",
-      "name": "Fixture and Cabinet Installation",
-      "stage": "Finishing",
-      "description": "Install all kitchen cabinets, bathroom fixtures, and fittings.",
-      "duration": "3",
-      "required_labor": {
-        "carpenters": "6 person-days",
-        "plumbers": "3 person-days"
-      },
-      "dependencies": ["9"],
-      "materials_used": [
-        {
-          "material": "Kitchen cabinets",
-          "quantity": "6 units"
-        },
-        {
-          "material": "Toilet",
-          "quantity": "1"
-        },
-        {
-          "material": "Shower",
-          "quantity": "1"
-        },
-        {
-          "material": "Sink",
-          "quantity": "1"
-        }
-      ],
-      "quality_control_requirements": "Inspect installations for secure fitting and proper function. Ensure all cabinets and fixtures are level and properly aligned.",
-      "room_location": "Kitchen and bathroom"
-    },
-    {
-      "task_id": "11",
-      "name": "Final Inspection and Cleanup",
-      "stage": "Completion",
-      "description": "Perform final inspections to comply with local regulations. Final cleanup of the construction site.",
-      "duration": "2",
-      "required_labor": {
-        "general_laborers": "4 person-days",
-        "site_supervisor": "2 person-days"
-      },
-      "dependencies": ["10"],
-      "materials_used": [],
-      "quality_control_requirements": "Ensure the building meets all local building codes and regulatory requirements. Prepare and clear the site for occupancy.",
-      "room_location": "Entire house"
+      "Quality_Control_Requirements": "Finish levels for painting and tile work, adherence to design specifications.",
+      "Room_Location_Specific_Details": "Different specific requirements for living room, kitchen, bedrooms, bathroom, dining room, office, and hallway." 
     }
   ]
 }

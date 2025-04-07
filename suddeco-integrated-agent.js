@@ -1350,6 +1350,968 @@ function generateCombinedSummary(combinedAnalysis) {
   }
 }
 
+// Generate Excel report for a single drawing analysis
+async function generateExcelReport(filePath, report) {
+  try {
+    console.log(`Generating Excel report: ${filePath}`);
+    
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = 'Suddeco AI Drawing Processor';
+    workbook.created = new Date();
+    
+    // Summary sheet
+    const summarySheet = workbook.addWorksheet('Summary');
+    summarySheet.columns = [
+      { header: 'Property', key: 'property', width: 30 },
+      { header: 'Value', key: 'value', width: 50 }
+    ];
+    
+    // Add summary data
+    const summary = generateSummary(report);
+    summarySheet.addRow({ property: 'Building Type', value: summary.building_type });
+    summarySheet.addRow({ property: 'Total Floor Area', value: summary.total_floor_area });
+    summarySheet.addRow({ property: 'Room Count', value: summary.room_count });
+    summarySheet.addRow({ property: 'Total Concrete Required', value: summary.total_concrete_required });
+    summarySheet.addRow({ property: 'Estimated Construction Duration', value: summary.estimated_construction_duration });
+    summarySheet.addRow({ property: 'Total Tasks Identified', value: summary.total_tasks_identified });
+    
+    // Style the summary sheet
+    summarySheet.getRow(1).font = { bold: true };
+    summarySheet.getColumn('property').font = { bold: true };
+    
+    // Architectural Analysis sheet
+    const analysisSheet = workbook.addWorksheet('Architectural Analysis');
+    
+    // Add building analysis
+    analysisSheet.addRow(['Building Analysis']);
+    analysisSheet.addRow(['Property', 'Value']);
+    
+    const buildingAnalysis = report.architectural_analysis?.architectural_analysis?.building_analysis;
+    if (buildingAnalysis) {
+      analysisSheet.addRow(['Building Type', buildingAnalysis.building_type || 'N/A']);
+      analysisSheet.addRow(['Number of Rooms', buildingAnalysis.number_of_rooms || 'N/A']);
+      
+      // Add internal dimensions
+      analysisSheet.addRow(['Internal Dimensions']);
+      if (buildingAnalysis.total_internal_dimensions) {
+        analysisSheet.addRow(['Length', buildingAnalysis.total_internal_dimensions.length || 'N/A']);
+        analysisSheet.addRow(['Width', buildingAnalysis.total_internal_dimensions.width || 'N/A']);
+        analysisSheet.addRow(['Height', buildingAnalysis.total_internal_dimensions.height || 'N/A']);
+      }
+      
+      // Add external dimensions
+      analysisSheet.addRow(['External Dimensions']);
+      if (buildingAnalysis.total_external_dimensions) {
+        analysisSheet.addRow(['Length', buildingAnalysis.total_external_dimensions.length || 'N/A']);
+        analysisSheet.addRow(['Width', buildingAnalysis.total_external_dimensions.width || 'N/A']);
+        analysisSheet.addRow(['Height', buildingAnalysis.total_external_dimensions.height || 'N/A']);
+      }
+      
+      // Add floor area
+      analysisSheet.addRow(['Floor Area']);
+      if (buildingAnalysis.total_floor_area) {
+        analysisSheet.addRow(['Internal', buildingAnalysis.total_floor_area.internal || 'N/A']);
+        analysisSheet.addRow(['External', buildingAnalysis.total_floor_area.external || 'N/A']);
+      }
+      
+      // Add other measurements
+      analysisSheet.addRow(['Other Measurements']);
+      analysisSheet.addRow(['Total Wall Surface Area', buildingAnalysis.total_wall_surface_area || 'N/A']);
+      analysisSheet.addRow(['Total Ceiling Area', buildingAnalysis.total_ceiling_area || 'N/A']);
+      analysisSheet.addRow(['Total Volume', buildingAnalysis.total_volume || 'N/A']);
+    }
+    
+    // Add room analysis
+    analysisSheet.addRow([]);
+    analysisSheet.addRow(['Room Analysis']);
+    
+    const rooms = report.architectural_analysis?.architectural_analysis?.rooms;
+    if (rooms && rooms.length > 0) {
+      // Add room headers
+      analysisSheet.addRow([
+        'Room Name',
+        'Internal Length',
+        'Internal Width',
+        'Internal Height',
+        'External Length',
+        'External Width',
+        'External Height',
+        'Internal Floor Area',
+        'External Floor Area',
+        'Wall Surface Area',
+        'Ceiling Area',
+        'Skirting Board Length',
+        'Volume'
+      ]);
+      
+      // Add room data
+      rooms.forEach(room => {
+        analysisSheet.addRow([
+          room.name || 'N/A',
+          room.internal_dimensions?.length || 'N/A',
+          room.internal_dimensions?.width || 'N/A',
+          room.internal_dimensions?.height || 'N/A',
+          room.external_dimensions?.length || 'N/A',
+          room.external_dimensions?.width || 'N/A',
+          room.external_dimensions?.height || 'N/A',
+          room.floor_area?.internal || 'N/A',
+          room.floor_area?.external || 'N/A',
+          room.wall_surface_area || 'N/A',
+          room.ceiling_area || 'N/A',
+          room.skirting_board_length || 'N/A',
+          room.volume || 'N/A'
+        ]);
+      });
+    }
+    
+    // Style the analysis sheet
+    analysisSheet.getRow(1).font = { bold: true, size: 14 };
+    analysisSheet.getRow(2).font = { bold: true };
+    analysisSheet.getRow(19).font = { bold: true, size: 14 };
+    analysisSheet.getRow(20).font = { bold: true };
+    
+    // Materials Quantities sheet
+    const materialsSheet = workbook.addWorksheet('Materials Quantities');
+    
+    // Add materials headers
+    materialsSheet.addRow(['Category', 'Material', 'Quantity', 'Unit']);
+    
+    // Add materials data
+    const materialQuantities = report.materials_quantities?.material_quantities;
+    if (materialQuantities) {
+      // Foundation and structure
+      if (materialQuantities.foundation_and_structure) {
+        const foundation = materialQuantities.foundation_and_structure;
+        if (foundation.concrete_cubic_meters) 
+          materialsSheet.addRow(['Foundation and Structure', 'Concrete', foundation.concrete_cubic_meters, 'cubic meters']);
+        if (foundation.rebar_kilograms) 
+          materialsSheet.addRow(['Foundation and Structure', 'Rebar', foundation.rebar_kilograms, 'kilograms']);
+        if (foundation.formwork_square_meters) 
+          materialsSheet.addRow(['Foundation and Structure', 'Formwork', foundation.formwork_square_meters, 'square meters']);
+      }
+      
+      // Walls
+      if (materialQuantities.walls) {
+        // Internal walls
+        if (materialQuantities.walls.internal) {
+          const internalWalls = materialQuantities.walls.internal;
+          if (internalWalls.drywall_square_meters) 
+            materialsSheet.addRow(['Internal Walls', 'Drywall', internalWalls.drywall_square_meters, 'square meters']);
+          if (internalWalls.insulation_square_meters) 
+            materialsSheet.addRow(['Internal Walls', 'Insulation', internalWalls.insulation_square_meters, 'square meters']);
+          if (internalWalls.paint_liters) 
+            materialsSheet.addRow(['Internal Walls', 'Paint', internalWalls.paint_liters, 'liters']);
+        }
+        
+        // External walls
+        if (materialQuantities.walls.external) {
+          const externalWalls = materialQuantities.walls.external;
+          if (externalWalls.brick_square_meters) 
+            materialsSheet.addRow(['External Walls', 'Brick', externalWalls.brick_square_meters, 'square meters']);
+          if (externalWalls.mortar_kilograms) 
+            materialsSheet.addRow(['External Walls', 'Mortar', externalWalls.mortar_kilograms, 'kilograms']);
+          if (externalWalls.paint_liters) 
+            materialsSheet.addRow(['External Walls', 'Paint', externalWalls.paint_liters, 'liters']);
+        }
+      }
+      
+      // Add other material categories
+      const addMaterialCategory = (category, displayName, units) => {
+        if (materialQuantities[category]) {
+          const materials = materialQuantities[category];
+          for (const [material, quantity] of Object.entries(materials)) {
+            if (quantity) {
+              const materialName = material.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').trim();
+              const unit = units[material] || '';
+              materialsSheet.addRow([displayName, materialName, quantity, unit]);
+            }
+          }
+        }
+      };
+      
+      // Define units for each category
+      const flooringUnits = {
+        concrete_cubic_meters: 'cubic meters',
+        tile_square_meters: 'square meters',
+        carpet_square_meters: 'square meters'
+      };
+      
+      const ceilingUnits = {
+        drywall_square_meters: 'square meters',
+        paint_liters: 'liters'
+      };
+      
+      const roofingUnits = {
+        roof_tiles_square_meters: 'square meters',
+        roof_felt_square_meters: 'square meters',
+        roof_battens_meters: 'meters'
+      };
+      
+      const doorsAndWindowsUnits = {
+        doors_units: 'units',
+        windows_square_meters: 'square meters'
+      };
+      
+      const finishesUnits = {
+        paint_liters: 'liters',
+        tiles_square_meters: 'square meters',
+        skirting_board_meters: 'meters'
+      };
+      
+      const electricalUnits = {
+        cable_meters: 'meters',
+        sockets_units: 'units',
+        switches_units: 'units'
+      };
+      
+      const plumbingUnits = {
+        pipe_meters: 'meters',
+        fittings_units: 'units',
+        sanitary_fixtures_units: 'units'
+      };
+      
+      const hvacUnits = {
+        ductwork_meters: 'meters',
+        units_units: 'units'
+      };
+      
+      // Add remaining material categories
+      addMaterialCategory('flooring', 'Flooring', flooringUnits);
+      addMaterialCategory('ceiling', 'Ceiling', ceilingUnits);
+      addMaterialCategory('roofing', 'Roofing', roofingUnits);
+      addMaterialCategory('doors_and_windows', 'Doors and Windows', doorsAndWindowsUnits);
+      addMaterialCategory('finishes', 'Finishes', finishesUnits);
+      addMaterialCategory('electrical', 'Electrical', electricalUnits);
+      addMaterialCategory('plumbing', 'Plumbing', plumbingUnits);
+      addMaterialCategory('hvac', 'HVAC', hvacUnits);
+    }
+    
+    // Style the materials sheet
+    materialsSheet.getRow(1).font = { bold: true };
+    materialsSheet.columns.forEach(column => {
+      column.width = 20;
+    });
+    
+    // Construction Tasks sheet
+    const tasksSheet = workbook.addWorksheet('Construction Tasks');
+    
+    // Add tasks headers
+    tasksSheet.addRow([
+      'Stage',
+      'Task Name',
+      'Description',
+      'Duration (days)',
+      'Labor Requirements',
+      'Equipment',
+      'Materials Used',
+      'Dependencies'
+    ]);
+    
+    // Add tasks data
+    const constructionTasks = report.construction_tasks?.construction_tasks;
+    if (constructionTasks) {
+      for (const stage in constructionTasks) {
+        if (Array.isArray(constructionTasks[stage])) {
+          constructionTasks[stage].forEach(task => {
+            tasksSheet.addRow([
+              stage.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+              task.task_name || 'N/A',
+              task.description || 'N/A',
+              task.duration_days || 'N/A',
+              task.labor_requirements || 'N/A',
+              Array.isArray(task.equipment) ? task.equipment.join(', ') : 'N/A',
+              Array.isArray(task.materials_used) ? task.materials_used.join(', ') : 'N/A',
+              Array.isArray(task.dependencies) ? task.dependencies.join(', ') : 'N/A'
+            ]);
+          });
+        }
+      }
+    }
+    
+    // Style the tasks sheet
+    tasksSheet.getRow(1).font = { bold: true };
+    tasksSheet.columns.forEach(column => {
+      column.width = 20;
+    });
+    tasksSheet.getColumn('C').width = 40; // Description column
+    tasksSheet.getColumn('F').width = 30; // Equipment column
+    tasksSheet.getColumn('G').width = 30; // Materials column
+    tasksSheet.getColumn('H').width = 30; // Dependencies column
+    
+    // Save the workbook
+    await workbook.xlsx.writeFile(filePath);
+    console.log(`Excel report generated: ${filePath}`);
+    
+    return filePath;
+  } catch (error) {
+    console.error('Error generating Excel report:', error);
+    throw error;
+  }
+}
+
+// Generate combined Excel report for multiple drawings
+async function generateCombinedExcelReport(filePath, combinedAnalysis) {
+  try {
+    console.log(`Generating combined Excel report: ${filePath}`);
+    
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = 'Suddeco AI Drawing Processor';
+    workbook.created = new Date();
+    
+    // Project Summary sheet
+    const summarySheet = workbook.addWorksheet('Project Summary');
+    summarySheet.columns = [
+      { header: 'Property', key: 'property', width: 30 },
+      { header: 'Value', key: 'value', width: 50 }
+    ];
+    
+    // Add summary data
+    const summary = generateCombinedSummary(combinedAnalysis);
+    summarySheet.addRow({ property: 'Project ID', value: summary.project_id });
+    summarySheet.addRow({ property: 'Drawing Count', value: summary.drawing_count });
+    summarySheet.addRow({ property: 'Total Floor Area', value: summary.total_floor_area });
+    summarySheet.addRow({ property: 'Total Room Count', value: summary.total_room_count });
+    summarySheet.addRow({ property: 'Total Concrete Required', value: summary.total_concrete_required });
+    summarySheet.addRow({ property: 'Estimated Construction Duration', value: summary.estimated_construction_duration });
+    summarySheet.addRow({ property: 'Total Tasks Identified', value: summary.total_tasks_identified });
+    
+    // Style the summary sheet
+    summarySheet.getRow(1).font = { bold: true };
+    summarySheet.getColumn('property').font = { bold: true };
+    
+    // Drawings sheet
+    const drawingsSheet = workbook.addWorksheet('Drawings');
+    drawingsSheet.columns = [
+      { header: 'Drawing ID', key: 'id', width: 20 },
+      { header: 'File Name', key: 'fileName', width: 30 },
+      { header: 'Building Type', key: 'buildingType', width: 20 },
+      { header: 'Floor Area', key: 'floorArea', width: 20 },
+      { header: 'Room Count', key: 'roomCount', width: 15 }
+    ];
+    
+    // Add drawings data
+    if (combinedAnalysis.drawings && combinedAnalysis.drawings.length > 0) {
+      combinedAnalysis.drawings.forEach(drawing => {
+        drawingsSheet.addRow({
+          id: drawing.id,
+          fileName: drawing.fileName,
+          buildingType: drawing.summary?.building_type || 'N/A',
+          floorArea: drawing.summary?.total_floor_area || 'N/A',
+          roomCount: drawing.summary?.room_count || 'N/A'
+        });
+      });
+    }
+    
+    // Style the drawings sheet
+    drawingsSheet.getRow(1).font = { bold: true };
+    
+    // Combined Materials Quantities sheet
+    const materialsSheet = workbook.addWorksheet('Combined Materials');
+    
+    // Add materials headers
+    materialsSheet.addRow(['Category', 'Material', 'Quantity', 'Unit']);
+    
+    // Add materials data
+    const materialQuantities = combinedAnalysis.combined_materials?.material_quantities;
+    if (materialQuantities) {
+      // Foundation and structure
+      if (materialQuantities.foundation_and_structure) {
+        const foundation = materialQuantities.foundation_and_structure;
+        if (foundation.concrete_cubic_meters) 
+          materialsSheet.addRow(['Foundation and Structure', 'Concrete', foundation.concrete_cubic_meters, 'cubic meters']);
+        if (foundation.rebar_kilograms) 
+          materialsSheet.addRow(['Foundation and Structure', 'Rebar', foundation.rebar_kilograms, 'kilograms']);
+        if (foundation.formwork_square_meters) 
+          materialsSheet.addRow(['Foundation and Structure', 'Formwork', foundation.formwork_square_meters, 'square meters']);
+      }
+      
+      // Walls
+      if (materialQuantities.walls) {
+        // Internal walls
+        if (materialQuantities.walls.internal) {
+          const internalWalls = materialQuantities.walls.internal;
+          if (internalWalls.drywall_square_meters) 
+            materialsSheet.addRow(['Internal Walls', 'Drywall', internalWalls.drywall_square_meters, 'square meters']);
+          if (internalWalls.insulation_square_meters) 
+            materialsSheet.addRow(['Internal Walls', 'Insulation', internalWalls.insulation_square_meters, 'square meters']);
+          if (internalWalls.paint_liters) 
+            materialsSheet.addRow(['Internal Walls', 'Paint', internalWalls.paint_liters, 'liters']);
+        }
+        
+        // External walls
+        if (materialQuantities.walls.external) {
+          const externalWalls = materialQuantities.walls.external;
+          if (externalWalls.brick_square_meters) 
+            materialsSheet.addRow(['External Walls', 'Brick', externalWalls.brick_square_meters, 'square meters']);
+          if (externalWalls.mortar_kilograms) 
+            materialsSheet.addRow(['External Walls', 'Mortar', externalWalls.mortar_kilograms, 'kilograms']);
+          if (externalWalls.paint_liters) 
+            materialsSheet.addRow(['External Walls', 'Paint', externalWalls.paint_liters, 'liters']);
+        }
+      }
+      
+      // Add other material categories
+      const addMaterialCategory = (category, displayName, units) => {
+        if (materialQuantities[category]) {
+          const materials = materialQuantities[category];
+          for (const [material, quantity] of Object.entries(materials)) {
+            if (quantity) {
+              const materialName = material.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').trim();
+              const unit = units[material] || '';
+              materialsSheet.addRow([displayName, materialName, quantity, unit]);
+            }
+          }
+        }
+      };
+      
+      // Define units for each category
+      const flooringUnits = {
+        concrete_cubic_meters: 'cubic meters',
+        tile_square_meters: 'square meters',
+        carpet_square_meters: 'square meters'
+      };
+      
+      const ceilingUnits = {
+        drywall_square_meters: 'square meters',
+        paint_liters: 'liters'
+      };
+      
+      const roofingUnits = {
+        roof_tiles_square_meters: 'square meters',
+        roof_felt_square_meters: 'square meters',
+        roof_battens_meters: 'meters'
+      };
+      
+      const doorsAndWindowsUnits = {
+        doors_units: 'units',
+        windows_square_meters: 'square meters'
+      };
+      
+      const finishesUnits = {
+        paint_liters: 'liters',
+        tiles_square_meters: 'square meters',
+        skirting_board_meters: 'meters'
+      };
+      
+      const electricalUnits = {
+        cable_meters: 'meters',
+        sockets_units: 'units',
+        switches_units: 'units'
+      };
+      
+      const plumbingUnits = {
+        pipe_meters: 'meters',
+        fittings_units: 'units',
+        sanitary_fixtures_units: 'units'
+      };
+      
+      const hvacUnits = {
+        ductwork_meters: 'meters',
+        units_units: 'units'
+      };
+      
+      // Add remaining material categories
+      addMaterialCategory('flooring', 'Flooring', flooringUnits);
+      addMaterialCategory('ceiling', 'Ceiling', ceilingUnits);
+      addMaterialCategory('roofing', 'Roofing', roofingUnits);
+      addMaterialCategory('doors_and_windows', 'Doors and Windows', doorsAndWindowsUnits);
+      addMaterialCategory('finishes', 'Finishes', finishesUnits);
+      addMaterialCategory('electrical', 'Electrical', electricalUnits);
+      addMaterialCategory('plumbing', 'Plumbing', plumbingUnits);
+      addMaterialCategory('hvac', 'HVAC', hvacUnits);
+    }
+    
+    // Style the materials sheet
+    materialsSheet.getRow(1).font = { bold: true };
+    materialsSheet.columns.forEach(column => {
+      column.width = 20;
+    });
+    
+    // Combined Construction Tasks sheet
+    const tasksSheet = workbook.addWorksheet('Combined Tasks');
+    
+    // Add tasks headers
+    tasksSheet.addRow([
+      'Stage',
+      'Task Name',
+      'Description',
+      'Duration (days)',
+      'Labor Requirements',
+      'Equipment',
+      'Materials Used',
+      'Dependencies'
+    ]);
+    
+    // Add tasks data
+    const constructionTasks = combinedAnalysis.combined_tasks?.construction_tasks;
+    if (constructionTasks) {
+      for (const stage in constructionTasks) {
+        if (Array.isArray(constructionTasks[stage])) {
+          constructionTasks[stage].forEach(task => {
+            tasksSheet.addRow([
+              stage.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+              task.task_name || 'N/A',
+              task.description || 'N/A',
+              task.duration_days || 'N/A',
+              task.labor_requirements || 'N/A',
+              Array.isArray(task.equipment) ? task.equipment.join(', ') : 'N/A',
+              Array.isArray(task.materials_used) ? task.materials_used.join(', ') : 'N/A',
+              Array.isArray(task.dependencies) ? task.dependencies.join(', ') : 'N/A'
+            ]);
+          });
+        }
+      }
+    }
+    
+    // Style the tasks sheet
+    tasksSheet.getRow(1).font = { bold: true };
+    tasksSheet.columns.forEach(column => {
+      column.width = 20;
+    });
+    tasksSheet.getColumn('C').width = 40; // Description column
+    tasksSheet.getColumn('F').width = 30; // Equipment column
+    tasksSheet.getColumn('G').width = 30; // Materials column
+    tasksSheet.getColumn('H').width = 30; // Dependencies column
+    
+    // Save the workbook
+    await workbook.xlsx.writeFile(filePath);
+    console.log(`Combined Excel report generated: ${filePath}`);
+    
+    return filePath;
+  } catch (error) {
+    console.error('Error generating combined Excel report:', error);
+    throw error;
+  }
+}
+
+// Function to combine analysis results from multiple drawings
+async function combineAnalysisResults(analysisResults) {
+  console.log('Combining architectural analysis results from multiple drawings...');
+  
+  try {
+    // Create a prompt for OpenAI to combine the analysis
+    const prompt = `
+You are an expert architectural analyst. Combine the following architectural analyses from multiple drawings into a single comprehensive analysis.
+
+Analyses:
+${JSON.stringify(analysisResults, null, 2)}
+
+Create a combined analysis that:
+1. Aggregates all rooms from all drawings
+2. Calculates total dimensions and areas
+3. Identifies common elements across drawings
+4. Resolves any conflicts or inconsistencies
+
+Format your response as a structured JSON object with the same schema as the input analyses.
+`;
+
+    // Call OpenAI API
+    const response = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        { role: "system", content: "You are an expert architectural analyst that combines multiple architectural analyses into a single comprehensive analysis." },
+        { role: "user", content: prompt }
+      ],
+      temperature: 0.2,
+      max_tokens: 2000,
+      response_format: { type: "json_object" }
+    });
+    
+    // Parse and return the combined analysis
+    try {
+      const combinedAnalysis = JSON.parse(response.choices[0].message.content);
+      return replaceNAValues(combinedAnalysis);
+    } catch (error) {
+      console.error("Error parsing OpenAI response for combined analysis:", error);
+      
+      // Create a default combined analysis
+      return createDefaultCombinedAnalysis(analysisResults);
+    }
+  } catch (error) {
+    console.error("Error combining architectural analyses:", error);
+    return createDefaultCombinedAnalysis(analysisResults);
+  }
+}
+
+// Function to combine materials results from multiple drawings
+async function combineMaterialsResults(materialsResults) {
+  console.log('Combining materials quantities from multiple drawings...');
+  
+  try {
+    // Create a prompt for OpenAI to combine the materials
+    const prompt = `
+You are an expert quantity surveyor. Combine the following materials quantities from multiple drawings into a single comprehensive list.
+
+Materials Quantities:
+${JSON.stringify(materialsResults, null, 2)}
+
+Create a combined materials list that:
+1. Aggregates quantities for the same materials
+2. Identifies unique materials across all drawings
+3. Ensures all quantities are in consistent units
+4. Resolves any conflicts or inconsistencies
+
+Format your response as a structured JSON object with the same schema as the input materials quantities.
+`;
+
+    // Call OpenAI API
+    const response = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        { role: "system", content: "You are an expert quantity surveyor that combines materials quantities from multiple sources into a single comprehensive list." },
+        { role: "user", content: prompt }
+      ],
+      temperature: 0.2,
+      max_tokens: 2000,
+      response_format: { type: "json_object" }
+    });
+    
+    // Parse and return the combined materials
+    try {
+      const combinedMaterials = JSON.parse(response.choices[0].message.content);
+      return combinedMaterials;
+    } catch (error) {
+      console.error("Error parsing OpenAI response for combined materials:", error);
+      
+      // Create a default combined materials list
+      return createDefaultCombinedMaterials(materialsResults);
+    }
+  } catch (error) {
+    console.error("Error combining materials quantities:", error);
+    return createDefaultCombinedMaterials(materialsResults);
+  }
+}
+
+// Function to combine construction tasks from multiple drawings
+async function combineTasksResults(tasksResults) {
+  console.log('Combining construction tasks from multiple drawings...');
+  
+  try {
+    // Create a prompt for OpenAI to combine the tasks
+    const prompt = `
+You are an expert construction project manager. Combine the following construction tasks from multiple drawings into a single comprehensive project plan.
+
+Construction Tasks:
+${JSON.stringify(tasksResults, null, 2)}
+
+Create a combined project plan that:
+1. Aggregates tasks from all drawings
+2. Eliminates duplicate tasks
+3. Ensures logical task dependencies
+4. Optimizes the construction sequence
+5. Adjusts durations and labor requirements for the combined project
+
+Format your response as a structured JSON object with the same schema as the input construction tasks.
+`;
+
+    // Call OpenAI API
+    const response = await openai.chat.completions.create({
+      model: "gpt-4",
+      messages: [
+        { role: "system", content: "You are an expert construction project manager that combines construction tasks from multiple sources into a single comprehensive project plan." },
+        { role: "user", content: prompt }
+      ],
+      temperature: 0.2,
+      max_tokens: 2500,
+      response_format: { type: "json_object" }
+    });
+    
+    // Parse and return the combined tasks
+    try {
+      const combinedTasks = JSON.parse(response.choices[0].message.content);
+      return combinedTasks;
+    } catch (error) {
+      console.error("Error parsing OpenAI response for combined tasks:", error);
+      
+      // Create a default combined tasks list
+      return createDefaultCombinedTasks(tasksResults);
+    }
+  } catch (error) {
+    console.error("Error combining construction tasks:", error);
+    return createDefaultCombinedTasks(tasksResults);
+  }
+}
+
+// Helper function to create default combined architectural analysis
+function createDefaultCombinedAnalysis(analysisResults) {
+  console.log('Creating default combined architectural analysis...');
+  
+  // Start with a default structure
+  const combinedAnalysis = {
+    architectural_analysis: {
+      drawing_type: "Combined Floor Plans",
+      scale: "Various",
+      building_analysis: {
+        building_type: "Residential",
+        number_of_rooms: "0",
+        total_internal_dimensions: {
+          length: "0m",
+          width: "0m",
+          height: "0m"
+        },
+        total_external_dimensions: {
+          length: "0m",
+          width: "0m",
+          height: "0m"
+        },
+        total_floor_area: {
+          internal: "0m²",
+          external: "0m²"
+        },
+        total_wall_surface_area: "0m²",
+        total_ceiling_area: "0m²",
+        total_volume: "0m³"
+      },
+      rooms: []
+    }
+  };
+  
+  // Combine data from all analyses
+  let totalInternalFloorArea = 0;
+  let totalExternalFloorArea = 0;
+  let totalWallArea = 0;
+  let totalCeilingArea = 0;
+  let totalVolume = 0;
+  let roomCount = 0;
+  
+  // Process each analysis result
+  analysisResults.forEach(analysis => {
+    if (analysis && analysis.architectural_analysis) {
+      const buildingAnalysis = analysis.architectural_analysis.building_analysis;
+      
+      // Extract building type
+      if (buildingAnalysis && buildingAnalysis.building_type) {
+        combinedAnalysis.architectural_analysis.building_analysis.building_type = buildingAnalysis.building_type;
+      }
+      
+      // Extract and add floor areas
+      if (buildingAnalysis && buildingAnalysis.total_floor_area) {
+        if (buildingAnalysis.total_floor_area.internal) {
+          const match = buildingAnalysis.total_floor_area.internal.match(/(\d+\.?\d*)/);
+          if (match) {
+            totalInternalFloorArea += parseFloat(match[1]);
+          }
+        }
+        
+        if (buildingAnalysis.total_floor_area.external) {
+          const match = buildingAnalysis.total_floor_area.external.match(/(\d+\.?\d*)/);
+          if (match) {
+            totalExternalFloorArea += parseFloat(match[1]);
+          }
+        }
+      }
+      
+      // Extract and add wall area
+      if (buildingAnalysis && buildingAnalysis.total_wall_surface_area) {
+        const match = buildingAnalysis.total_wall_surface_area.match(/(\d+\.?\d*)/);
+        if (match) {
+          totalWallArea += parseFloat(match[1]);
+        }
+      }
+      
+      // Extract and add ceiling area
+      if (buildingAnalysis && buildingAnalysis.total_ceiling_area) {
+        const match = buildingAnalysis.total_ceiling_area.match(/(\d+\.?\d*)/);
+        if (match) {
+          totalCeilingArea += parseFloat(match[1]);
+        }
+      }
+      
+      // Extract and add volume
+      if (buildingAnalysis && buildingAnalysis.total_volume) {
+        const match = buildingAnalysis.total_volume.match(/(\d+\.?\d*)/);
+        if (match) {
+          totalVolume += parseFloat(match[1]);
+        }
+      }
+      
+      // Add rooms
+      if (analysis.architectural_analysis.rooms && Array.isArray(analysis.architectural_analysis.rooms)) {
+        analysis.architectural_analysis.rooms.forEach(room => {
+          // Add a drawing identifier to the room name
+          const roomWithSource = { ...room };
+          roomWithSource.name = `${room.name} (Drawing ${roomCount + 1})`;
+          combinedAnalysis.architectural_analysis.rooms.push(roomWithSource);
+        });
+        
+        roomCount += analysis.architectural_analysis.rooms.length;
+      }
+    }
+  });
+  
+  // Update the combined analysis with the calculated totals
+  combinedAnalysis.architectural_analysis.building_analysis.number_of_rooms = roomCount.toString();
+  combinedAnalysis.architectural_analysis.building_analysis.total_floor_area.internal = `${totalInternalFloorArea.toFixed(1)}m²`;
+  combinedAnalysis.architectural_analysis.building_analysis.total_floor_area.external = `${totalExternalFloorArea.toFixed(1)}m²`;
+  combinedAnalysis.architectural_analysis.building_analysis.total_wall_surface_area = `${totalWallArea.toFixed(1)}m²`;
+  combinedAnalysis.architectural_analysis.building_analysis.total_ceiling_area = `${totalCeilingArea.toFixed(1)}m²`;
+  combinedAnalysis.architectural_analysis.building_analysis.total_volume = `${totalVolume.toFixed(1)}m³`;
+  
+  // Calculate approximate dimensions based on floor area (assuming square shape)
+  const internalLength = Math.sqrt(totalInternalFloorArea);
+  const internalWidth = internalLength;
+  const externalLength = Math.sqrt(totalExternalFloorArea);
+  const externalWidth = externalLength;
+  
+  combinedAnalysis.architectural_analysis.building_analysis.total_internal_dimensions.length = `${internalLength.toFixed(1)}m`;
+  combinedAnalysis.architectural_analysis.building_analysis.total_internal_dimensions.width = `${internalWidth.toFixed(1)}m`;
+  combinedAnalysis.architectural_analysis.building_analysis.total_internal_dimensions.height = "2.4m";
+  
+  combinedAnalysis.architectural_analysis.building_analysis.total_external_dimensions.length = `${externalLength.toFixed(1)}m`;
+  combinedAnalysis.architectural_analysis.building_analysis.total_external_dimensions.width = `${externalWidth.toFixed(1)}m`;
+  combinedAnalysis.architectural_analysis.building_analysis.total_external_dimensions.height = "2.7m";
+  
+  return combinedAnalysis;
+}
+
+// Helper function to create default combined materials quantities
+function createDefaultCombinedMaterials(materialsResults) {
+  console.log('Creating default combined materials quantities...');
+  
+  // Start with a default structure
+  const combinedMaterials = {
+    material_quantities: {
+      foundation_and_structure: {
+        concrete_cubic_meters: 0,
+        rebar_kilograms: 0,
+        formwork_square_meters: 0
+      },
+      walls: {
+        internal: {
+          drywall_square_meters: 0,
+          insulation_square_meters: 0,
+          paint_liters: 0
+        },
+        external: {
+          brick_square_meters: 0,
+          mortar_kilograms: 0,
+          paint_liters: 0
+        }
+      },
+      flooring: {
+        concrete_cubic_meters: 0,
+        tile_square_meters: 0,
+        carpet_square_meters: 0
+      },
+      ceiling: {
+        drywall_square_meters: 0,
+        paint_liters: 0
+      },
+      roofing: {
+        roof_tiles_square_meters: 0,
+        roof_felt_square_meters: 0,
+        roof_battens_meters: 0
+      },
+      doors_and_windows: {
+        doors_units: 0,
+        windows_square_meters: 0
+      },
+      finishes: {
+        paint_liters: 0,
+        tiles_square_meters: 0,
+        skirting_board_meters: 0
+      },
+      electrical: {
+        cable_meters: 0,
+        sockets_units: 0,
+        switches_units: 0
+      },
+      plumbing: {
+        pipe_meters: 0,
+        fittings_units: 0,
+        sanitary_fixtures_units: 0
+      },
+      hvac: {
+        ductwork_meters: 0,
+        units_units: 0
+      }
+    }
+  };
+  
+  // Combine quantities from all materials results
+  materialsResults.forEach(materials => {
+    if (materials && materials.material_quantities) {
+      // Helper function to add quantities
+      const addQuantities = (targetObj, sourceObj) => {
+        if (!sourceObj) return;
+        
+        for (const key in sourceObj) {
+          if (typeof sourceObj[key] === 'object') {
+            if (!targetObj[key]) targetObj[key] = {};
+            addQuantities(targetObj[key], sourceObj[key]);
+          } else if (typeof sourceObj[key] === 'number') {
+            if (!targetObj[key]) targetObj[key] = 0;
+            targetObj[key] += sourceObj[key];
+          }
+        }
+      };
+      
+      // Add all quantities
+      addQuantities(combinedMaterials.material_quantities, materials.material_quantities);
+    }
+  });
+  
+  return combinedMaterials;
+}
+
+// Helper function to create default combined construction tasks
+function createDefaultCombinedTasks(tasksResults) {
+  console.log('Creating default combined construction tasks...');
+  
+  // Start with a default structure
+  const combinedTasks = {
+    construction_tasks: {
+      site_preparation: [],
+      foundation: [],
+      structure: [],
+      roofing: [],
+      external_walls: [],
+      windows_and_doors: [],
+      internal_walls: [],
+      electrical: [],
+      plumbing: [],
+      hvac: [],
+      flooring: [],
+      finishes: [],
+      final_touches: []
+    }
+  };
+  
+  // Track tasks to avoid duplicates
+  const taskTracker = {};
+  
+  // Combine tasks from all results
+  tasksResults.forEach((tasks, index) => {
+    if (tasks && tasks.construction_tasks) {
+      for (const stage in tasks.construction_tasks) {
+        if (Array.isArray(tasks.construction_tasks[stage])) {
+          tasks.construction_tasks[stage].forEach(task => {
+            // Create a unique key for the task
+            const taskKey = `${stage}-${task.task_name}`;
+            
+            if (!taskTracker[taskKey]) {
+              // Add drawing identifier to task name
+              const taskWithSource = { ...task };
+              taskWithSource.task_name = `${task.task_name} (Drawing ${index + 1})`;
+              
+              // Add to combined tasks
+              if (!combinedTasks.construction_tasks[stage]) {
+                combinedTasks.construction_tasks[stage] = [];
+              }
+              combinedTasks.construction_tasks[stage].push(taskWithSource);
+              
+              // Mark as added
+              taskTracker[taskKey] = true;
+            }
+          });
+        }
+      }
+    }
+  });
+  
+  return combinedTasks;
+}
+
 // Start the server
 app.listen(port, () => {
   console.log(`Suddeco AI Integrated Agent server running at http://localhost:${port}`);

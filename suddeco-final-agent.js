@@ -9,9 +9,10 @@ const fs = require('fs');
 const path = require('path');
 const PDFParser = require('pdf-parse');
 const ExcelJS = require('exceljs');
+const { openai } = require('./openai');
 
 // Flag to always use mock data for reliable operation
-const USE_MOCK_DATA = true;
+const USE_MOCK_DATA = false;
 
 // Cache for storing previous analysis results
 const analysisCache = new Map();
@@ -40,24 +41,103 @@ async function analyzeDrawingWithAI(filePath, type) {
   try {
     let analysisResult;
     
-    // Generate mock data for reliable operation
-    console.log('Using mock data for architectural analysis');
-    analysisResult = createDefaultArchitecturalAnalysis();
-    
-    // If we're processing a PDF, extract some text to enhance the mock data
+    // Process the drawing based on its type
     if (type === 'pdf') {
       try {
+        // Extract text content from PDF
         const fileBuffer = fs.readFileSync(filePath);
         const data = await PDFParser(fileBuffer);
         const extractedText = data.text;
         
-        // Use the extracted text to enhance the mock data if possible
         if (extractedText && extractedText.length > 100) {
-          analysisResult = enhanceMockDataWithExtractedText(analysisResult, extractedText);
+          // Use OpenAI to analyze the drawing
+          try {
+            console.log('Sending PDF content to OpenAI for analysis...');
+            const response = await openai.chat.completions.create({
+              model: "gpt-4-turbo",
+              messages: [
+                {
+                  role: "system",
+                  content: `You are an AI specialized in analyzing architectural drawings for construction purposes. 
+                  Extract all measurements and provide detailed analysis following construction industry standards.
+                  
+                  For each room, calculate:
+                  1. Internal dimensions (width, length, height) as numeric values with units
+                  2. External dimensions (including wall thickness) as numeric values with units
+                  3. Floor area (internal and external) as numeric values with units
+                  4. Wall surface area (for painting, tiling, etc.) as numeric values with units
+                  5. Ceiling area as numeric values with units
+                  
+                  Also provide:
+                  1. Total building dimensions (width, length, height) as numeric values with units
+                  2. Total floor area (internal and external) as numeric values with units
+                  
+                  Format your response as a detailed JSON object with the following structure:
+                  {
+                    "building_analysis": {
+                      "total_internal_dimensions": {
+                        "length": "numeric_value_with_unit",
+                        "width": "numeric_value_with_unit",
+                        "height": "numeric_value_with_unit"
+                      },
+                      "total_external_dimensions": {
+                        "length": "numeric_value_with_unit",
+                        "width": "numeric_value_with_unit",
+                        "height": "numeric_value_with_unit"
+                      },
+                      "total_floor_area": {
+                        "internal": "numeric_value_with_unit",
+                        "external": "numeric_value_with_unit"
+                      }
+                    },
+                    "room_details": [
+                      {
+                        "name": "room_name",
+                        "internal_dimensions": {
+                          "length": "numeric_value_with_unit",
+                          "width": "numeric_value_with_unit",
+                          "height": "numeric_value_with_unit"
+                        },
+                        "floor_area": {
+                          "internal": "numeric_value_with_unit"
+                        }
+                      }
+                    ]
+                  }
+                  
+                  IMPORTANT: Always provide numeric values with units (e.g., "12.5m", "150m²"). Never use "N/A" or empty values.`
+                },
+                {
+                  role: "user",
+                  content: `Analyze this architectural drawing text content and extract all measurements and details:\n\n${extractedText}`
+                }
+              ],
+              response_format: { type: "json_object" }
+            });
+            
+            // Parse the response
+            analysisResult = JSON.parse(response.choices[0].message.content);
+            console.log('Successfully received analysis from OpenAI');
+          } catch (openaiError) {
+            console.error('Error using OpenAI for analysis:', openaiError);
+            console.log('Falling back to default architectural analysis');
+            analysisResult = createDefaultArchitecturalAnalysis();
+            
+            // Try to enhance the mock data with extracted text
+            analysisResult = enhanceMockDataWithExtractedText(analysisResult, extractedText);
+          }
+        } else {
+          console.log('Insufficient text content extracted from PDF, using default analysis');
+          analysisResult = createDefaultArchitecturalAnalysis();
         }
       } catch (pdfError) {
         console.warn('Could not extract text from PDF:', pdfError.message);
+        analysisResult = createDefaultArchitecturalAnalysis();
       }
+    } else {
+      // For non-PDF files, use default analysis
+      console.log('Using default architectural analysis for non-PDF file');
+      analysisResult = createDefaultArchitecturalAnalysis();
     }
     
     // Replace any N/A values with realistic estimates
@@ -82,90 +162,246 @@ async function analyzeDrawingWithAI(filePath, type) {
 
 /**
  * Generate materials quantities based on architectural analysis
- * @param {Object} architecturalAnalysis - Architectural analysis results
+ * @param {Object} architecturalAnalysis - Architectural analysis
  * @returns {Promise<Object>} Materials quantities
  */
 async function generateMaterialsQuantities(architecturalAnalysis) {
   console.log('Generating materials quantities...');
   
-  // Generate a cache key based on the architectural analysis
-  const cacheKey = JSON.stringify(architecturalAnalysis);
-  
-  // Check if we have a cached result
-  if (materialsCache.has(cacheKey)) {
-    console.log('Using cached materials quantities');
-    return materialsCache.get(cacheKey);
-  }
-  
   try {
-    // Generate mock data for reliable operation
-    console.log('Using mock data for materials quantities');
-    const materialsResult = createDefaultMaterialsQuantities(architecturalAnalysis);
+    // Try to use OpenAI to generate materials quantities
+    if (!USE_MOCK_DATA) {
+      try {
+        console.log('Sending architectural analysis to OpenAI for materials estimation...');
+        const response = await openai.chat.completions.create({
+          model: "gpt-4-turbo",
+          messages: [
+            {
+              role: "system",
+              content: `You are an AI specialized in construction materials estimation.
+              Based on architectural analysis data, calculate the required materials for construction.
+              
+              Provide detailed quantities for:
+              1. Structural materials (concrete, rebar, formwork)
+              2. Wall materials (bricks, blocks, mortar, paint)
+              3. Flooring materials (concrete, tiles, carpet)
+              4. Ceiling materials (drywall, paint)
+              5. Roofing materials (tiles, felt, battens)
+              6. Doors and windows (units, square meters)
+              7. Finishes (paint, tiles, skirting boards)
+              8. Electrical materials (cables, sockets, switches)
+              9. Plumbing materials (pipes, fittings, fixtures)
+              10. HVAC materials (ductwork, units)
+              
+              Format your response as a detailed JSON object with the following structure:
+              {
+                "material_quantities": {
+                  "structural_materials": {
+                    "concrete_cubic_meters": numeric_value,
+                    "rebar_tons": numeric_value,
+                    "formwork_square_meters": numeric_value
+                  },
+                  "walls": {
+                    "bricks_units": numeric_value,
+                    "blocks_units": numeric_value,
+                    "mortar_kilograms": numeric_value,
+                    "paint_liters": numeric_value
+                  },
+                  "flooring": {
+                    "concrete_cubic_meters": numeric_value,
+                    "tile_square_meters": numeric_value,
+                    "carpet_square_meters": numeric_value
+                  },
+                  "ceiling": {
+                    "drywall_square_meters": numeric_value,
+                    "paint_liters": numeric_value
+                  },
+                  "roofing": {
+                    "roof_tiles_square_meters": numeric_value,
+                    "roof_felt_square_meters": numeric_value,
+                    "roof_battens_meters": numeric_value
+                  },
+                  "doors_and_windows": {
+                    "doors_units": numeric_value,
+                    "windows_square_meters": numeric_value
+                  },
+                  "finishes": {
+                    "paint_liters": numeric_value,
+                    "tiles_square_meters": numeric_value,
+                    "skirting_board_meters": numeric_value
+                  },
+                  "electrical": {
+                    "cable_meters": numeric_value,
+                    "sockets_units": numeric_value,
+                    "switches_units": numeric_value
+                  },
+                  "plumbing": {
+                    "pipe_meters": numeric_value,
+                    "fittings_units": numeric_value,
+                    "sanitary_fixtures_units": numeric_value
+                  },
+                  "hvac": {
+                    "ductwork_meters": numeric_value,
+                    "units_units": numeric_value
+                  }
+                }
+              }
+              
+              IMPORTANT: Always provide numeric values (e.g., 12.5, 150). Never use "N/A" or empty values.`
+            },
+            {
+              role: "user",
+              content: `Based on the following architectural analysis, calculate the required materials for construction:\n\n${JSON.stringify(architecturalAnalysis, null, 2)}`
+            }
+          ],
+          response_format: { type: "json_object" }
+        });
+        
+        // Parse the response
+        const materialsResult = JSON.parse(response.choices[0].message.content);
+        console.log('Successfully received materials quantities from OpenAI');
+        
+        // Replace any zero values with realistic estimates
+        return replaceZeroMaterialValues(materialsResult, architecturalAnalysis);
+      } catch (openaiError) {
+        console.error('Error using OpenAI for materials estimation:', openaiError);
+        console.log('Falling back to default materials quantities');
+      }
+    } else {
+      console.log('Using mock data for materials quantities');
+    }
     
-    // Replace any zero values with realistic estimates
-    const cleanedResult = replaceZeroMaterialValues(materialsResult, architecturalAnalysis);
-    
-    // Cache the result
-    materialsCache.set(cacheKey, cleanedResult);
-    
-    return cleanedResult;
+    // If OpenAI fails or mock data is requested, create default materials quantities
+    const defaultMaterials = createDefaultMaterialsQuantities(architecturalAnalysis);
+    return defaultMaterials;
   } catch (error) {
     console.error('Error generating materials quantities:', error);
     
     // Return default materials quantities in case of error
-    const defaultMaterials = createDefaultMaterialsQuantities(architecturalAnalysis);
-    
-    // Cache the default result to avoid repeated failures
-    materialsCache.set(cacheKey, defaultMaterials);
-    
-    return defaultMaterials;
+    return createDefaultMaterialsQuantities(architecturalAnalysis);
   }
 }
 
 /**
  * Generate construction tasks based on architectural analysis and materials quantities
- * @param {Object} architecturalAnalysis - Architectural analysis results
+ * @param {Object} architecturalAnalysis - Architectural analysis
  * @param {Object} materialsQuantities - Materials quantities
  * @returns {Promise<Object>} Construction tasks
  */
 async function generateConstructionTasks(architecturalAnalysis, materialsQuantities) {
   console.log('Generating construction tasks...');
   
-  // Generate a cache key based on the inputs
-  const cacheKey = JSON.stringify({ arch: architecturalAnalysis, materials: materialsQuantities });
-  
-  // Check if we have a cached result
-  if (tasksCache.has(cacheKey)) {
-    console.log('Using cached construction tasks');
-    return tasksCache.get(cacheKey);
-  }
-  
   try {
-    // Generate mock data for reliable operation
-    console.log('Using mock data for construction tasks');
+    // Try to use OpenAI to generate construction tasks
+    if (!USE_MOCK_DATA) {
+      try {
+        console.log('Sending analysis and materials data to OpenAI for construction task generation...');
+        const response = await openai.chat.completions.create({
+          model: "gpt-4-turbo",
+          messages: [
+            {
+              role: "system",
+              content: `You are an AI specialized in construction project planning.
+              Based on architectural analysis and materials quantities, create a detailed construction task breakdown.
+              
+              For each construction phase, provide:
+              1. Task name
+              2. Duration in days
+              3. Labor required (number and type of workers)
+              4. Dependencies on other tasks
+              5. Materials used
+              
+              Organize tasks by construction phases:
+              1. Site preparation
+              2. Foundation
+              3. Structure
+              4. Roofing
+              5. External walls
+              6. Windows and doors
+              7. Internal walls
+              8. Electrical
+              9. Plumbing
+              10. HVAC
+              11. Flooring
+              12. Finishes
+              13. Final touches
+              
+              Also include a project timeline with:
+              1. Estimated start date (use current date)
+              2. Estimated completion date
+              3. Critical path tasks
+              
+              Format your response as a detailed JSON object with the following structure:
+              {
+                "construction_tasks": {
+                  "site_preparation": [
+                    {
+                      "task_name": "string",
+                      "duration_days": numeric_value,
+                      "labor_required": "string",
+                      "dependencies": ["string"],
+                      "materials_used": ["string"]
+                    }
+                  ],
+                  "foundation": [...],
+                  "structure": [...],
+                  "roofing": [...],
+                  "external_walls": [...],
+                  "windows_and_doors": [...],
+                  "internal_walls": [...],
+                  "electrical": [...],
+                  "plumbing": [...],
+                  "hvac": [...],
+                  "flooring": [...],
+                  "finishes": [...],
+                  "final_touches": [...]
+                },
+                "project_timeline": {
+                  "start_date": "YYYY-MM-DD",
+                  "end_date": "YYYY-MM-DD",
+                  "total_duration_days": numeric_value,
+                  "critical_path_tasks": ["string"]
+                }
+              }
+              
+              IMPORTANT: Always provide numeric values for durations (e.g., 5, 10). Never use "N/A" or empty values.`
+            },
+            {
+              role: "user",
+              content: `Generate a detailed construction task breakdown based on this architectural analysis and materials list:
+              
+              Architectural Analysis:
+              ${JSON.stringify(architecturalAnalysis, null, 2)}
+              
+              Materials Quantities:
+              ${JSON.stringify(materialsQuantities, null, 2)}`
+            }
+          ],
+          response_format: { type: "json_object" }
+        });
+        
+        // Parse the response
+        const tasksResult = JSON.parse(response.choices[0].message.content);
+        console.log('Successfully received construction tasks from OpenAI');
+        
+        // Replace any N/A values with realistic estimates
+        return replaceNATaskValues(tasksResult, architecturalAnalysis, materialsQuantities);
+      } catch (openaiError) {
+        console.error('Error using OpenAI for construction task generation:', openaiError);
+        console.log('Falling back to default construction tasks');
+      }
+    } else {
+      console.log('Using mock data for construction tasks');
+    }
+    
+    // If OpenAI fails or mock data is requested, create default construction tasks
     const defaultTasks = createDefaultConstructionTasks(architecturalAnalysis, materialsQuantities);
-    const additionalPhases = createAdditionalConstructionPhases(architecturalAnalysis, materialsQuantities);
-    const tasksResult = combineConstructionTasks(defaultTasks, additionalPhases);
-    
-    // Replace any N/A values with realistic estimates
-    const cleanedResult = replaceNAConstructionTasks(tasksResult, architecturalAnalysis, materialsQuantities);
-    
-    // Cache the result
-    tasksCache.set(cacheKey, cleanedResult);
-    
-    return cleanedResult;
+    return defaultTasks;
   } catch (error) {
     console.error('Error generating construction tasks:', error);
     
-    // Generate default construction tasks in case of error
-    const defaultTasks = createDefaultConstructionTasks(architecturalAnalysis, materialsQuantities);
-    const additionalPhases = createAdditionalConstructionPhases(architecturalAnalysis, materialsQuantities);
-    const combinedTasks = combineConstructionTasks(defaultTasks, additionalPhases);
-    
-    // Cache the default result to avoid repeated failures
-    tasksCache.set(cacheKey, combinedTasks);
-    
-    return combinedTasks;
+    // Return default construction tasks in case of error
+    return createDefaultConstructionTasks(architecturalAnalysis, materialsQuantities);
   }
 }
 
@@ -461,6 +697,7 @@ function createDefaultMaterialsQuantities(architecturalAnalysis) {
     const buildingAnalysis = architecturalAnalysis.building_analysis || {};
     const totalFloorArea = buildingAnalysis.total_floor_area || {};
     const internalFloorArea = parseFloat(totalFloorArea.internal) || 100;
+    const externalFloorArea = parseFloat(totalFloorArea.external) || 120;
     
     // Calculate realistic material quantities based on floor area
     return {
@@ -1018,7 +1255,7 @@ function combineConstructionTasks(defaultTasks, additionalPhases) {
  * @param {Object} materialsQuantities - Materials quantities
  * @returns {Object} Cleaned construction tasks
  */
-function replaceNAConstructionTasks(tasks, architecturalAnalysis, materialsQuantities) {
+function replaceNATaskValues(tasks, architecturalAnalysis, materialsQuantities) {
   try {
     // Create a deep copy of the tasks
     const cleanedTasks = JSON.parse(JSON.stringify(tasks));
@@ -1316,6 +1553,7 @@ async function generateExcelReport(data, outputPath) {
     // Add project timeline
     if (constructionTasks.project_timeline) {
       const timeline = constructionTasks.project_timeline;
+      
       tasksSheet.addRow({
         phase: 'Project Timeline',
         task: 'Start Date',
@@ -1712,5 +1950,5 @@ module.exports = {
   createDefaultConstructionTasks,
   replaceNAValues,
   replaceZeroMaterialValues,
-  replaceNAConstructionTasks
+  replaceNATaskValues
 };
