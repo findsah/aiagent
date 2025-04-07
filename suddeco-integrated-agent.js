@@ -10,6 +10,7 @@ const { OpenAI } = require('openai');
 const PDFParser = require('pdf-parse');
 const ExcelJS = require('exceljs');
 const cors = require('cors');
+require('dotenv').config();
 
 // Initialize Express app
 const app = express();
@@ -20,7 +21,7 @@ app.use(cors());
 
 // Configure OpenAI API
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || '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'
+  apiKey: process.env.OPENAI_API_KEY
 });
 
 // Configure file upload
@@ -2239,7 +2240,7 @@ function createDefaultCombinedMaterials(materialsResults) {
           if (typeof sourceObj[key] === 'object') {
             if (!targetObj[key]) targetObj[key] = {};
             addQuantities(targetObj[key], sourceObj[key]);
-          } else if (typeof sourceObj[key] === 'number') {
+          } else {
             if (!targetObj[key]) targetObj[key] = 0;
             targetObj[key] += sourceObj[key];
           }
