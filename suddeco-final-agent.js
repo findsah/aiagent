@@ -1,3 +1,6 @@
+// Dynamic Architectural Drawing Processor Agent
+console.log('Loading SUDDECO FINAL AGENT - Enhanced Version (April 2025)');
+
 /**
  * Suddeco AI Drawing Processor - Final Consolidated Agent
  * 
