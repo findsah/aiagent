@@ -1,0 +1,58 @@
+{
+  "material_quantities": {
+    "foundation_and_structure": {
+      "concrete_cubic_meters": 15000,
+      "rebar_kilograms": 30000,
+      "formwork_square_meters": 1664
+    },
+    "walls": {
+      "internal": {
+        "drywall_square_meters": 3200,
+        "insulation_square_meters": 3200,
+        "paint_liters": 640
+      },
+      "external": {
+        "brick_square_meters": 3200,
+        "mortar_kilograms": 6400,
+        "paint_liters": 640
+      }
+    },
+    "flooring": {
+      "concrete_cubic_meters": 1500,
+      "tile_square_meters": 750,
+      "carpet_square_meters": 750
+    },
+    "ceiling": {
+      "drywall_square_meters": 1500,
+      "paint_liters": 300
+    },
+    "roofing": {
+      "roof_tiles_square_meters": 1664,
+      "roof_felt_square_meters": 1664,
+      "roof_battens_meters": 3328
+    },
+    "doors_and_windows": {
+      "doors_units": 20,
+      "windows_square_meters": 100
+    },
+    "finishes": {
+      "paint_liters": 940,
+      "tiles_square_meters": 750,
+      "skirting_board_meters": 50
+    },
+    "electrical": {
+      "cable_meters": 5000,
+      "sockets_units": 100,
+      "switches_units": 50
+    },
+    "plumbing": {
+      "pipe_meters": 2000,
+      "fittings_units": 400,
+      "sanitary_fixtures_units": 20
+    },
+    "hvac": {
+      "ductwork_meters": 1000,
+      "units_units": 10
+    }
+  }
+}

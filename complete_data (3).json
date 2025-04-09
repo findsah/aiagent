@@ -1,0 +1,608 @@
+{
+  "generated_at": "2025-04-07T21:56:42.793Z",
+  "file_info": {
+    "name": "Architect Tech Pack Binder_Rev03 3.pdf",
+    "path": "/opt/render/project/src/uploads/1744062899480_Architect Tech Pack Binder_Rev03 3.pdf",
+    "type": "pdf",
+    "timestamp": 1744062900905
+  },
+  "architectural_analysis": {
+    "architectural_analysis": {
+      "building_analysis": {
+        "total_internal_dimensions": {
+          "length": "50m",
+          "width": "30m",
+          "height": "10m"
+        },
+        "total_external_dimensions": {
+          "length": "52m",
+          "width": "32m",
+          "height": "12m"
+        },
+        "total_floor_area": {
+          "internal": "1500m2",
+          "external": "1664m2"
+        },
+        "total_wall_surface_area": "1600m2",
+        "total_ceiling_area": "1500m2",
+        "total_volume": "15000m3"
+      },
+      "room_details": [
+        {
+          "name": "Living Room",
+          "internal_dimensions": {
+            "length": "10m",
+            "width": "8m",
+            "height": "3m"
+          },
+          "external_dimensions": {
+            "length": "10.5m",
+            "width": "8.5m",
+            "height": "3.5m"
+          },
+          "floor_area": {
+            "internal": "80m2",
+            "external": "89.25m2"
+          },
+          "wall_surface_area": "84m2",
+          "ceiling_area": "80m2",
+          "volume": "240m3",
+          "skirting_board_length": "36m"
+        }
+      ]
+    }
+  },
+  "materials_quantities": {
+    "material_quantities": {
+      "foundation_and_structure": {
+        "concrete_cubic_meters": 15000,
+        "rebar_kilograms": 30000,
+        "formwork_square_meters": 1664
+      },
+      "walls": {
+        "internal": {
+          "drywall_square_meters": 1600,
+          "insulation_square_meters": 1600,
+          "paint_liters": 320
+        },
+        "external": {
+          "brick_square_meters": 1664,
+          "mortar_kilograms": 16640,
+          "paint_liters": 332.8
+        }
+      },
+      "flooring": {
+        "concrete_cubic_meters": 1500,
+        "tile_square_meters": 750,
+        "carpet_square_meters": 750
+      },
+      "ceiling": {
+        "drywall_square_meters": 1500,
+        "paint_liters": 300
+      },
+      "roofing": {
+        "roof_tiles_square_meters": 1664,
+        "roof_felt_square_meters": 1664,
+        "roof_battens_meters": 1664
+      },
+      "doors_and_windows": {
+        "doors_units": 10,
+        "windows_square_meters": 100
+      },
+      "finishes": {
+        "paint_liters": 320,
+        "tiles_square_meters": 750,
+        "skirting_board_meters": 160
+      },
+      "electrical": {
+        "cable_meters": 5000,
+        "sockets_units": 100,
+        "switches_units": 50
+      },
+      "plumbing": {
+        "pipe_meters": 2000,
+        "fittings_units": 400,
+        "sanitary_fixtures_units": 20
+      },
+      "hvac": {
+        "ductwork_meters": 1500,
+        "units_units": 10
+      }
+    }
+  },
+  "construction_tasks": {
+    "constructionStages": [
+      {
+        "stageName": "Site Preparation",
+        "tasks": [
+          {
+            "taskId": "SP-001",
+            "taskName": "Site Clearing",
+            "description": "Clear vegetation and debris from the construction site",
+            "estimatedDuration": "15 days",
+            "requiredLabor": {
+              "personDays": 30,
+              "trades": [
+                "General Labor"
+              ]
+            },
+            "dependencies": [],
+            "materialsUsed": [
+              "Waste Disposal Services"
+            ],
+            "qualityControlRequirements": "Ensure complete removal of vegetation and debris",
+            "roomLocation": "Entire Site"
+          },
+          {
+            "taskId": "SP-002",
+            "taskName": "Site Survey and Layout",
+            "description": "Survey the site and mark building layout",
+            "estimatedDuration": "1 day",
+            "requiredLabor": {
+              "personDays": 2,
+              "trades": [
+                "Surveyor",
+                "General Labor"
+              ]
+            },
+            "dependencies": [
+              "SP-001"
+            ],
+            "materialsUsed": [
+              "Survey Equipment",
+              "Marking Materials"
+            ],
+            "qualityControlRequirements": "Verify accuracy of layout against architectural plans",
+            "roomLocation": "Entire Site"
+          }
+        ]
+      },
+      {
+        "stageName": "Foundation",
+        "tasks": [
+          {
+            "taskId": "FD-001",
+            "taskName": "Excavation",
+            "description": "Excavate foundation area according to plans",
+            "estimatedDuration": "10 days",
+            "requiredLabor": {
+              "personDays": 20,
+              "trades": [
+                "Excavator Operator",
+                "General Labor"
+              ]
+            },
+            "dependencies": [
+              "SP-002"
+            ],
+            "materialsUsed": [
+              "Excavation Equipment"
+            ],
+            "qualityControlRequirements": "Ensure proper depth and level base",
+            "roomLocation": "Entire Building"
+          },
+          {
+            "taskId": "FD-002",
+            "taskName": "Foundation Formwork",
+            "description": "Install formwork for concrete foundation",
+            "estimatedDuration": "10 days",
+            "requiredLabor": {
+              "personDays": 30,
+              "trades": [
+                "Carpenter",
+                "General Labor"
+              ]
+            },
+            "dependencies": [
+              "FD-001"
+            ],
+            "materialsUsed": [
+              "Formwork Materials",
+              "Reinforcement Steel"
+            ],
+            "qualityControlRequirements": "Check formwork alignment and stability",
+            "roomLocation": "Entire Building"
+          },
+          {
+            "taskId": "FD-003",
+            "taskName": "Concrete Pouring",
+            "description": "Pour concrete for foundation",
+            "estimatedDuration": "1 day",
+            "requiredLabor": {
+              "personDays": 4,
+              "trades": [
+                "Concrete Finisher",
+                "General Labor"
+              ]
+            },
+            "dependencies": [
+              "FD-002"
+            ],
+            "materialsUsed": [
+              "15000m³ Concrete"
+            ],
+            "qualityControlRequirements": "Test concrete mix and ensure proper curing",
+            "roomLocation": "Entire Building"
+          }
+        ]
+      },
+      {
+        "stageName": "Structure",
+        "tasks": [
+          {
+            "taskId": "ST-001",
+            "taskName": "Framing",
+            "description": "Construct structural framing",
+            "estimatedDuration": "30 days",
+            "requiredLabor": {
+              "personDays": 90,
+              "trades": [
+                "Carpenter",
+                "General Labor"
+              ]
+            },
+            "dependencies": [
+              "FD-003"
+            ],
+            "materialsUsed": [
+              "Timber/Steel Framing Materials"
+            ],
+            "qualityControlRequirements": "Verify structural integrity and alignment",
+            "roomLocation": "Entire Building"
+          }
+        ]
+      },
+      {
+        "stageName": "Walls",
+        "tasks": [
+          {
+            "taskId": "WL-001",
+            "taskName": "External Wall Construction",
+            "description": "Construct external walls",
+            "estimatedDuration": "14 days",
+            "requiredLabor": {
+              "personDays": 42,
+              "trades": [
+                "Mason",
+                "General Labor"
+              ]
+            },
+            "dependencies": [
+              "ST-001"
+            ],
+            "materialsUsed": [
+              "99840 units Bricks",
+              "Mortar"
+            ],
+            "qualityControlRequirements": "Check wall alignment, level, and structural integrity",
+            "roomLocation": "Exterior"
+          },
+          {
+            "taskId": "WL-002",
+            "taskName": "Internal Wall Construction",
+            "description": "Construct internal walls",
+            "estimatedDuration": "14 days",
+            "requiredLabor": {
+              "personDays": 28,
+              "trades": [
+                "Carpenter",
+                "General Labor"
+              ]
+            },
+            "dependencies": [
+              "ST-001"
+            ],
+            "materialsUsed": [
+              "Drywall Materials",
+              "1600m² Insulation"
+            ],
+            "qualityControlRequirements": "Verify wall placement according to plans",
+            "roomLocation": "Interior"
+          }
+        ]
+      },
+      {
+        "stageName": "Roofing",
+        "tasks": [
+          {
+            "taskId": "RF-001",
+            "taskName": "Roof Framing",
+            "description": "Construct roof framing",
+            "estimatedDuration": "11 days",
+            "requiredLabor": {
+              "personDays": 33,
+              "trades": [
+                "Carpenter",
+                "General Labor"
+              ]
+            },
+            "dependencies": [
+              "WL-001"
+            ],
+            "materialsUsed": [
+              "Timber Roof Trusses"
+            ],
+            "qualityControlRequirements": "Check structural integrity and alignment",
+            "roomLocation": "Roof"
+          },
+          {
+            "taskId": "RF-002",
+            "taskName": "Roof Covering",
+            "description": "Install roof covering materials",
+            "estimatedDuration": "11 days",
+            "requiredLabor": {
+              "personDays": 33,
+              "trades": [
+                "Roofer",
+                "General Labor"
+              ]
+            },
+            "dependencies": [
+              "RF-001"
+            ],
+            "materialsUsed": [
+              "Roof Tiles/Shingles",
+              "Roof Insulation"
+            ],
+            "qualityControlRequirements": "Ensure watertight installation and proper drainage",
+            "roomLocation": "Roof"
+          }
+        ]
+      },
+      {
+        "stageName": "Windows and Doors",
+        "tasks": [
+          {
+            "taskId": "WD-001",
+            "taskName": "Window Installation",
+            "description": "Install windows",
+            "estimatedDuration": "1 days",
+            "requiredLabor": {
+              "personDays": 2,
+              "trades": [
+                "Carpenter",
+                "General Labor"
+              ]
+            },
+            "dependencies": [
+              "WL-001",
+              "WL-002"
+            ],
+            "materialsUsed": [
+              "Windows",
+              "Sealant"
+            ],
+            "qualityControlRequirements": "Check for proper fit, operation, and weatherproofing",
+            "roomLocation": "Exterior"
+          },
+          {
+            "taskId": "WD-002",
+            "taskName": "Door Installation",
+            "description": "Install interior and exterior doors",
+            "estimatedDuration": "1 days",
+            "requiredLabor": {
+              "personDays": 2,
+              "trades": [
+                "Carpenter"
+              ]
+            },
+            "dependencies": [
+              "WL-001",
+              "WL-002"
+            ],
+            "materialsUsed": [
+              "Doors",
+              "Door Hardware"
+            ],
+            "qualityControlRequirements": "Verify proper operation and alignment",
+            "roomLocation": "Interior and Exterior"
+          }
+        ]
+      },
+      {
+        "stageName": "Electrical",
+        "tasks": [
+          {
+            "taskId": "EL-001",
+            "taskName": "Electrical Rough-In",
+            "description": "Install electrical wiring, boxes, and panels",
+            "estimatedDuration": "25 days",
+            "requiredLabor": {
+              "personDays": 50,
+              "trades": [
+                "Electrician"
+              ]
+            },
+            "dependencies": [
+              "WL-002"
+            ],
+            "materialsUsed": [
+              "Electrical Wiring",
+              "Junction Boxes",
+              "Electrical Panel"
+            ],
+            "qualityControlRequirements": "Conduct electrical tests and ensure code compliance",
+            "roomLocation": "Entire Building"
+          }
+        ]
+      },
+      {
+        "stageName": "Plumbing",
+        "tasks": [
+          {
+            "taskId": "PL-001",
+            "taskName": "Plumbing Rough-In",
+            "description": "Install water supply and drainage pipes",
+            "estimatedDuration": "21 days",
+            "requiredLabor": {
+              "personDays": 42,
+              "trades": [
+                "Plumber"
+              ]
+            },
+            "dependencies": [
+              "WL-002"
+            ],
+            "materialsUsed": [
+              "Plumbing Pipes",
+              "Fittings"
+            ],
+            "qualityControlRequirements": "Pressure test all plumbing systems",
+            "roomLocation": "Entire Building"
+          }
+        ]
+      },
+      {
+        "stageName": "HVAC",
+        "tasks": [
+          {
+            "taskId": "HV-001",
+            "taskName": "HVAC Installation",
+            "description": "Install heating, ventilation, and air conditioning systems",
+            "estimatedDuration": "17 days",
+            "requiredLabor": {
+              "personDays": 34,
+              "trades": [
+                "HVAC Technician"
+              ]
+            },
+            "dependencies": [
+              "WL-002"
+            ],
+            "materialsUsed": [
+              "HVAC Units",
+              "Ductwork"
+            ],
+            "qualityControlRequirements": "Test system operation and airflow",
+            "roomLocation": "Entire Building"
+          }
+        ]
+      },
+      {
+        "stageName": "Interior Finishes",
+        "tasks": [
+          {
+            "taskId": "IF-001",
+            "taskName": "Drywall Finishing",
+            "description": "Tape, mud, and sand drywall",
+            "estimatedDuration": "13 days",
+            "requiredLabor": {
+              "personDays": 26,
+              "trades": [
+                "Drywall Finisher"
+              ]
+            },
+            "dependencies": [
+              "EL-001",
+              "PL-001",
+              "HV-001"
+            ],
+            "materialsUsed": [
+              "Joint Compound",
+              "Drywall Tape",
+              "Sandpaper"
+            ],
+            "qualityControlRequirements": "Ensure smooth, even surfaces",
+            "roomLocation": "Interior"
+          },
+          {
+            "taskId": "IF-002",
+            "taskName": "Painting",
+            "description": "Prime and paint walls and ceilings",
+            "estimatedDuration": "13 days",
+            "requiredLabor": {
+              "personDays": 26,
+              "trades": [
+                "Painter"
+              ]
+            },
+            "dependencies": [
+              "IF-001"
+            ],
+            "materialsUsed": [
+              "Primer",
+              "Paint"
+            ],
+            "qualityControlRequirements": "Check for even coverage and color consistency",
+            "roomLocation": "Interior"
+          },
+          {
+            "taskId": "IF-003",
+            "taskName": "Flooring Installation",
+            "description": "Install flooring materials",
+            "estimatedDuration": "13 days",
+            "requiredLabor": {
+              "personDays": 26,
+              "trades": [
+                "Flooring Installer"
+              ]
+            },
+            "dependencies": [
+              "IF-001"
+            ],
+            "materialsUsed": [
+              "Flooring Materials",
+              "Adhesive"
+            ],
+            "qualityControlRequirements": "Verify level installation and proper transitions",
+            "roomLocation": "Interior"
+          }
+        ]
+      },
+      {
+        "stageName": "Exterior Finishes",
+        "tasks": [
+          {
+            "taskId": "EF-001",
+            "taskName": "Exterior Painting/Siding",
+            "description": "Apply exterior finishes",
+            "estimatedDuration": "20 days",
+            "requiredLabor": {
+              "personDays": 40,
+              "trades": [
+                "Painter",
+                "Siding Installer"
+              ]
+            },
+            "dependencies": [
+              "WD-001"
+            ],
+            "materialsUsed": [
+              "Exterior Paint",
+              "Siding Materials"
+            ],
+            "qualityControlRequirements": "Check for weather resistance and aesthetic quality",
+            "roomLocation": "Exterior"
+          }
+        ]
+      },
+      {
+        "stageName": "Final Inspection and Handover",
+        "tasks": [
+          {
+            "taskId": "FI-001",
+            "taskName": "Final Inspection",
+            "description": "Conduct final inspection and address any issues",
+            "estimatedDuration": "2 days",
+            "requiredLabor": {
+              "personDays": 4,
+              "trades": [
+                "Project Manager",
+                "Quality Inspector"
+              ]
+            },
+            "dependencies": [
+              "IF-003",
+              "EF-001"
+            ],
+            "materialsUsed": [
+              "Inspection Tools"
+            ],
+            "qualityControlRequirements": "Complete all items on inspection checklist",
+            "roomLocation": "Entire Building"
+          }
+        ]
+      }
+    ]
+  }
+}

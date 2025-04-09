@@ -1,0 +1,67 @@
+{
+  "architectural_analysis": {
+    "building_analysis": {
+      "total_internal_dimensions": {
+        "length": "50m",
+        "width": "30m",
+        "height": "10m"
+      },
+      "total_external_dimensions": {
+        "length": "52m",
+        "width": "32m",
+        "height": "12m"
+      },
+      "total_floor_area": {
+        "internal": "1500m2",
+        "external": "1664m2"
+      },
+      "total_wall_surface_area": "3200m2",
+      "total_ceiling_area": "1500m2",
+      "total_volume": "15000m3"
+    },
+    "room_details": [
+      {
+        "name": "Living Room",
+        "internal_dimensions": {
+          "length": "8m",
+          "width": "6m",
+          "height": "3m"
+        },
+        "external_dimensions": {
+          "length": "8.4m",
+          "width": "6.4m",
+          "height": "3.2m"
+        },
+        "floor_area": {
+          "internal": "48m2",
+          "external": "53.76m2"
+        },
+        "wall_surface_area": "84m2",
+        "ceiling_area": "48m2",
+        "volume": "144m3",
+        "skirting_board_length": "28m"
+      },
+      {
+        "name": "Kitchen",
+        "internal_dimensions": {
+          "length": "6m",
+          "width": "5m",
+          "height": "3m"
+        },
+        "external_dimensions": {
+          "length": "6.4m",
+          "width": "5.4m",
+          "height": "3.2m"
+        },
+        "floor_area": {
+          "internal": "30m2",
+          "external": "34.56m2"
+        },
+        "wall_surface_area": "66m2",
+        "ceiling_area": "30m2",
+        "volume": "90m3",
+        "skirting_board_length": "22m"
+      }
+    ]
+  }
+}
