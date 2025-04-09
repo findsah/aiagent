@@ -1,4 +1,6 @@
 // Dynamic Architectural Drawing Processor Server
+console.log('Starting Suddeco AI Drawing Processor with FINAL AGENT - Enhanced Version (April 2025)');
+
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
