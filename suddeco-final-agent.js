@@ -304,67 +304,38 @@ async function generateConstructionTasks(architecturalAnalysis, materialsQuantit
               content: `You are an AI specialized in construction project planning.
               Based on architectural analysis and materials quantities, create a detailed construction task breakdown.
               
-              For each construction phase, provide:
-              1. Task name
+              # Task Breakdown
+              For each major construction phase, provide:
+              1. Task name and description
               2. Duration in days
-              3. Labor required (number and type of workers)
-              4. Dependencies on other tasks
-              5. Materials used
+              3. Labor requirements (number of workers and skills needed)
+              4. Material requirements (quantities and specifications)
+              5. Dependencies on other tasks
+              6. Critical path identification
               
-              Organize tasks by construction phases:
-              1. Site preparation
-              2. Foundation
-              3. Structure
-              4. Roofing
-              5. External walls
-              6. Windows and doors
-              7. Internal walls
-              8. Electrical
-              9. Plumbing
-              10. HVAC
-              11. Flooring
-              12. Finishes
-              13. Final touches
+              # Timeline Planning
+              Create a realistic timeline that includes:
+              1. Sequential and parallel tasks
+              2. Buffer periods for potential delays
+              3. Milestones and checkpoints
+              4. Optimal scheduling to minimize overall duration
               
-              Also include a project timeline with:
-              1. Estimated start date (use current date)
-              2. Estimated completion date
-              3. Critical path tasks
+              # Resource Allocation
+              Provide recommendations for:
+              1. Optimal crew size for each task
+              2. Equipment requirements and duration
+              3. Material delivery scheduling
+              4. Specialized contractor requirements
               
-              Format your response as a detailed JSON object with the following structure:
-              {
-                "construction_tasks": {
-                  "site_preparation": [
-                    {
-                      "task_name": "string",
-                      "duration_days": numeric_value,
-                      "labor_required": "string",
-                      "dependencies": ["string"],
-                      "materials_used": ["string"]
-                    }
-                  ],
-                  "foundation": [...],
-                  "structure": [...],
-                  "roofing": [...],
-                  "external_walls": [...],
-                  "windows_and_doors": [...],
-                  "internal_walls": [...],
-                  "electrical": [...],
-                  "plumbing": [...],
-                  "hvac": [...],
-                  "flooring": [...],
-                  "finishes": [...],
-                  "final_touches": [...]
-                },
-                "project_timeline": {
-                  "start_date": "YYYY-MM-DD",
-                  "end_date": "YYYY-MM-DD",
-                  "total_duration_days": numeric_value,
-                  "critical_path_tasks": ["string"]
-                }
-              }
+              # Risk Assessment
+              Identify potential risks and mitigation strategies:
+              1. Weather-dependent tasks and contingencies
+              2. Supply chain risks for critical materials
+              3. Technical complexity challenges
+              4. Regulatory and inspection considerations
               
-              IMPORTANT: Always provide numeric values for durations (e.g., 5, 10). Never use "N/A" or empty values.`
+              Format your response as a detailed JSON object that includes all these elements.
+              IMPORTANT: Ensure all durations, quantities, and resource allocations are realistic and based on industry standards.`
             },
             {
               role: "user",

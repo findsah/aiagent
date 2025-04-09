@@ -422,46 +422,18 @@ app.post('/api/process-drawing', upload.single('drawing'), async (req, res) => {
     // Process the drawing using the same logic as the upload endpoint
     const result = await processDrawingFile(req.file);
     
-    // Generate construction plan based on the analysis
-    console.log('Generating construction plan for the drawing...');
-    let constructionPlan = null;
-    
-    try {
-      // Use the consolidated agent functions for construction tasks
-      constructionPlan = {
-        taskBreakdown: result.taskBreakdown,
-        reportUrl: result.reportUrl
-      };
-      
-      // The Excel report already contains all the necessary information
-      // including construction tasks, so we don't need to generate it again
-    } catch (planError) {
-      console.error('Error generating construction plan:', planError);
-      constructionPlan = { error: planError.message };
-    }
-    
-    // Return detailed API response
+    // Return the result paths for the web interface
     res.json({
       success: true,
       message: 'Drawing processed successfully',
-      data: {
-        analysis: result.analysisResult,
-        materials: result.materialsResult,
-        tasks: result.taskBreakdown,
-        constructionPlan: constructionPlan,
-        reportUrls: {
-          excel: `/output/${result.reportUrl || `suddeco_report_${result.timestamp}.xlsx`}`,
-          text: '/suddeco_measurements_report.txt',
-          html: '/measurements_report.html',
-          constructionPlan: constructionPlan?.reportUrl ? `/output/${constructionPlan.reportUrl}` : null
-        }
-      }
+      reportUrl: `/output/${path.basename(result.outputPath)}`,
+      visualizationUrl: '/suddeco_measurements_report.txt',
+      htmlReportUrl: '/measurements_report.html'
     });
     
   } catch (error) {
-    console.error('API Error processing drawing:', error);
+    console.error('Error processing drawing:', error);
     res.status(500).json({ 
-      success: false,
       error: 'Error processing drawing', 
       details: error.message 
     });
@@ -484,7 +456,7 @@ app.post('/upload', upload.single('drawing'), async (req, res) => {
     res.json({
       success: true,
       message: 'Drawing processed successfully',
-      reportUrl: `/output/${result.reportUrl || `suddeco_report_${result.timestamp}.xlsx`}`,
+      reportUrl: `/output/${path.basename(result.outputPath)}`,
       visualizationUrl: '/suddeco_measurements_report.txt',
       htmlReportUrl: '/measurements_report.html'
     });

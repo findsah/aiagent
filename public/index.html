@@ -132,10 +132,10 @@
                 <div class="drop-zone" id="drop-zone">
                     <div class="mb-3">
                         <p class="mb-3">Drag & drop your architectural drawing file here or click to browse</p>
-                        <input type="file" class="form-control" id="drawing-file" name="drawing" accept=".pdf,.dxf,.dwg,.json" style="display: none;">
+                        <input type="file" class="form-control" id="drawing-file" name="drawing" accept=".pdf,.dxf,.dwg,.json" style="display: none;" multiple>
                         <button type="button" class="btn btn-primary" id="browse-button">Browse Files</button>
                         <div class="form-check mt-3">
-                            <input class="form-check-input" type="checkbox" id="multiple-files-checkbox">
+                            <input class="form-check-input" type="checkbox" id="multiple-files-checkbox" checked>
                             <label class="form-check-label" for="multiple-files-checkbox">
                                 Upload multiple drawings
                             </label>
@@ -220,133 +220,109 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // DOM elements
-            const uploadForm = document.getElementById('upload-form');
-            const dropZone = document.getElementById('drop-zone');
+            const form = document.getElementById('upload-form');
+            const fileInput = document.getElementById('drawing-file');
             const browseButton = document.getElementById('browse-button');
-            const drawingFileInput = document.getElementById('drawing-file');
+            const dropZone = document.getElementById('drop-zone');
             const fileNameDisplay = document.getElementById('file-name');
+            const progressBar = document.querySelector('.progress-bar');
+            const progressContainer = document.getElementById('progress');
             const processButton = document.getElementById('process-button');
             const loadingIndicator = document.querySelector('.loading');
             const resultsSection = document.getElementById('results-section');
-            const progress = document.getElementById('progress');
-            const progressBar = document.querySelector('.progress-bar');
             const embeddedReport = document.getElementById('embedded-report');
-            const reportContainer = document.getElementById('report-container');
-            const closeEmbeddedReport = document.getElementById('close-embedded-report');
-            const newUploadButton = document.getElementById('new-upload-button');
             const multipleFilesCheckbox = document.getElementById('multiple-files-checkbox');
             
-            // Handle file selection via browse button
+            // Browse button click handler
             browseButton.addEventListener('click', function() {
-                // Update file input attributes based on checkbox
-                if (multipleFilesCheckbox.checked) {
-                    drawingFileInput.setAttribute('multiple', 'multiple');
-                    drawingFileInput.setAttribute('name', 'drawings');
-                } else {
-                    drawingFileInput.removeAttribute('multiple');
-                    drawingFileInput.setAttribute('name', 'drawing');
-                }
-                drawingFileInput.click();
+                fileInput.click();
             });
             
-            // Handle file selection
-            drawingFileInput.addEventListener('change', function() {
-                if (this.files.length > 0) {
-                    if (this.files.length === 1) {
-                        fileNameDisplay.textContent = `Selected file: ${this.files[0].name}`;
-                    } else {
-                        fileNameDisplay.textContent = `Selected ${this.files.length} files`;
-                    }
-                    processButton.disabled = false;
-                } else {
-                    fileNameDisplay.textContent = '';
-                    processButton.disabled = true;
-                }
+            // File input change handler
+            fileInput.addEventListener('change', function() {
+                handleFiles(this.files);
             });
             
-            // Handle drag and drop
+            // Drag and drop handlers
             dropZone.addEventListener('dragover', function(e) {
                 e.preventDefault();
-                this.classList.add('active');
+                dropZone.classList.add('drop-zone-hover');
             });
             
             dropZone.addEventListener('dragleave', function() {
-                this.classList.remove('active');
+                dropZone.classList.remove('drop-zone-hover');
             });
             
             dropZone.addEventListener('drop', function(e) {
                 e.preventDefault();
-                this.classList.remove('active');
+                dropZone.classList.remove('drop-zone-hover');
                 
-                if (multipleFilesCheckbox.checked) {
-                    drawingFileInput.setAttribute('multiple', 'multiple');
-                    drawingFileInput.setAttribute('name', 'drawings');
-                } else {
-                    drawingFileInput.removeAttribute('multiple');
-                    drawingFileInput.setAttribute('name', 'drawing');
-                }
-                
-                drawingFileInput.files = e.dataTransfer.files;
-                const fileCount = drawingFileInput.files.length;
-                
-                if (fileCount > 0) {
-                    if (fileCount === 1) {
-                        fileNameDisplay.textContent = `Selected file: ${drawingFileInput.files[0].name}`;
-                    } else {
-                        fileNameDisplay.textContent = `Selected ${fileCount} files`;
-                    }
-                    processButton.disabled = false;
-                }
+                const files = e.dataTransfer.files;
+                handleFiles(files);
             });
             
-            // Handle form submission
-            uploadForm.addEventListener('submit', function(e) {
+            // Handle selected files
+            function handleFiles(files) {
+                if (files.length === 0) return;
+                
+                // Enable the process button
+                processButton.disabled = false;
+                
+                // Display file names
+                let fileNames = '';
+                for (let i = 0; i < files.length; i++) {
+                    fileNames += `<div class="alert alert-info">${files[i].name} (${formatFileSize(files[i].size)})</div>`;
+                }
+                fileNameDisplay.innerHTML = fileNames;
+                
+                // If multiple files are selected, ensure the checkbox is checked
+                if (files.length > 1) {
+                    multipleFilesCheckbox.checked = true;
+                }
+            }
+            
+            // Format file size
+            function formatFileSize(bytes) {
+                if (bytes < 1024) return bytes + ' bytes';
+                else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+                else return (bytes / 1048576).toFixed(1) + ' MB';
+            }
+            
+            // Form submit handler
+            form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                const formData = new FormData();
-                
-                if (multipleFilesCheckbox.checked) {
-                    for (let i = 0; i < drawingFileInput.files.length; i++) {
-                        formData.append('drawings', drawingFileInput.files[i]);
-                    }
-                } else {
-                    formData.append('drawing', drawingFileInput.files[0]);
+                const files = fileInput.files;
+                if (files.length === 0) {
+                    alert('Please select a file to upload');
+                    return;
                 }
                 
-                // Show loading indicator and progress bar
-                loadingIndicator.style.display = 'block';
-                progress.style.display = 'block';
-                uploadForm.style.display = 'none';
+                // Create FormData object
+                const formData = new FormData();
                 
-                // Simulate progress (in a real app, this would use XHR upload progress)
-                let progressValue = 0;
-                const progressInterval = setInterval(function() {
-                    progressValue += 5;
-                    if (progressValue > 90) {
-                        clearInterval(progressInterval);
-                    }
-                    progressBar.style.width = `${progressValue}%`;
-                    progressBar.setAttribute('aria-valuenow', progressValue);
-                }, 500);
+                // Add all files to the formData
+                for (let i = 0; i < files.length; i++) {
+                    formData.append('drawing', files[i]);
+                }
                 
-                // Determine the endpoint based on whether multiple files are selected
-                const endpoint = multipleFilesCheckbox.checked ? 
-                    '/api/process-multiple-drawings' : 
-                    '/api/process-drawing';
+                // Show progress bar
+                progressContainer.style.display = 'block';
+                
+                // Show loading indicator
+                loadingIndicator.style.display = 'flex';
+                
+                // Hide results section
+                resultsSection.style.display = 'none';
                 
                 // Send the request
-                fetch(endpoint, {
+                fetch('/api/process-drawing', {
                     method: 'POST',
                     body: formData
                 })
                 .then(response => {
-                    clearInterval(progressInterval);
-                    progressBar.style.width = '100%';
-                    progressBar.setAttribute('aria-valuenow', 100);
-                    
                     if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
+                        throw new Error('Network response was not ok');
                     }
                     return response.json();
                 })
@@ -359,276 +335,77 @@
                     // Show results section
                     resultsSection.style.display = 'block';
                     
-                    // Update download links
-                    if (multipleFilesCheckbox.checked) {
-                        // Update for combined report
-                        document.getElementById('skson-report-link').href = data.data.reports.excel;
-                        document.getElementById('download-text-report-btn').style.display = 'none'; // Hide text report for multiple files
-                    } else {
-                        // Update for single file
-                        document.getElementById('skson-report-link').href = data.data.reportUrls.excel;
-                        document.getElementById('download-text-report-btn').style.display = 'block';
-                    }
-                    
-                    // Show embedded report
-                    embeddedReport.style.display = 'block';
-                    
-                    // Load report data
-                    const reportDataUrl = multipleFilesCheckbox.checked ? 
-                        '/api/latest-analysis?combined=true' : 
-                        '/api/latest-analysis';
-                    
-                    fetch(reportDataUrl)
-                        .then(response => response.json())
-                        .then(data => {
-                            let reportHtml = '';
-                            
-                            // Add building summary
-                            reportHtml += `
-                                <h3>Building Summary</h3>
-                                <div class="card mb-4">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <h5>Internal Dimensions</h5>
-                                                <ul class="list-group">
-                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                        Length
-                                                        <span class="badge bg-primary rounded-pill">${data.architectural_analysis.building_analysis.total_internal_dimensions.length}</span>
-                                                    </li>
-                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                        Width
-                                                        <span class="badge bg-primary rounded-pill">${data.architectural_analysis.building_analysis.total_internal_dimensions.width}</span>
-                                                    </li>
-                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                        Height
-                                                        <span class="badge bg-primary rounded-pill">${data.architectural_analysis.building_analysis.total_internal_dimensions.height}</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <h5>Floor Area</h5>
-                                                <ul class="list-group">
-                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                        Internal
-                                                        <span class="badge bg-success rounded-pill">${data.architectural_analysis.building_analysis.total_floor_area.internal}</span>
-                                                    </li>
-                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                        External
-                                                        <span class="badge bg-success rounded-pill">${data.architectural_analysis.building_analysis.total_floor_area.external}</span>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                            
-                            // Add room details
-                            reportHtml += `<h3>Room Details</h3>`;
-                            
-                            // Display first few rooms
-                            const rooms = data.architectural_analysis.room_details.slice(0, 3);
-                            rooms.forEach(room => {
-                                reportHtml += `
-                                    <div class="card mb-3">
-                                        <div class="card-header bg-light">
-                                            <h5 class="mb-0">${room.name}</h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <h6>Internal Dimensions</h6>
-                                                    <ul class="list-group list-group-flush">
-                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                            Length
-                                                            <span class="badge bg-secondary rounded-pill">${room.internal_dimensions.length}</span>
-                                                        </li>
-                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                            Width
-                                                            <span class="badge bg-secondary rounded-pill">${room.internal_dimensions.width}</span>
-                                                        </li>
-                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                            Height
-                                                            <span class="badge bg-secondary rounded-pill">${room.internal_dimensions.height}</span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <h6>Floor Area</h6>
-                                                    <ul class="list-group list-group-flush">
-                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                            Internal
-                                                            <span class="badge bg-info rounded-pill">${room.floor_area.internal}</span>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                `;
-                            });
-                            
-                            // Add materials summary
-                            reportHtml += `
-                                <h3 class="mt-4">Materials Summary</h3>
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="row">
-                            `;
-                            
-                            // Add first few material categories
-                            const materialCategories = Object.keys(data.materials_quantities).slice(0, 3);
-                            materialCategories.forEach(category => {
-                                reportHtml += `
-                                    <div class="col-md-4">
-                                        <h5>${category}</h5>
-                                        <ul class="list-group">
-                                `;
-                                
-                                if (typeof data.materials_quantities[category] === 'object') {
-                                    Object.keys(data.materials_quantities[category]).slice(0, 5).forEach(item => {
-                                        const value = data.materials_quantities[category][item];
-                                        reportHtml += `
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                ${item}
-                                                <span class="badge bg-secondary rounded-pill">${value}</span>
-                                            </li>
-                                        `;
-                                    });
-                                } else {
-                                    reportHtml += `
-                                        <li class="list-group-item">
-                                            ${data.materials_quantities[category]}
-                                        </li>
-                                    `;
-                                }
-                                
-                                reportHtml += `
-                                        </ul>
-                                    </div>
-                                `;
-                            });
-                            
-                            reportHtml += `
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                            
-                            // Add construction tasks if available
-                            if (data.construction_tasks) {
-                                reportHtml += `
-                                    <h3 class="mt-4">Construction Tasks</h3>
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="table-responsive">
-                                                <table class="table table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Task</th>
-                                                            <th>Duration (days)</th>
-                                                            <th>Labor Required</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                `;
-                                
-                                // Add first few tasks
-                                const tasks = data.construction_tasks.slice(0, 5);
-                                tasks.forEach(task => {
-                                    reportHtml += `
-                                        <tr>
-                                            <td>${task.task_name}</td>
-                                            <td>${task.duration_days}</td>
-                                            <td>${task.labor_required}</td>
-                                        </tr>
-                                    `;
-                                });
-                                
-                                reportHtml += `
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                `;
+                    // Update download links based on single or multiple files
+                    if (files.length > 1) {
+                        // Multiple files case
+                        document.getElementById('skson-report-link').href = data.combinedReportUrl || '/output/combined_report.xlsx';
+                        
+                        // Create a results summary for multiple files
+                        let resultsHtml = '<h4>Processing Results:</h4>';
+                        resultsHtml += '<div class="list-group mb-4">';
+                        
+                        data.results.forEach(result => {
+                            if (result.success) {
+                                resultsHtml += `
+                                    <div class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                                        ${result.filename}
+                                        <a href="${result.reportUrl}" class="btn btn-sm btn-primary" target="_blank">View Report</a>
+                                    </div>`;
+                            } else {
+                                resultsHtml += `
+                                    <div class="list-group-item list-group-item-danger">
+                                        ${result.filename} - Error: ${result.error}
+                                    </div>`;
                             }
-                            
-                            // Display the report
-                            reportContainer.innerHTML = reportHtml;
-                        })
-                        .catch(error => {
-                            reportContainer.innerHTML = `<div class="alert alert-danger">Error loading report data: ${error.message}</div>`;
                         });
+                        
+                        resultsHtml += '</div>';
+                        
+                        // Insert the results summary
+                        const resultsContainer = document.createElement('div');
+                        resultsContainer.className = 'multiple-results-container';
+                        resultsContainer.innerHTML = resultsHtml;
+                        
+                        // Add to the results section
+                        document.querySelector('.results-section h3').after(resultsContainer);
+                        
+                        // Hide individual text report buttons for multiple files
+                        document.getElementById('html-report-link').parentElement.parentElement.style.display = 'none';
+                        document.getElementById('text-report-link').parentElement.parentElement.style.display = 'none';
+                        
+                    } else {
+                        // Single file case - original behavior
+                        document.getElementById('skson-report-link').href = data.reportUrl;
+                        document.getElementById('html-report-link').href = data.htmlReportUrl;
+                        document.getElementById('text-report-link').href = data.visualizationUrl;
+                        
+                        // Show all report cards
+                        document.getElementById('html-report-link').parentElement.parentElement.style.display = 'block';
+                        document.getElementById('text-report-link').parentElement.parentElement.style.display = 'block';
+                    }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    clearInterval(progressInterval);
-                    
-                    // Hide loading indicator
                     loadingIndicator.style.display = 'none';
-                    
-                    // Show error message
-                    resultsSection.style.display = 'block';
-                    resultsSection.innerHTML = `
-                        <div class="alert alert-danger">
-                            <h4 class="alert-heading">Error Processing Drawing</h4>
-                            <p>${error.message}</p>
-                            <hr>
-                            <p class="mb-0">Please try again or contact support if the problem persists.</p>
-                        </div>
-                        <div class="text-center mt-4">
-                            <button type="button" class="btn btn-outline-primary" id="new-upload-button">Try Again</button>
-                        </div>
-                    `;
-                    
-                    // Re-attach event listener to the new button
-                    document.getElementById('new-upload-button').addEventListener('click', function() {
-                        resultsSection.style.display = 'none';
-                        uploadForm.style.display = 'block';
-                    });
+                    alert('Error processing drawing: ' + error.message);
                 });
             });
             
-            closeEmbeddedReport.addEventListener('click', function() {
-                embeddedReport.style.display = 'none';
+            // Multiple files checkbox handler
+            multipleFilesCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    fileInput.setAttribute('multiple', '');
+                } else {
+                    fileInput.removeAttribute('multiple');
+                    
+                    // If multiple files are already selected, clear the selection
+                    if (fileInput.files.length > 1) {
+                        fileInput.value = '';
+                        fileNameDisplay.innerHTML = '';
+                        processButton.disabled = true;
+                    }
+                }
             });
-            
-            // Setup download text report functionality
-            const downloadTextReportBtn = document.getElementById('download-text-report-btn');
-            downloadTextReportBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                downloadFile('/reports/text', 'suddeco_measurements_report.txt');
-            });
-            
-            // Handle "Process Another Drawing" button
-            newUploadButton.addEventListener('click', function() {
-                resultsSection.style.display = 'none';
-                uploadForm.style.display = 'block';
-                drawingFileInput.value = '';
-                fileNameDisplay.textContent = '';
-                processButton.disabled = true;
-                progressBar.style.width = '0%';
-                progress.style.display = 'none';
-            });
-            
-            // Helper function to download files
-            function downloadFile(url, filename) {
-                fetch(url)
-                    .then(response => response.blob())
-                    .then(blob => {
-                        const url = window.URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.style.display = 'none';
-                        a.href = url;
-                        a.download = filename;
-                        document.body.appendChild(a);
-                        a.click();
-                        window.URL.revokeObjectURL(url);
-                    })
-                    .catch(error => console.error('Error downloading file:', error));
-            }
         });
     </script>
 </body>
