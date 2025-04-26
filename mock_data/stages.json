@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "stage": "Ceiling structure and lining"
+  },
+  {
+    "id": 2,
+    "stage": "Floor structure and lining"
+  },
+  {
+    "id": 3,
+    "stage": "Roof structure and coverings"
+  },
+  {
+    "id": 4,
+    "stage": "Units, worktops and kitchen appliances"
+  },
+  {
+    "id": 5,
+    "stage": "Floor preparation and finishes"
+  },
+  {
+    "id": 6,
+    "stage": "Preliminaries"
+  },
+  {
+    "id": 7,
+    "stage": "Plumbed appliances"
+  },
+  {
+    "id": 8,
+    "stage": "Joinery"
+  },
+  {
+    "id": 9,
+    "stage": "Steel and structural supports"
+  },
+  {
+    "id": 10,
+    "stage": "Electric Wiring and fuseboards"
+  },
+  {
+    "id": 11,
+    "stage": "Foundations and substructure"
+  },
+  {
+    "id": 12,
+    "stage": "Wired appliances"
+  },
+  {
+    "id": 13,
+    "stage": "Fixtures and fittings"
+  },
+  {
+    "id": 14,
+    "stage": "Internal doors and frames"
+  },
+  {
+    "id": 15,
+    "stage": "Demolitions"
+  },
+  {
+    "id": 16,
+    "stage": "External windows and doors"
+  },
+  {
+    "id": 17,
+    "stage": "Pluming, Pipework and Drainage"
+  },
+  {
+    "id": 18,
+    "stage": "Decoration"
+  },
+  {
+    "id": 19,
+    "stage": "Wall preparation and finishes"
+  },
+  {
+    "id": 20,
+    "stage": "External wall structure and lining"
+  },
+  {
+    "id": 21,
+    "stage": "Heating and cooling"
+  },
+  {
+    "id": 22,
+    "stage": "External works"
+  },
+  {
+    "id": 23,
+    "stage": "Ceiling preparation and finishes"
+  },
+  {
+    "id": 24,
+    "stage": "Stairs, balustrades and lifts"
+  },
+  {
+    "id": 25,
+    "stage": "Internal wall structure and lining"
+  }
+]

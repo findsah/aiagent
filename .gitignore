@@ -1,0 +1,66 @@
+# Environment variables (never commit these)
+.env
+
+# Node modules
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# dotenv environment variable files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Uploads folder content (but keep the folder)
+uploads/*
+!uploads/.gitkeep
+
+# Output folder content (but keep the folder)
+output/*
+!output/.gitkeep
+
+# PDF files (potentially containing sensitive information)
+*.pdf
+
+# Image files
+*.png
+*.jpg
+*.jpeg
+
+# Data files with sensitive information
+suddeco_data/
+
+# Backup folders
+backups/
+working-backup/
+final-backup/
+clean-project/
+
+# Temporary files
+*.tmp
+*.temp

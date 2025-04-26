@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suddeco AI Drawing Processor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .header {
+            background-color: #343a40;
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            text-align: center;
+            border-radius: 0 0 10px 10px;
+        }
+        .card {
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #f1f5f9;
+            font-weight: bold;
+        }
+        .file-item {
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            background-color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .file-item .file-name {
+            max-width: 70%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .results-container {
+            margin-top: 2rem;
+        }
+        .tab-content {
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #dee2e6;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+        }
+        .nav-tabs .nav-link {
+            font-weight: 500;
+        }
+        .nav-tabs .nav-link.active {
+            background-color: #fff;
+            border-bottom-color: #fff;
+        }
+        .measurement-card {
+            transition: transform 0.2s;
+        }
+        .measurement-card:hover {
+            transform: translateY(-5px);
+        }
+        #dropArea {
+            border: 2px dashed #6c757d;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #dropArea:hover, #dropArea.dragover {
+            background-color: #e9ecef;
+        }
+        .progress {
+            height: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Suddeco AI Drawing Processor</h1>
+            <p>Upload architectural drawings for AI-powered analysis and construction planning</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Upload Architectural Drawings</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="dropArea" class="mb-4">
+                            <div id="dropText">
+                                <i class="bi bi-cloud-upload" style="font-size: 3rem;"></i>
+                                <h4 class="mt-3">Drag & Drop Files Here</h4>
+                                <p>or click to browse files</p>
+                                <p class="text-muted">Supported formats: PDF, PNG</p>
+                            </div>
+                        </div>
+                        
+                        <form id="upload-form" enctype="multipart/form-data">
+                            <input type="file" id="fileInput" name="drawing" multiple accept=".pdf,.png" class="d-none">
+                            
+                            <div id="fileList" class="mb-3"></div>
+                            
+                            <div class="d-flex justify-content-between">
+                                <button type="button" id="clearFiles" class="btn btn-outline-secondary" disabled>Clear Files</button>
+                                <button type="submit" id="processBtn" class="btn btn-primary" disabled>Process Drawings</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="loadingSection" class="text-center my-5" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <h3 class="mt-3">Processing Drawings...</h3>
+            <div class="progress mt-3">
+                <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+            </div>
+            <p class="text-muted mt-2">This may take a few minutes. We're analyzing your drawings and extracting measurements.</p>
+        </div>
+
+        <div id="resultsSection" class="results-container" style="display: none;">
+            <h2 class="mb-4">Analysis Results</h2>
+            
+            <ul class="nav nav-tabs" id="resultTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="measurements-tab" data-bs-toggle="tab" data-bs-target="#measurements" type="button" role="tab" aria-controls="measurements" aria-selected="true">Measurements</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="materials-tab" data-bs-toggle="tab" data-bs-target="#materials" type="button" role="tab" aria-controls="materials" aria-selected="false">Materials</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tasks-tab" data-bs-toggle="tab" data-bs-target="#tasks" type="button" role="tab" aria-controls="tasks" aria-selected="false">Tasks</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="json-tab" data-bs-toggle="tab" data-bs-target="#json" type="button" role="tab" aria-controls="json" aria-selected="false">JSON Output</button>
+                </li>
+            </ul>
+            
+            <div class="tab-content" id="resultTabsContent">
+                <div class="tab-pane fade show active" id="measurements" role="tabpanel" aria-labelledby="measurements-tab">
+                    <div id="buildingAnalysis"></div>
+                    <div id="roomDetails" class="mt-4"></div>
+                </div>
+                
+                <div class="tab-pane fade" id="materials" role="tabpanel" aria-labelledby="materials-tab">
+                    <div id="materialsContent"></div>
+                </div>
+                
+                <div class="tab-pane fade" id="tasks" role="tabpanel" aria-labelledby="tasks-tab">
+                    <div id="tasksContent"></div>
+                    <div class="text-center mt-4">
+                        <a href="/construction-planner" class="btn btn-primary">Open Construction Planner</a>
+                    </div>
+                </div>
+                
+                <div class="tab-pane fade" id="json" role="tabpanel" aria-labelledby="json-tab">
+                    <div class="d-flex justify-content-end mb-3">
+                        <button id="downloadJson" class="btn btn-sm btn-outline-primary">Download JSON</button>
+                    </div>
+                    <pre id="jsonContent" class="bg-light p-3 rounded" style="max-height: 500px; overflow-y: auto;"></pre>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4 mb-5">
+                <button id="newAnalysis" class="btn btn-outline-primary">Process New Drawings</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropArea = document.getElementById('dropArea');
+            const fileInput = document.getElementById('fileInput');
+            const fileList = document.getElementById('fileList');
+            const clearFilesBtn = document.getElementById('clearFiles');
+            const processBtn = document.getElementById('processBtn');
+            const uploadForm = document.getElementById('upload-form');
+            const loadingSection = document.getElementById('loadingSection');
+            const resultsSection = document.getElementById('resultsSection');
+            const progressBar = document.getElementById('progressBar');
+            const newAnalysisBtn = document.getElementById('newAnalysis');
+            const downloadJsonBtn = document.getElementById('downloadJson');
+            
+            // Building analysis and room details elements
+            const buildingAnalysisEl = document.getElementById('buildingAnalysis');
+            const roomDetailsEl = document.getElementById('roomDetails');
+            const materialsContentEl = document.getElementById('materialsContent');
+            const tasksContentEl = document.getElementById('tasksContent');
+            const jsonContentEl = document.getElementById('jsonContent');
+            
+            let selectedFiles = [];
+            
+            // Handle drag and drop events
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                dropArea.classList.add('dragover');
+            }
+            
+            function unhighlight() {
+                dropArea.classList.remove('dragover');
+            }
+            
+            // Handle file drop
+            dropArea.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFiles(files);
+            }
+            
+            // Handle file selection via click
+            dropArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+            
+            fileInput.addEventListener('change', () => {
+                handleFiles(fileInput.files);
+            });
+            
+            function handleFiles(files) {
+                if (files.length === 0) return;
+                
+                // Add files to the selected files array
+                Array.from(files).forEach(file => {
+                    // Check if file is already in the list
+                    const isDuplicate = selectedFiles.some(f => f.name === file.name && f.size === file.size);
+                    if (!isDuplicate) {
+                        selectedFiles.push(file);
+                    }
+                });
+                
+                updateFileList();
+            }
+            
+            function updateFileList() {
+                fileList.innerHTML = '';
+                
+                selectedFiles.forEach((file, index) => {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    
+                    const fileName = document.createElement('div');
+                    fileName.className = 'file-name';
+                    fileName.textContent = file.name;
+                    
+                    const fileSize = document.createElement('div');
+                    fileSize.className = 'file-size text-muted';
+                    fileSize.textContent = formatFileSize(file.size);
+                    
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'btn btn-sm btn-outline-danger';
+                    removeBtn.innerHTML = '&times;';
+                    removeBtn.addEventListener('click', () => {
+                        selectedFiles.splice(index, 1);
+                        updateFileList();
+                    });
+                    
+                    fileItem.appendChild(fileName);
+                    fileItem.appendChild(fileSize);
+                    fileItem.appendChild(removeBtn);
+                    fileList.appendChild(fileItem);
+                });
+                
+                // Update button states
+                clearFilesBtn.disabled = selectedFiles.length === 0;
+                processBtn.disabled = selectedFiles.length === 0;
+            }
+            
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            // Clear files button
+            clearFilesBtn.addEventListener('click', () => {
+                selectedFiles = [];
+                updateFileList();
+                fileInput.value = '';
+            });
+            
+            // Form submission
+            uploadForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                if (selectedFiles.length === 0) {
+                    alert('Please select at least one file to process');
+                    return;
+                }
+                
+                // Show loading section
+                loadingSection.style.display = 'block';
+                resultsSection.style.display = 'none';
+                
+                // Simulate progress
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += 1;
+                    if (progress > 95) {
+                        clearInterval(progressInterval);
+                    }
+                    progressBar.style.width = `${progress}%`;
+                }, 300);
+                
+                try {
+                    // Create FormData and append all selected files
+                    const formData = new FormData();
+                    selectedFiles.forEach(file => {
+                        formData.append('drawing', file);
+                    });
+                    
+                    // Send the files to the server
+                    const response = await fetch('/api/process-multiple-drawings', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const data = await response.json();
+                    
+                    // Complete progress
+                    clearInterval(progressInterval);
+                    progressBar.style.width = '100%';
+                    
+                    // Display results after a short delay
+                    setTimeout(() => {
+                        loadingSection.style.display = 'none';
+                        resultsSection.style.display = 'block';
+                        
+                        if (data.success) {
+                            displayResults(data.data);
+                        } else {
+                            alert(`Error: ${data.error || 'Unknown error occurred'}`);
+                        }
+                    }, 500);
+                    
+                } catch (error) {
+                    clearInterval(progressInterval);
+                    loadingSection.style.display = 'none';
+                    alert('Error processing files: ' + error.message);
+                    console.error('Error:', error);
+                }
+            });
+            
+            // Display results function
+            function displayResults(data) {
+                // Display the JSON data
+                jsonContentEl.textContent = JSON.stringify(data, null, 2);
+                
+                // Display building analysis
+                if (data.architecturalAnalysis && data.architecturalAnalysis.building_analysis) {
+                    const buildingAnalysis = data.architecturalAnalysis.building_analysis;
+                    
+                    buildingAnalysisEl.innerHTML = `
+                        <h3>Building Analysis</h3>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5>Internal Dimensions</h5>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Length:</span>
+                                                <strong>${buildingAnalysis.total_internal_dimensions?.length || 'N/A'}</strong>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Width:</span>
+                                                <strong>${buildingAnalysis.total_internal_dimensions?.width || 'N/A'}</strong>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Height:</span>
+                                                <strong>${buildingAnalysis.total_internal_dimensions?.height || 'N/A'}</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>External Dimensions</h5>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Length:</span>
+                                                <strong>${buildingAnalysis.total_external_dimensions?.length || 'N/A'}</strong>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Width:</span>
+                                                <strong>${buildingAnalysis.total_external_dimensions?.width || 'N/A'}</strong>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Height:</span>
+                                                <strong>${buildingAnalysis.total_external_dimensions?.height || 'N/A'}</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <h5>Floor Area</h5>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Internal:</span>
+                                                <strong>${buildingAnalysis.total_floor_area?.internal || 'N/A'}</strong>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>External:</span>
+                                                <strong>${buildingAnalysis.total_floor_area?.external || 'N/A'}</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // Display room details
+                if (data.architecturalAnalysis && data.architecturalAnalysis.room_details) {
+                    const roomDetails = data.architecturalAnalysis.room_details;
+                    
+                    let roomHtml = `<h3>Room Details</h3><div class="row">`;
+                    
+                    roomDetails.forEach(room => {
+                        roomHtml += `
+                            <div class="col-md-6 mb-4">
+                                <div class="card measurement-card">
+                                    <div class="card-header">
+                                        <h5>${room.name || 'Room'}</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6>Internal Dimensions</h6>
+                                        <ul class="list-group list-group-flush mb-3">
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Length:</span>
+                                                <strong>${room.internal_dimensions?.length || 'N/A'}</strong>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Width:</span>
+                                                <strong>${room.internal_dimensions?.width || 'N/A'}</strong>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Height:</span>
+                                                <strong>${room.internal_dimensions?.height || 'N/A'}</strong>
+                                            </li>
+                                        </ul>
+                                        
+                                        <h6>Floor Area</h6>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <span>Internal:</span>
+                                                <strong>${room.floor_area?.internal || 'N/A'}</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    roomHtml += `</div>`;
+                    roomDetailsEl.innerHTML = roomHtml;
+                }
+                
+                // Display materials quantities
+                if (data.materialsQuantities) {
+                    const materials = data.materialsQuantities;
+                    
+                    let materialsHtml = `<h3>Materials Quantities</h3>`;
+                    
+                    Object.keys(materials).forEach(category => {
+                        materialsHtml += `
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5>${category}</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                        `;
+                        
+                        const categoryItems = materials[category];
+                        Object.keys(categoryItems).forEach(item => {
+                            materialsHtml += `
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>${item}:</span>
+                                    <strong>${categoryItems[item]}</strong>
+                                </li>
+                            `;
+                        });
+                        
+                        materialsHtml += `
+                                    </ul>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    materialsContentEl.innerHTML = materialsHtml;
+                }
+                
+                // Display tasks
+                if (data.constructionTasks) {
+                    const tasks = data.constructionTasks;
+                    
+                    let tasksHtml = `<h3>Construction Tasks</h3>`;
+                    
+                    if (Array.isArray(tasks)) {
+                        tasksHtml += `<div class="list-group">`;
+                        
+                        tasks.forEach(task => {
+                            tasksHtml += `
+                                <div class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h5 class="mb-1">${task.task_name}</h5>
+                                        <small>${task.duration_days} days</small>
+                                    </div>
+                                    <p class="mb-1">${task.description || 'No description available'}</p>
+                                    <small>Labor: ${task.labor_required || 'N/A'}</small>
+                                </div>
+                            `;
+                        });
+                        
+                        tasksHtml += `</div>`;
+                    } else {
+                        tasksHtml += `<p>No tasks available</p>`;
+                    }
+                    
+                    tasksContentEl.innerHTML = tasksHtml;
+                }
+            }
+            
+            // New analysis button
+            newAnalysisBtn.addEventListener('click', () => {
+                resultsSection.style.display = 'none';
+                selectedFiles = [];
+                updateFileList();
+                fileInput.value = '';
+            });
+            
+            // Download JSON button
+            downloadJsonBtn.addEventListener('click', () => {
+                const jsonData = jsonContentEl.textContent;
+                const blob = new Blob([jsonData], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'suddeco_analysis.json';
+                document.body.appendChild(a);
+                a.click();
+                URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            });
+
+            // Check if there's already analysis data available
+            fetch('/api/latest-analysis?combined=true')
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.architectural_analysis) {
+                        resultsSection.style.display = 'block';
+                        displayResults(data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching latest analysis:', error);
+                });
+        });
+    </script>
+</body>
+</html>
