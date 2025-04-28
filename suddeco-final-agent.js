@@ -1279,6 +1279,14 @@ app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) 
       });
     } catch (processingError) {
       console.error('Error processing drawing with RAG:', processingError.message);
+      return res.status(500).json({
+        success: false,
+        error: 'Error processing drawing with RAG',
+        message: processingError.message
+      });
+    }
+  }
+});
 
 /**
  * @swagger
@@ -1725,6 +1733,157 @@ app.post('/api/process-multiple-drawings', upload.array('drawings', 10), async (
   }
 });
 
+// Import the Python bridge for advanced drawing analysis
+const pythonBridge = require('./python-bridge');
+
+/**
+ * @swagger
+ * /api/advanced-analysis:
+ *   post:
+ *     summary: Advanced drawing analysis with Python FixItAll agent
+ *     description: Upload and process an architectural drawing file using the Python-based FixItAll agent
+ *     tags: [Advanced Analysis]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               drawing:
+ *                 type: string
+ *                 format: binary
+ *                 description: Drawing file (PDF, PNG, JPG, or DWG)
+ *     responses:
+ *       200:
+ *         description: Drawing analyzed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 fileInfo:
+ *                   type: object
+ *                 analysis:
+ *                   type: object
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+app.post('/api/advanced-analysis', upload.single('drawing'), async (req, res) => {
+  try {
+    console.log('Received request to /api/advanced-analysis');
+    
+    // Check if Python environment is available
+    const pythonAvailable = await pythonBridge.checkEnvironment().catch(err => {
+      console.error('Error checking Python environment:', err);
+      return false;
+    });
+    
+    if (!pythonAvailable) {
+      console.error('Python environment is not properly configured');
+      return res.status(500).json({
+        success: false,
+        error: 'Python environment not available',
+        message: 'The server is not properly configured to use the advanced analysis features. Please contact the administrator.'
+      });
+    }
+    
+    // Check if file was uploaded
+    if (!req.file) {
+      console.error('No file uploaded in request');
+      return res.status(400).json({
+        success: false,
+        error: 'No file uploaded',
+        message: 'Please upload a drawing file (PDF, PNG, JPG, or DWG)'
+      });
+    }
+    
+    // Extract file extension
+    const fileExtension = path.extname(req.file.originalname).toLowerCase().substring(1);
+    
+    // Validate file type
+    const validExtensions = ['pdf', 'png', 'jpg', 'jpeg', 'dwg'];
+    if (!validExtensions.includes(fileExtension)) {
+      console.error(`Invalid file type: ${fileExtension}. Supported types: ${validExtensions.join(', ')}`);
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid file type',
+        message: `Only ${validExtensions.join(', ')} files are supported`
+      });
+    }
+    
+    // Check file size (max 10MB)
+    if (req.file.size > 10 * 1024 * 1024) {
+      console.error(`File too large: ${req.file.size} bytes. Maximum size is 10MB.`);
+      return res.status(400).json({
+        success: false,
+        error: 'File too large',
+        message: 'Maximum file size is 10MB'
+      });
+    }
+    
+    // Extract file information
+    const fileInfo = {
+      name: req.file.originalname,
+      path: req.file.path,
+      type: fileExtension,
+      size: req.file.size,
+      timestamp: Date.now()
+    };
+    
+    console.log(`Processing drawing with FixItAll agent: ${fileInfo.path}`);
+    
+    // Process the drawing with the Python FixItAll agent
+    const analysisResult = await pythonBridge.processDrawing(req.file.path);
+    
+    // Generate timestamp for output files
+    const timestamp = Date.now();
+    const outputDir = path.join(__dirname, 'output');
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+    
+    // Save the result to a file
+    const outputPath = path.join(outputDir, `advanced_analysis_${fileInfo.name.replace(/\s+/g, '_')}_${timestamp}.json`);
+    fs.writeFileSync(outputPath, JSON.stringify(analysisResult, null, 2));
+    
+    console.log(`Advanced analysis saved to ${outputPath}`);
+    
+    // Return the result
+    res.json({
+      success: true,
+      message: 'Drawing analyzed successfully with FixItAll agent',
+      fileInfo,
+      analysis: analysisResult,
+      outputPath: `/output/advanced_analysis_${fileInfo.name.replace(/\s+/g, '_')}_${timestamp}.json`
+    });
+  } catch (error) {
+    console.error('Error in advanced-analysis endpoint:', error.message);
+    console.error(error.stack);
+    
+    res.status(500).json({
+      success: false,
+      error: 'Server error',
+      message: 'An unexpected error occurred while processing your request.',
+      details: error.message
+    });
+  }
+});
+
 // Import the schema API router
 const schemaApiRouter = require('./suddeco-schema-api');
 
@@ -1754,3 +1913,6 @@ app.listen(port, () => {
   console.log(`Schema Manager UI available at: http://localhost:${port}/schema-manager`);
   console.log(`RAG Chat UI available at: http://localhost:${port}/rag-chat`);
 });
+
+// Export the Express app for use in server.js
+module.exports = app;
