@@ -89,6 +89,7 @@
         <div class="header">
             <h1>Suddeco AI Drawing Processor</h1>
             <p>Upload architectural drawings for AI-powered analysis and construction planning</p>
+            <div class="badge bg-primary mt-2">NEW: Advanced Analysis with Python AI Agent</div>
         </div>
 
         <div class="row">
@@ -96,6 +97,10 @@
                 <div class="card">
                     <div class="card-header">
                         <h2>Upload Architectural Drawings</h2>
+                        <div class="form-check form-switch mt-2">
+                            <input class="form-check-input" type="checkbox" id="useAdvancedAnalysis">
+                            <label class="form-check-label" for="useAdvancedAnalysis">Use Advanced Analysis (Python AI Agent)</label>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div id="dropArea" class="mb-4">
@@ -103,12 +108,12 @@
                                 <i class="bi bi-cloud-upload" style="font-size: 3rem;"></i>
                                 <h4 class="mt-3">Drag & Drop Files Here</h4>
                                 <p>or click to browse files</p>
-                                <p class="text-muted">Supported formats: PDF, PNG</p>
+                                <p class="text-muted">Supported formats: PDF, PNG, JPG, DWG (Advanced Analysis)</p>
                             </div>
                         </div>
                         
                         <form id="upload-form" enctype="multipart/form-data">
-                            <input type="file" id="fileInput" name="drawing" multiple accept=".pdf,.png" class="d-none">
+                            <input type="file" id="fileInput" name="drawing" multiple accept=".pdf,.png,.jpg,.jpeg,.dwg" class="d-none">
                             
                             <div id="fileList" class="mb-3"></div>
                             
@@ -138,13 +143,19 @@
             
             <ul class="nav nav-tabs" id="resultTabs" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="measurements-tab" data-bs-toggle="tab" data-bs-target="#measurements" type="button" role="tab" aria-controls="measurements" aria-selected="true">Measurements</button>
+                    <button class="nav-link active" id="measurements-tab" data-bs-toggle="tab" data-bs-target="#measurements" type="button" role="tab" aria-controls="measurements" aria-selected="true">Building Analysis</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="materials-tab" data-bs-toggle="tab" data-bs-target="#materials" type="button" role="tab" aria-controls="materials" aria-selected="false">Materials</button>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="tasks-tab" data-bs-toggle="tab" data-bs-target="#tasks" type="button" role="tab" aria-controls="tasks" aria-selected="false">Tasks</button>
+                    <button class="nav-link" id="tasks-tab" data-bs-toggle="tab" data-bs-target="#tasks" type="button" role="tab" aria-controls="tasks" aria-selected="false">Construction Tasks</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="compliance-tab" data-bs-toggle="tab" data-bs-target="#compliance" type="button" role="tab" aria-controls="compliance" aria-selected="false">Compliance Check</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="boq-tab" data-bs-toggle="tab" data-bs-target="#boq" type="button" role="tab" aria-controls="boq" aria-selected="false">Bill of Quantities</button>
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="json-tab" data-bs-toggle="tab" data-bs-target="#json" type="button" role="tab" aria-controls="json" aria-selected="false">JSON Output</button>
@@ -168,9 +179,36 @@
                     </div>
                 </div>
                 
+                <div class="tab-pane fade" id="compliance" role="tabpanel" aria-labelledby="compliance-tab">
+                    <div id="complianceContent" class="mt-3">
+                        <h3>Building Compliance Check</h3>
+                        <div class="alert alert-info mb-3">This feature is available with Advanced Analysis mode</div>
+                        <div id="complianceIssues" class="list-group"></div>
+                    </div>
+                </div>
+                
+                <div class="tab-pane fade" id="boq" role="tabpanel" aria-labelledby="boq-tab">
+                    <div id="boqContent" class="mt-3">
+                        <h3>Bill of Quantities (BOQ)</h3>
+                        <div class="alert alert-info mb-3">This feature is available with Advanced Analysis mode</div>
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="boqTable">
+                                <thead>
+                                    <tr>
+                                        <th>Material</th>
+                                        <th>Quantity (m²)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="tab-pane fade" id="json" role="tabpanel" aria-labelledby="json-tab">
                     <div class="d-flex justify-content-end mb-3">
-                        <button id="downloadJson" class="btn btn-sm btn-outline-primary">Download JSON</button>
+                        <button id="downloadJson" class="btn btn-sm btn-outline-secondary">Download JSON</button>
                     </div>
                     <pre id="jsonContent" class="bg-light p-3 rounded" style="max-height: 500px; overflow-y: auto;"></pre>
                 </div>
@@ -319,81 +357,62 @@
                 e.preventDefault();
                 
                 if (selectedFiles.length === 0) {
-                    alert('Please select at least one file to process');
+                    alert('Please select at least one file');
                     return;
                 }
                 
-                // Show loading section
+                const formData = new FormData();
+                selectedFiles.forEach(file => {
+                    formData.append('drawing', file);
+                });
+                
+                // Check if advanced analysis is enabled
+                const useAdvancedAnalysis = document.getElementById('useAdvancedAnalysis').checked;
+                
+                // Show loading indicator
                 loadingSection.style.display = 'block';
                 resultsSection.style.display = 'none';
                 
-                // Simulate progress
-                let progress = 0;
-                const progressInterval = setInterval(() => {
-                    progress += 1;
-                    if (progress > 95) {
-                        clearInterval(progressInterval);
-                    }
-                    progressBar.style.width = `${progress}%`;
-                }, 300);
-                
                 try {
-                    // Create FormData and append all selected files
-                    const formData = new FormData();
-                    selectedFiles.forEach(file => {
-                        formData.append('drawing', file);
-                    });
+                    // Use different endpoint based on analysis mode
+                    const endpoint = useAdvancedAnalysis ? '/api/advanced-analysis' : '/api/process-drawing';
                     
-                    // Send the files to the server
-                    const response = await fetch('/api/process-multiple-drawings', {
+                    const response = await fetch(endpoint, {
                         method: 'POST',
                         body: formData
                     });
                     
                     const data = await response.json();
                     
-                    // Complete progress
-                    clearInterval(progressInterval);
-                    progressBar.style.width = '100%';
-                    
-                    // Display results after a short delay
-                    setTimeout(() => {
-                        loadingSection.style.display = 'none';
-                        resultsSection.style.display = 'block';
-                        
-                        if (data.success) {
-                            displayResults(data.data);
-                        } else {
-                            alert(`Error: ${data.error || 'Unknown error occurred'}`);
-                        }
-                    }, 500);
-                    
-                } catch (error) {
-                    clearInterval(progressInterval);
+                    // Hide loading indicator and show results
                     loadingSection.style.display = 'none';
-                    alert('Error processing files: ' + error.message);
-                    console.error('Error:', error);
+                    resultsSection.style.display = 'block';
+                    
+                    // Display the results
+                    displayResults(data, useAdvancedAnalysis);
+                    
+                    // Show JSON output
+                    jsonContentEl.textContent = JSON.stringify(data, null, 2);
+                } catch (error) {
+                    console.error('Error processing drawings:', error);
+                    loadingSection.style.display = 'none';
+                    alert('Error processing drawings. Please try again.');
                 }
             });
             
             // Display results function
-            function displayResults(data) {
-                // Display the JSON data
-                jsonContentEl.textContent = JSON.stringify(data, null, 2);
-                
-                // Display building analysis
-                if (data.architecturalAnalysis && data.architecturalAnalysis.building_analysis) {
-                    const buildingAnalysis = data.architecturalAnalysis.building_analysis;
+            function displayResults(data, isAdvancedAnalysis = false) {
+                // Handle different response formats based on analysis mode
+                if (isAdvancedAnalysis && data.analysis) {
+                    // Display advanced analysis results from Python agent
+                    displayAdvancedAnalysisResults(data.analysis);
+                } else if (data.architectural_analysis) {
+                    // Display standard analysis
+                    const analysis = data.architectural_analysis;
                     
-                    buildingAnalysisEl.innerHTML = `
+                    let analysisHtml = `
                         <h3>Building Analysis</h3>
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <h5>Internal Dimensions</h5>
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item d-flex justify-content-between">
+                        <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
                                                 <span>Length:</span>
                                                 <strong>${buildingAnalysis.total_internal_dimensions?.length || 'N/A'}</strong>
                                             </li>
@@ -581,6 +600,134 @@
                 document.body.removeChild(a);
             });
 
+            // Function to display advanced analysis results from Python agent
+            function displayAdvancedAnalysisResults(analysis) {
+                // Display building analysis
+                let analysisHtml = `
+                    <h3>Advanced Building Analysis</h3>
+                    <div class="alert alert-success">Analyzed using Python FixItAll Agent</div>
+                    <div class="row row-cols-1 row-cols-md-2 g-4 mb-4">
+                `;
+                
+                // Display scale information
+                analysisHtml += `
+                    <div class="col">
+                        <div class="card h-100 measurement-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Drawing Scale</h5>
+                                <p class="card-text">1:${analysis.scale || 'Not detected'}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Display measurements
+                if (analysis.measurements && analysis.measurements.length > 0) {
+                    analysisHtml += `
+                        <div class="col">
+                            <div class="card h-100 measurement-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Measurements</h5>
+                                    <ul class="list-group list-group-flush">
+                    `;
+                    
+                    analysis.measurements.slice(0, 5).forEach(measurement => {
+                        analysisHtml += `
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>${measurement[0]} ${measurement[1]}</span>
+                            </li>
+                        `;
+                    });
+                    
+                    if (analysis.measurements.length > 5) {
+                        analysisHtml += `
+                            <li class="list-group-item text-muted">+ ${analysis.measurements.length - 5} more measurements</li>
+                        `;
+                    }
+                    
+                    analysisHtml += `
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                analysisHtml += `</div>`;
+                document.getElementById('buildingAnalysis').innerHTML = analysisHtml;
+                
+                // Display materials
+                if (analysis.materials && analysis.materials.length > 0) {
+                    let materialsHtml = `<h3>Detected Materials</h3><div class="row row-cols-1 row-cols-md-3 g-4">`;
+                    
+                    analysis.materials.forEach(material => {
+                        materialsHtml += `
+                            <div class="col">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${material.material}</h5>
+                                        <p class="card-text">Type: ${material.type || 'N/A'}</p>
+                                        <p class="card-text">Thickness: ${material.thickness || 'N/A'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    materialsHtml += `</div>`;
+                    document.getElementById('materialsContent').innerHTML = materialsHtml;
+                }
+                
+                // Display compliance issues
+                if (analysis.compliance_issues && analysis.compliance_issues.length > 0) {
+                    let complianceHtml = '';
+                    
+                    analysis.compliance_issues.forEach(issue => {
+                        complianceHtml += `
+                            <div class="list-group-item list-group-item-warning">
+                                <i class="bi bi-exclamation-triangle me-2"></i> ${issue}
+                            </div>
+                        `;
+                    });
+                    
+                    document.getElementById('complianceIssues').innerHTML = complianceHtml;
+                } else {
+                    document.getElementById('complianceIssues').innerHTML = `
+                        <div class="list-group-item list-group-item-success">
+                            <i class="bi bi-check-circle me-2"></i> No compliance issues detected
+                        </div>
+                    `;
+                }
+                
+                // Display BOQ (Bill of Quantities)
+                if (analysis.boq && analysis.boq.length > 0) {
+                    let boqHtml = '';
+                    
+                    analysis.boq.forEach(item => {
+                        boqHtml += `
+                            <tr>
+                                <td>${item.material}</td>
+                                <td>${item.quantity_m2}</td>
+                            </tr>
+                        `;
+                    });
+                    
+                    document.getElementById('boqTable').querySelector('tbody').innerHTML = boqHtml;
+                }
+                
+                // Display missing information
+                if (analysis.missing_info && analysis.missing_info.length > 0) {
+                    let tasksHtml = `<h3>Missing Information</h3><div class="alert alert-warning">`;
+                    
+                    analysis.missing_info.forEach(item => {
+                        tasksHtml += `<p><i class="bi bi-info-circle me-2"></i> ${item}</p>`;
+                    });
+                    
+                    tasksHtml += `</div>`;
+                    document.getElementById('tasksContent').innerHTML = tasksHtml;
+                }
+            }
+            
             // Check if there's already analysis data available
             fetch('/api/latest-analysis?combined=true')
                 .then(response => response.json())
