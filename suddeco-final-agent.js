@@ -629,20 +629,61 @@ async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '') 
     }
     
     // Ensure we have the latest API data for context
-    if (!globalApiData) {
-      console.log('Refreshing API data before analysis...');
-      try {
-        globalApiData = await apiClient.getAllAPIData();
-      } catch (apiError) {
-        console.error('Error refreshing API data:', apiError.message);
-        console.log('Using mock data instead');
-        globalApiData = {
-          materials: { materials: createMockMaterials() },
-          tasks: { tasks: createMockTasks() },
-          stages: { stages: createMockStages() },
-          rooms: { rooms: createMockRooms() }
-        };
-      }
+    console.log('Refreshing API data before analysis from Suddeco API...');
+    try {
+      // Use specific Suddeco API endpoints
+      const materialsPromise = axios.get('https://api.suddeco.com/syed/materials', {
+        headers: { 'Accept': 'application/json' },
+        timeout: 8000
+      });
+      
+      const tasksPromise = axios.get('https://api.suddeco.com/syed/tasks', {
+        headers: { 'Accept': 'application/json' },
+        timeout: 8000
+      });
+      
+      const stagesPromise = axios.get('https://api.suddeco.com/syed/stages', {
+        headers: { 'Accept': 'application/json' },
+        timeout: 8000
+      });
+      
+      const roomsPromise = axios.get('https://api.suddeco.com/syed/rooms', {
+        headers: { 'Accept': 'application/json' },
+        timeout: 8000
+      });
+      
+      // Fetch all data in parallel
+      const [materialsResponse, tasksResponse, stagesResponse, roomsResponse] = 
+        await Promise.allSettled([materialsPromise, tasksPromise, stagesPromise, roomsPromise]);
+      
+      // Process responses, falling back to mock data if any request fails
+      const materials = materialsResponse.status === 'fulfilled' ? materialsResponse.value.data : { materials: createMockMaterials() };
+      const tasks = tasksResponse.status === 'fulfilled' ? tasksResponse.value.data : { tasks: createMockTasks() };
+      const stages = stagesResponse.status === 'fulfilled' ? stagesResponse.value.data : { stages: createMockStages() };
+      const rooms = roomsResponse.status === 'fulfilled' ? roomsResponse.value.data : { rooms: createMockRooms() };
+      
+      // Log success/failure for each API
+      console.log(`Materials API: ${materialsResponse.status === 'fulfilled' ? 'SUCCESS' : 'FAILED'}`);
+      console.log(`Tasks API: ${tasksResponse.status === 'fulfilled' ? 'SUCCESS' : 'FAILED'}`);
+      console.log(`Stages API: ${stagesResponse.status === 'fulfilled' ? 'SUCCESS' : 'FAILED'}`);
+      console.log(`Rooms API: ${roomsResponse.status === 'fulfilled' ? 'SUCCESS' : 'FAILED'}`);
+      
+      // Update global API data
+      globalApiData = {
+        materials,
+        tasks,
+        stages,
+        rooms
+      };
+    } catch (apiError) {
+      console.error('Error refreshing API data:', apiError.message);
+      console.log('Using mock data instead');
+      globalApiData = {
+        materials: { materials: createMockMaterials() },
+        tasks: { tasks: createMockTasks() },
+        stages: { stages: createMockStages() },
+        rooms: { rooms: createMockRooms() }
+      };
     }
     
     if (fileType === 'pdf') {
@@ -716,6 +757,60 @@ async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '') 
               enhancedSystemPrompt : 
               require('./suddeco_system_prompt');
             
+            // Prepare API data context for the prompt
+            let apiDataContext = '';
+            
+            if (globalApiData) {
+              // Add materials context
+              if (globalApiData.materials?.materials?.length > 0) {
+                apiDataContext += '\n\n## AVAILABLE MATERIALS FROM SUDDECO DATABASE:\n';
+                globalApiData.materials.materials.slice(0, 15).forEach(material => {
+                  apiDataContext += `- ${material.name}: ${material.description || 'No description'} (Unit: ${material.unit || 'N/A'})\n`;
+                });
+                if (globalApiData.materials.materials.length > 15) {
+                  apiDataContext += `- Plus ${globalApiData.materials.materials.length - 15} more materials...\n`;
+                }
+              }
+              
+              // Add tasks context
+              if (globalApiData.tasks?.tasks?.length > 0) {
+                apiDataContext += '\n\n## AVAILABLE TASKS FROM SUDDECO DATABASE:\n';
+                globalApiData.tasks.tasks.slice(0, 10).forEach(task => {
+                  apiDataContext += `- ${task.name}: ${task.description || 'No description'} (Duration: ${task.duration || 'N/A'} days)\n`;
+                });
+                if (globalApiData.tasks.tasks.length > 10) {
+                  apiDataContext += `- Plus ${globalApiData.tasks.tasks.length - 10} more tasks...\n`;
+                }
+              }
+              
+              // Add stages context
+              if (globalApiData.stages?.stages?.length > 0) {
+                apiDataContext += '\n\n## AVAILABLE STAGES FROM SUDDECO DATABASE:\n';
+                globalApiData.stages.stages.slice(0, 8).forEach(stage => {
+                  apiDataContext += `- ${stage.name}: ${stage.description || 'No description'}\n`;
+                });
+                if (globalApiData.stages.stages.length > 8) {
+                  apiDataContext += `- Plus ${globalApiData.stages.stages.length - 8} more stages...\n`;
+                }
+              }
+              
+              // Add rooms context
+              if (globalApiData.rooms?.rooms?.length > 0) {
+                apiDataContext += '\n\n## AVAILABLE ROOM TYPES FROM SUDDECO DATABASE:\n';
+                globalApiData.rooms.rooms.slice(0, 10).forEach(room => {
+                  const dimensions = room.typical_dimensions ? 
+                    `(Typical dimensions: ${room.typical_dimensions.length || 'N/A'} x ${room.typical_dimensions.width || 'N/A'} x ${room.typical_dimensions.height || 'N/A'})` : 
+                    '';
+                  apiDataContext += `- ${room.name}: ${room.description || 'No description'} ${dimensions}\n`;
+                });
+                if (globalApiData.rooms.rooms.length > 10) {
+                  apiDataContext += `- Plus ${globalApiData.rooms.rooms.length - 10} more room types...\n`;
+                }
+              }
+            }
+            
+            console.log(`Generated API data context with ${apiDataContext.length} characters`);
+            
             // Create a clean OpenAI instance for this specific call
             const response = await openai.chat.completions.create({
               model: "gpt-4-turbo",
@@ -728,9 +823,11 @@ async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '') 
                   role: "user",
                   content: `Analyze this architectural drawing. Extract ALL measurements with precise values and units. Provide a detailed analysis following construction industry standards. Pay special attention to dimensions, scales, materials, and compliance requirements.
 
+You MUST use the Suddeco database materials, tasks, stages, and room types provided below when identifying elements in the drawing. Match materials and other elements to the closest items in the Suddeco database.
+
 ${clientDescription ? `Client Description: ${clientDescription}
 
-` : ''}${ragContext}
+` : ''}${apiDataContext}${ragContext}
 
 Drawing Content:
 ${extractedText}`
@@ -1943,8 +2040,67 @@ app.post('/api/advanced-analysis', upload.single('drawing'), async (req, res) =>
     
     console.log(`Processing drawing with FixItAll agent: ${fileInfo.path}`);
     
-    // Process the drawing with the Python FixItAll agent
-    const analysisResult = await pythonBridge.processDrawing(req.file.path);
+    // Get client description if provided
+    const clientDescription = req.body.clientDescription || '';
+    console.log(`Client description: ${clientDescription ? clientDescription.substring(0, 100) + '...' : 'Not provided'}`);
+    
+    // Fetch data from Suddeco APIs for context
+    console.log('Fetching Suddeco API data for advanced analysis...');
+    let apiData = {};
+    
+    try {
+      // Use specific Suddeco API endpoints
+      const materialsPromise = axios.get('https://api.suddeco.com/syed/materials', {
+        headers: { 'Accept': 'application/json' },
+        timeout: 8000
+      });
+      
+      const tasksPromise = axios.get('https://api.suddeco.com/syed/tasks', {
+        headers: { 'Accept': 'application/json' },
+        timeout: 8000
+      });
+      
+      const stagesPromise = axios.get('https://api.suddeco.com/syed/stages', {
+        headers: { 'Accept': 'application/json' },
+        timeout: 8000
+      });
+      
+      const roomsPromise = axios.get('https://api.suddeco.com/syed/rooms', {
+        headers: { 'Accept': 'application/json' },
+        timeout: 8000
+      });
+      
+      // Fetch all data in parallel
+      const [materialsResponse, tasksResponse, stagesResponse, roomsResponse] = 
+        await Promise.allSettled([materialsPromise, tasksPromise, stagesPromise, roomsPromise]);
+      
+      // Process responses, falling back to mock data if any request fails
+      apiData = {
+        materials: materialsResponse.status === 'fulfilled' ? materialsResponse.value.data : { materials: [] },
+        tasks: tasksResponse.status === 'fulfilled' ? tasksResponse.value.data : { tasks: [] },
+        stages: stagesResponse.status === 'fulfilled' ? stagesResponse.value.data : { stages: [] },
+        rooms: roomsResponse.status === 'fulfilled' ? roomsResponse.value.data : { rooms: [] }
+      };
+      
+      // Log success/failure for each API
+      console.log(`Materials API: ${materialsResponse.status === 'fulfilled' ? 'SUCCESS' : 'FAILED'}`);
+      console.log(`Tasks API: ${tasksResponse.status === 'fulfilled' ? 'SUCCESS' : 'FAILED'}`);
+      console.log(`Stages API: ${stagesResponse.status === 'fulfilled' ? 'SUCCESS' : 'FAILED'}`);
+      console.log(`Rooms API: ${roomsResponse.status === 'fulfilled' ? 'SUCCESS' : 'FAILED'}`);
+      
+    } catch (apiError) {
+      console.error('Error fetching Suddeco API data:', apiError.message);
+      console.log('Using empty API data');
+    }
+    
+    // Process the drawing with the Python FixItAll agent, passing API data and client description
+    const analysisResult = await pythonBridge.processDrawing(
+      req.file.path, 
+      { 
+        clientDescription,
+        apiData: JSON.stringify(apiData)
+      }
+    );
     
     // Generate timestamp for output files
     const timestamp = Date.now();

@@ -85,14 +85,28 @@ except ImportError as e:
   /**
    * Process a drawing file using the FixItAll Python agent
    * @param {string} filePath Path to the drawing file
+   * @param {Object} options Additional options for processing
+   * @param {string} options.clientDescription Client description for context
+   * @param {string} options.apiData JSON string containing API data from Suddeco
    * @returns {Promise<object>} Analysis results from the Python agent
    */
-  async processDrawing(filePath) {
+  async processDrawing(filePath, options = {}) {
     try {
       // Create a temporary Python script to run the FixItAll agent
       const runnerScriptPath = path.join(this.tempDir, 'run_fixit_agent.py');
       const uploadPath = path.dirname(filePath);
       const filename = path.basename(filePath);
+      
+      // Extract options
+      const clientDescription = options.clientDescription || '';
+      const apiData = options.apiData || '{}';
+      
+      // Create a temporary file for API data if provided
+      const apiDataPath = path.join(this.tempDir, 'api_data.json');
+      await writeFileAsync(apiDataPath, apiData);
+      
+      console.log(`Client description length: ${clientDescription.length} characters`);
+      console.log(`API data written to ${apiDataPath}`);
       
       const runnerScript = `
 import sys
@@ -103,10 +117,22 @@ sys.path.append('${__dirname.replace(/\\/g, '\\\\')}')
 try:
     from fixit_all_agent import FixItAllAgent
     
-    # Initialize the agent with the upload path
-    agent = FixItAllAgent('${uploadPath.replace(/\\/g, '\\\\')}')
+    # Load API data from file
+    api_data = {}
+    try:
+        with open('${apiDataPath.replace(/\\/g, '\\\\')}', 'r') as f:
+            api_data = json.load(f)
+    except Exception as api_error:
+        print(f"Warning: Failed to load API data: {api_error}", file=sys.stderr)
     
-    # Process the file
+    # Initialize the agent with the upload path and context
+    agent = FixItAllAgent(
+        upload_path='${uploadPath.replace(/\\/g, '\\\\')}',
+        client_description="""${clientDescription.replace(/"/g, '\\"')}""",
+        api_data=api_data
+    )
+    
+    # Process the file with context
     result = agent.process('${filename}')
     
     # Convert any non-serializable objects to strings
