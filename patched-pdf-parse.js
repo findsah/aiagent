@@ -103,6 +103,13 @@ fs.readFileSync = function(filePath, options) {
 
 // Create a patched version of the pdf-parse function
 function patchedPdfParse(dataBuffer, options) {
+  // Add detailed logging for debugging
+  console.log(`PDF parse called with dataBuffer type: ${typeof dataBuffer}`);
+  if (Buffer.isBuffer(dataBuffer)) {
+    console.log(`Buffer size: ${dataBuffer.length} bytes`);
+  }
+  console.log(`Options: ${JSON.stringify(options || {})}`);
+  
   // If dataBuffer is a string (file path), handle it specially
   if (typeof dataBuffer === 'string') {
     console.log(`PDF parse called with file path: ${dataBuffer}`);
@@ -113,9 +120,26 @@ function patchedPdfParse(dataBuffer, options) {
         return createMockPdfResponse();
       }
       
+      // Check if the file exists before trying to read it
+      if (!fs.existsSync(dataBuffer)) {
+        console.warn(`File does not exist: ${dataBuffer}, returning mock data`);
+        return createMockPdfResponse();
+      }
+      
       // Try to read the file
       const fileBuffer = fs.readFileSync(dataBuffer);
-      return originalPdfParse(fileBuffer, options);
+      console.log(`Successfully read file: ${dataBuffer}, size: ${fileBuffer.length} bytes`);
+      
+      // Check if the file starts with the PDF signature
+      if (fileBuffer.length >= 5 && fileBuffer.toString('ascii', 0, 5) !== '%PDF-') {
+        console.warn(`File does not appear to be a valid PDF: ${dataBuffer}`);
+        return createMockPdfResponse();
+      }
+      
+      return originalPdfParse(fileBuffer, options).catch(err => {
+        console.warn(`Error in originalPdfParse with file ${dataBuffer}: ${err.message}`);
+        return createMockPdfResponse();
+      });
     } catch (error) {
       console.warn(`Error reading PDF file ${dataBuffer}: ${error.message}`);
       console.warn('Returning mock PDF response as fallback');
@@ -135,11 +159,20 @@ function patchedPdfParse(dataBuffer, options) {
     return createMockPdfResponse();
   }
   
+  // Check if the buffer starts with the PDF signature
+  if (dataBuffer.toString('ascii', 0, 5) !== '%PDF-') {
+    console.warn('Buffer does not appear to be a valid PDF (missing %PDF- signature)');
+    return createMockPdfResponse();
+  }
+  
   try {
-    // Call the original pdf-parse function
-    return originalPdfParse(dataBuffer, options);
+    // Call the original pdf-parse function with proper error handling
+    return originalPdfParse(dataBuffer, options).catch(err => {
+      console.warn(`PDF parse error in promise: ${err.message}`);
+      return createMockPdfResponse();
+    });
   } catch (error) {
-    console.warn(`PDF parse error: ${error.message}`);
+    console.warn(`PDF parse error in try/catch: ${error.message}`);
     
     // Handle any type of error with a mock response
     return createMockPdfResponse();

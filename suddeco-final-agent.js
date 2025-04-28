@@ -1124,47 +1124,104 @@ function createDefaultArchitecturalAnalysis() {
  */
 app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
+    console.log('Received request to /api/rag/process-drawing');
+    
+    // Check if OpenAI API key is available
+    if (!process.env.OPENAI_API_KEY) {
+      console.error('OPENAI_API_KEY environment variable is not set!');
+      return res.status(500).json({
+        success: false,
+        error: 'OpenAI API key is not configured',
+        message: 'Please set the OPENAI_API_KEY environment variable'
+      });
     }
     
-    console.log(`Processing file with RAG enhancement: ${req.file.originalname}`);
+    // Check if file was uploaded
+    if (!req.file) {
+      console.error('No file uploaded in request');
+      return res.status(400).json({ 
+        success: false,
+        error: 'No file uploaded',
+        message: 'Please upload a drawing file (PDF)'
+      });
+    }
+    
+    console.log(`Processing file with RAG enhancement: ${req.file.originalname}, size: ${req.file.size} bytes`);
+    
+    // Validate file type
+    const fileExtension = path.extname(req.file.originalname).toLowerCase().substring(1);
+    if (fileExtension !== 'pdf') {
+      console.error(`Invalid file type: ${fileExtension}. Only PDF files are supported.`);
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid file type',
+        message: 'Only PDF files are supported'
+      });
+    }
+    
+    // Check file size (max 10MB)
+    if (req.file.size > 10 * 1024 * 1024) {
+      console.error(`File too large: ${req.file.size} bytes. Maximum size is 10MB.`);
+      return res.status(400).json({
+        success: false,
+        error: 'File too large',
+        message: 'Maximum file size is 10MB'
+      });
+    }
+    
+    // Check if file exists
+    if (!fs.existsSync(req.file.path)) {
+      console.error(`File not found at path: ${req.file.path}`);
+      return res.status(500).json({
+        success: false,
+        error: 'File not found',
+        message: 'The uploaded file could not be processed'
+      });
+    }
     
     // Extract file information
     const fileInfo = {
       name: req.file.originalname,
       path: req.file.path,
-      type: path.extname(req.file.originalname).toLowerCase().substring(1),
+      type: fileExtension,
       size: req.file.size,
       timestamp: Date.now()
     };
     
     try {
+      console.log(`Analyzing drawing with RAG: ${fileInfo.path}`);
+      
       // Wait for RAG data to be initialized if it's still loading
       if (!globalRagData) {
+        console.log('Waiting for RAG data to be initialized...');
         globalRagData = await ragDataPromise;
+        console.log('RAG data initialized successfully');
       }
       
       // Generate RAG context string
+      console.log('Generating RAG context...');
       const ragContext = ragModule.generateContextString(globalRagData);
+      console.log(`Generated RAG context with ${ragContext.length} characters`);
       
-      // Extract text from the file
-      let extractedText = '';
-      if (fileInfo.type === 'pdf') {
-        const fileBuffer = fs.readFileSync(req.file.path);
-        const data = await PDFParser(fileBuffer);
-        extractedText = data.text;
-      } else {
-        extractedText = `[File type ${fileInfo.type} - text extraction not supported]`;
-      }
+      // Read the PDF file
+      console.log(`Reading PDF file: ${req.file.path}`);
+      const dataBuffer = fs.readFileSync(req.file.path);
+      console.log(`Read ${dataBuffer.length} bytes from PDF file`);
       
-      // Call OpenAI with RAG-enhanced prompt
+      console.log('Parsing PDF with patched PDF parser...');
+      const pdfData = await PDFParser(dataBuffer);
+      const extractedText = pdfData.text;
+      
+      console.log(`Extracted ${extractedText.length} characters of text from the PDF`);
+      
+      // Call OpenAI with the RAG-enhanced prompt
+      console.log('Calling OpenAI API with RAG-enhanced prompt...');
       const response = await openai.chat.completions.create({
         model: "gpt-4-turbo",
         messages: [
           {
             role: "system",
-            content: enhancedSystemPrompt
+            content: enhancedSystemPrompt.getArchitecturalDrawingSystemPrompt()
           },
           {
             role: "user",
@@ -1176,8 +1233,11 @@ app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) 
         response_format: { type: "json_object" }
       });
       
+      console.log('Received response from OpenAI API');
+      
       // Safely parse the JSON response
       const responseContent = response.choices[0].message.content;
+      console.log(`Response content length: ${responseContent.length} characters`);
       let analysisResult;
       
       try {
@@ -1188,10 +1248,13 @@ app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) 
         }
         
         // Try to parse the JSON
+        console.log('Parsing JSON response...');
         analysisResult = safeJsonParse(responseContent, createDefaultArchitecturalAnalysis());
+        console.log('Successfully parsed JSON response');
       } catch (parseError) {
         console.error('Error parsing analysis result:', parseError.message);
         console.error('Response content:', responseContent.substring(0, 200) + '...');
+        console.log('Using default architectural analysis as fallback');
         analysisResult = createDefaultArchitecturalAnalysis();
       }
       
@@ -1205,6 +1268,7 @@ app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) 
       // Save the result to a file
       const outputPath = path.join(outputDir, `rag_analysis_${timestamp}.json`);
       fs.writeFileSync(outputPath, JSON.stringify(analysisResult, null, 2));
+      console.log(`Analysis saved to ${outputPath}`);
       
       res.json({
         success: true,
@@ -1215,23 +1279,6 @@ app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) 
       });
     } catch (processingError) {
       console.error('Error processing drawing with RAG:', processingError.message);
-      res.status(500).json({
-        success: false,
-        error: 'Error processing drawing',
-        details: processingError.message
-      });
-    }
-  } catch (error) {
-    console.error('Error in RAG process-drawing endpoint:', error.message);
-    res.status(500).json({
-      success: false,
-      error: 'Server error',
-      details: error.message
-    });
-  }
-});
-
-/**
  * @swagger
  * /api/process-drawing:
  *   post:
@@ -1280,24 +1327,76 @@ app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) 
  */
 app.post('/api/process-drawing', upload.single('drawing'), async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
+    console.log('Received request to /api/process-drawing');
+    
+    // Check if OpenAI API key is available
+    if (!process.env.OPENAI_API_KEY) {
+      console.error('OPENAI_API_KEY environment variable is not set!');
+      return res.status(500).json({
+        success: false,
+        error: 'OpenAI API key is not configured',
+        message: 'Please set the OPENAI_API_KEY environment variable'
+      });
     }
     
-    console.log(`Processing file: ${req.file.originalname}`);
+    // Check if file was uploaded
+    if (!req.file) {
+      console.error('No file uploaded in request');
+      return res.status(400).json({ 
+        success: false,
+        error: 'No file uploaded',
+        message: 'Please upload a drawing file (PDF)'
+      });
+    }
+    
+    console.log(`Processing file: ${req.file.originalname}, size: ${req.file.size} bytes`);
+    
+    // Validate file type
+    const fileExtension = path.extname(req.file.originalname).toLowerCase().substring(1);
+    if (fileExtension !== 'pdf') {
+      console.error(`Invalid file type: ${fileExtension}. Only PDF files are supported.`);
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid file type',
+        message: 'Only PDF files are supported'
+      });
+    }
+    
+    // Check file size (max 10MB)
+    if (req.file.size > 10 * 1024 * 1024) {
+      console.error(`File too large: ${req.file.size} bytes. Maximum size is 10MB.`);
+      return res.status(400).json({
+        success: false,
+        error: 'File too large',
+        message: 'Maximum file size is 10MB'
+      });
+    }
+    
+    // Check if file exists
+    if (!fs.existsSync(req.file.path)) {
+      console.error(`File not found at path: ${req.file.path}`);
+      return res.status(500).json({
+        success: false,
+        error: 'File not found',
+        message: 'The uploaded file could not be processed'
+      });
+    }
     
     // Extract file information
     const fileInfo = {
       name: req.file.originalname,
       path: req.file.path,
-      type: path.extname(req.file.originalname).toLowerCase().substring(1),
+      type: fileExtension,
       size: req.file.size,
       timestamp: Date.now()
     };
     
     try {
+      console.log(`Analyzing drawing: ${fileInfo.path}`);
+      
       // Analyze the drawing using OpenAI
       const analysisResult = await analyzeDrawingWithAI(req.file.path, fileInfo.type);
+      console.log('Analysis completed successfully');
       
       // Generate timestamp for output files
       const timestamp = Date.now();
@@ -1309,6 +1408,7 @@ app.post('/api/process-drawing', upload.single('drawing'), async (req, res) => {
       // Save the result to a file
       const outputPath = path.join(outputDir, `analysis_${timestamp}.json`);
       fs.writeFileSync(outputPath, JSON.stringify(analysisResult, null, 2));
+      console.log(`Analysis saved to ${outputPath}`);
       
       res.json({
         success: true,
@@ -1319,17 +1419,24 @@ app.post('/api/process-drawing', upload.single('drawing'), async (req, res) => {
       });
     } catch (processingError) {
       console.error('Error processing drawing:', processingError.message);
+      console.error(processingError.stack);
+      
+      // Return a more user-friendly error
       res.status(500).json({
         success: false,
         error: 'Error processing drawing',
+        message: 'The drawing could not be processed. Please try again with a different file.',
         details: processingError.message
       });
     }
   } catch (error) {
     console.error('Error in process-drawing endpoint:', error.message);
+    console.error(error.stack);
+    
     res.status(500).json({
       success: false,
       error: 'Server error',
+      message: 'An unexpected error occurred while processing your request.',
       details: error.message
     });
   }
