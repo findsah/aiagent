@@ -1188,6 +1188,9 @@ app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) 
       timestamp: Date.now()
     };
     
+    // Process the drawing with RAG
+    let analysisResult;
+    
     try {
       console.log(`Analyzing drawing with RAG: ${fileInfo.path}`);
       
@@ -1238,8 +1241,8 @@ app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) 
       // Safely parse the JSON response
       const responseContent = response.choices[0].message.content;
       console.log(`Response content length: ${responseContent.length} characters`);
-      let analysisResult;
       
+      // Parse the JSON response
       try {
         // Check if response is HTML
         if (ragModule.isHtmlResponse(responseContent)) {
@@ -1270,13 +1273,15 @@ app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) 
       fs.writeFileSync(outputPath, JSON.stringify(analysisResult, null, 2));
       console.log(`Analysis saved to ${outputPath}`);
       
-      res.json({
+      // Send the successful response
+      return res.json({
         success: true,
         message: 'Drawing processed successfully with RAG enhancement',
         fileInfo,
         analysis: analysisResult,
         outputPath: `/output/rag_analysis_${timestamp}.json`
       });
+      
     } catch (processingError) {
       console.error('Error processing drawing with RAG:', processingError.message);
       return res.status(500).json({
