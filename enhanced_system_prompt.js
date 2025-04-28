@@ -200,4 +200,14 @@ Format your response as a detailed JSON object with the following structure:
 
 IMPORTANT: Always provide numeric values with units (e.g., "12.5m", "150m²"). If certain information cannot be determined from the drawing, indicate this clearly in your response.`;
 
-module.exports = systemPrompt;
+/**
+ * Returns the enhanced architectural drawing system prompt
+ * @returns {string} The system prompt for architectural drawing analysis
+ */
+function getArchitecturalDrawingSystemPrompt() {
+  return systemPrompt;
+}
+
+module.exports = {
+  getArchitecturalDrawingSystemPrompt
+};

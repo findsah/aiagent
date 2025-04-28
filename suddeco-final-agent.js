@@ -754,7 +754,7 @@ async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '') 
             
             // Use enhanced system prompt if enabled
             const systemPromptContent = CONFIG.ENABLE_ENHANCED_DESCRIPTIONS ? 
-              enhancedSystemPrompt : 
+              enhancedSystemPrompt.getArchitecturalDrawingSystemPrompt() : 
               require('./suddeco_system_prompt');
             
             // Prepare API data context for the prompt
