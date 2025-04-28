@@ -1442,6 +1442,287 @@ app.post('/api/process-drawing', upload.single('drawing'), async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/process-multiple-drawings:
+ *   post:
+ *     summary: Process multiple architectural drawings
+ *     description: Upload and process multiple architectural drawing files at once
+ *     tags: [Drawing Processing]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               drawings:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *                 description: Multiple drawing files (PDF)
+ *               projectName:
+ *                 type: string
+ *                 description: Name of the project
+ *               projectDescription:
+ *                 type: string
+ *                 description: Description of the project
+ *     responses:
+ *       200:
+ *         description: Drawings processed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 projectInfo:
+ *                   type: object
+ *                 fileInfos:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                 analyses:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+app.post('/api/process-multiple-drawings', upload.array('drawings', 10), async (req, res) => {
+  try {
+    console.log('Received request to /api/process-multiple-drawings');
+    
+    // Check if OpenAI API key is available
+    if (!process.env.OPENAI_API_KEY) {
+      console.error('OPENAI_API_KEY environment variable is not set!');
+      return res.status(500).json({
+        success: false,
+        error: 'OpenAI API key is not configured',
+        message: 'Please set the OPENAI_API_KEY environment variable'
+      });
+    }
+    
+    // Check if files were uploaded
+    if (!req.files || req.files.length === 0) {
+      console.error('No files uploaded in request');
+      return res.status(400).json({ 
+        success: false,
+        error: 'No files uploaded',
+        message: 'Please upload at least one drawing file (PDF)'
+      });
+    }
+    
+    console.log(`Processing ${req.files.length} files`);
+    
+    // Extract project information
+    const projectInfo = {
+      name: req.body.projectName || 'Unnamed Project',
+      description: req.body.projectDescription || 'No description provided',
+      timestamp: Date.now(),
+      fileCount: req.files.length
+    };
+    
+    // Process each file
+    const filePromises = req.files.map(async (file) => {
+      // Validate file type
+      const fileExtension = path.extname(file.originalname).toLowerCase().substring(1);
+      if (fileExtension !== 'pdf') {
+        console.error(`Invalid file type: ${fileExtension}. Only PDF files are supported.`);
+        return {
+          success: false,
+          fileInfo: {
+            name: file.originalname,
+            path: file.path,
+            type: fileExtension,
+            size: file.size
+          },
+          error: 'Invalid file type',
+          message: 'Only PDF files are supported'
+        };
+      }
+      
+      // Check file size (max 10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        console.error(`File too large: ${file.size} bytes. Maximum size is 10MB.`);
+        return {
+          success: false,
+          fileInfo: {
+            name: file.originalname,
+            path: file.path,
+            type: fileExtension,
+            size: file.size
+          },
+          error: 'File too large',
+          message: 'Maximum file size is 10MB'
+        };
+      }
+      
+      // Extract file information
+      const fileInfo = {
+        name: file.originalname,
+        path: file.path,
+        type: fileExtension,
+        size: file.size,
+        timestamp: Date.now()
+      };
+      
+      try {
+        console.log(`Analyzing drawing: ${fileInfo.path}`);
+        
+        // Analyze the drawing using OpenAI
+        const analysisResult = await analyzeDrawingWithAI(file.path, fileInfo.type);
+        console.log(`Analysis completed for ${fileInfo.name}`);
+        
+        // Generate timestamp for output files
+        const timestamp = Date.now();
+        const outputDir = path.join(__dirname, 'output');
+        if (!fs.existsSync(outputDir)) {
+          fs.mkdirSync(outputDir, { recursive: true });
+        }
+        
+        // Save the result to a file
+        const outputPath = path.join(outputDir, `analysis_${fileInfo.name.replace(/\s+/g, '_')}_${timestamp}.json`);
+        fs.writeFileSync(outputPath, JSON.stringify(analysisResult, null, 2));
+        
+        return {
+          success: true,
+          fileInfo,
+          analysis: analysisResult,
+          outputPath: `/output/analysis_${fileInfo.name.replace(/\s+/g, '_')}_${timestamp}.json`
+        };
+      } catch (processingError) {
+        console.error(`Error processing drawing ${fileInfo.name}:`, processingError.message);
+        return {
+          success: false,
+          fileInfo,
+          error: 'Error processing drawing',
+          message: processingError.message
+        };
+      }
+    });
+    
+    // Wait for all files to be processed
+    const results = await Promise.all(filePromises);
+    
+    // Generate a combined analysis for all drawings
+    const successfulResults = results.filter(result => result.success);
+    
+    // Create a project summary
+    const projectSummary = {
+      projectName: projectInfo.name,
+      projectDescription: projectInfo.description,
+      timestamp: new Date().toISOString(),
+      totalDrawings: req.files.length,
+      successfullyProcessed: successfulResults.length,
+      failedToProcess: req.files.length - successfulResults.length,
+      drawingNames: req.files.map(file => file.originalname)
+    };
+    
+    // Save project summary
+    const projectDir = path.join(__dirname, 'projects');
+    if (!fs.existsSync(projectDir)) {
+      fs.mkdirSync(projectDir, { recursive: true });
+    }
+    
+    const projectPath = path.join(projectDir, `project_${projectInfo.name.replace(/\s+/g, '_')}_${projectInfo.timestamp}.json`);
+    fs.writeFileSync(projectPath, JSON.stringify({
+      projectInfo,
+      results: results.map(result => ({
+        fileName: result.fileInfo?.name,
+        success: result.success,
+        outputPath: result.outputPath,
+        error: result.error
+      }))
+    }, null, 2));
+    
+    // If any drawings were successfully processed, generate a combined analysis
+    if (successfulResults.length > 0) {
+      try {
+        console.log('Generating combined analysis for all drawings');
+        
+        // Extract all text from successful analyses
+        const combinedText = successfulResults.map(result => {
+          return `Drawing: ${result.fileInfo.name}\n${JSON.stringify(result.analysis, null, 2)}`;
+        }).join('\n\n');
+        
+        // Generate a combined analysis using OpenAI
+        const response = await openai.chat.completions.create({
+          model: "gpt-4-turbo",
+          messages: [
+            {
+              role: "system",
+              content: enhancedSystemPrompt.getArchitecturalDrawingSystemPrompt()
+            },
+            {
+              role: "user",
+              content: `You are analyzing multiple architectural drawings for a project named "${projectInfo.name}". Here is the project description: "${projectInfo.description}".\n\nPlease provide a comprehensive analysis of all drawings, including:\n1. Overall project scope and measurements\n2. Consistency between drawings\n3. Material requirements across all drawings\n4. Potential issues or inconsistencies between drawings\n5. Suggestions for optimization\n\nHere are the individual analyses of each drawing:\n\n${combinedText}`
+            }
+          ],
+          temperature: 0.2,
+          max_tokens: 4000,
+          response_format: { type: "json_object" }
+        });
+        
+        // Parse the combined analysis
+        const combinedAnalysis = safeJsonParse(response.choices[0].message.content, {
+          project_summary: {
+            name: projectInfo.name,
+            description: projectInfo.description,
+            drawing_count: successfulResults.length
+          },
+          error: "Failed to generate combined analysis"
+        });
+        
+        // Save the combined analysis
+        const combinedOutputPath = path.join(outputDir, `combined_analysis_${projectInfo.name.replace(/\s+/g, '_')}_${projectInfo.timestamp}.json`);
+        fs.writeFileSync(combinedOutputPath, JSON.stringify(combinedAnalysis, null, 2));
+        
+        // Add the combined analysis to the response
+        projectSummary.combinedAnalysis = combinedAnalysis;
+        projectSummary.combinedAnalysisPath = `/output/combined_analysis_${projectInfo.name.replace(/\s+/g, '_')}_${projectInfo.timestamp}.json`;
+      } catch (combinedAnalysisError) {
+        console.error('Error generating combined analysis:', combinedAnalysisError.message);
+        projectSummary.combinedAnalysisError = combinedAnalysisError.message;
+      }
+    }
+    
+    // Return the results
+    res.json({
+      success: true,
+      message: `Processed ${successfulResults.length} out of ${req.files.length} drawings`,
+      projectInfo,
+      fileInfos: results.map(result => result.fileInfo),
+      results,
+      projectSummary
+    });
+  } catch (error) {
+    console.error('Error in process-multiple-drawings endpoint:', error.message);
+    console.error(error.stack);
+    
+    res.status(500).json({
+      success: false,
+      error: 'Server error',
+      message: 'An unexpected error occurred while processing your request.',
+      details: error.message
+    });
+  }
+});
+
 // Import the schema API router
 const schemaApiRouter = require('./suddeco-schema-api');
 
