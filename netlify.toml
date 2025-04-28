@@ -1,0 +1,65 @@
+[build]
+  command = "npm install"
+  functions = "netlify/functions"
+  publish = "public"
+
+[dev]
+  command = "npm run dev"
+  port = 8888
+  publish = "public"
+  functions = "netlify/functions"
+
+# Redirect API requests to Netlify Functions
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+  force = true
+
+# Explicit redirect for schema API endpoints
+[[redirects]]
+  from = "/api/schema/*"
+  to = "/.netlify/functions/api/api/schema/:splat"
+  status = 200
+  force = true
+
+# Health check endpoint
+[[redirects]]
+  from = "/health"
+  to = "/.netlify/functions/api/health"
+  status = 200
+  force = true
+
+# Reports endpoint
+[[redirects]]
+  from = "/reports/*"
+  to = "/.netlify/functions/api/reports/:splat"
+  status = 200
+  force = true
+
+# Handle static pages
+[[redirects]]
+  from = "/construction-planner"
+  to = "/construction-planner.html"
+  status = 200
+
+[[redirects]]
+  from = "/rag-chat"
+  to = "/rag-chat.html"
+  status = 200
+
+[[redirects]]
+  from = "/schema-manager"
+  to = "/schema-manager.html"
+  status = 200
+
+[[redirects]]
+  from = "/api-key-error"
+  to = "/api-key-error.html"
+  status = 200
+
+# Default fallback
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

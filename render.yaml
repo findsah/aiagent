@@ -1,0 +1,38 @@
+# Render configuration for Suddeco AI Drawing Processor
+services:
+  - type: web
+    name: suddeco-ai-drawing-processor
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    # Use our custom start script to ensure directories are created and the correct agent file is used
+    startCommand: |
+      chmod +x ./start-render.sh
+      ./start-render.sh
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false # This will be set manually in the Render dashboard
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+      - key: USE_AGENT_FILE
+        value: suddeco-final-agent.js # Explicitly specify which agent file to use
+    healthCheckPath: /health
+    autoDeploy: true
+    # Create necessary directories during build
+    buildFilter:
+      paths:
+        - server.js
+        - suddeco-final-agent.js
+        - suddeco-agent.js
+        - patched-pdf-parse.js
+        - api-client.js
+        - rag-module.js
+        - package.json
+        - package-lock.json
+        - start-render.sh
+        - public/**
+        - suddeco-schema-api.js
+        - test/**
+        - mock_data/**

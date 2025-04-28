@@ -4,7 +4,24 @@
 const fs = require('fs');
 const path = require('path');
 const axios = require('axios');
-const { isHtmlResponse } = require('./api-client');
+
+// Import the api-client module with proper error handling
+let apiClient;
+try {
+  apiClient = require('./api-client');
+} catch (error) {
+  console.error('Error loading api-client module:', error.message);
+  // Create a fallback implementation if the module can't be loaded
+  apiClient = {
+    isHtmlResponse: function(data) {
+      if (!data || typeof data !== 'string') return false;
+      return data.includes('<html') || data.includes('<!DOCTYPE') || data.includes('<body');
+    }
+  };
+  console.log('Created fallback api-client with basic isHtmlResponse function');
+}
+
+const { isHtmlResponse } = apiClient;
 
 // Base URLs for the Suddeco API
 const BASE_URL = 'https://api.suddeco.com/syed';
