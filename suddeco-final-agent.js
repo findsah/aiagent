@@ -1279,6 +1279,8 @@ app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) 
       });
     } catch (processingError) {
       console.error('Error processing drawing with RAG:', processingError.message);
+
+/**
  * @swagger
  * /api/process-drawing:
  *   post:
