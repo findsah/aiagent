@@ -373,9 +373,15 @@
                 // Get client description
                 const clientDescription = document.getElementById('clientDescription').value || 'Architectural drawing analysis';
                 
-                // Determine if we're processing single or multiple files
+                // Determine if we're processing single or multiple files and set the appropriate endpoint
+                let endpoint;
+                const useAdvancedAnalysis = document.getElementById('useAdvancedAnalysis').checked;
+                
                 if (selectedFiles.length > 1) {
                     // Multiple files - use the process-multiple-drawings endpoint
+                    endpoint = '/api/process-multiple-drawings';
+                    
+                    // For multiple files, the field name must be 'drawings'
                     selectedFiles.forEach(file => {
                         formData.append('drawings', file);
                     });
@@ -386,21 +392,11 @@
                     formData.append('clientDescription', clientDescription);
                 } else {
                     // Single file - use the process-drawing or advanced-analysis endpoint
+                    endpoint = useAdvancedAnalysis ? '/api/advanced-analysis' : '/api/process-drawing';
+                    
+                    // For single file, the field name must be 'drawing'
                     formData.append('drawing', selectedFiles[0]);
                     formData.append('clientDescription', clientDescription);
-                }
-                
-                // Check if advanced analysis is enabled
-                const useAdvancedAnalysis = document.getElementById('useAdvancedAnalysis').checked;
-                
-                // Determine the endpoint based on advanced analysis toggle and file count
-                let endpoint;
-                if (selectedFiles.length > 1) {
-                    // For multiple files, use the process-multiple-drawings endpoint
-                    endpoint = '/api/process-multiple-drawings';
-                } else {
-                    // For a single file, use either advanced-analysis or process-drawing
-                    endpoint = useAdvancedAnalysis ? '/api/advanced-analysis' : '/api/process-drawing';
                 }
                 
                 // Show loading indicator
