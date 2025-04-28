@@ -615,7 +615,7 @@ const upload = multer({
 });
 
 // Analyze drawing with OpenAI
-async function analyzeDrawingWithAI(filePath, fileType) {
+async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '') {
   console.log(`Analyzing drawing with AI (type: ${fileType})...`);
   
   try {
@@ -726,9 +726,11 @@ async function analyzeDrawingWithAI(filePath, fileType) {
                 },
                 {
                   role: "user",
-                  content: `Analyze this architectural drawing. Extract all measurements and provide a detailed analysis following construction industry standards.
+                  content: `Analyze this architectural drawing. Extract ALL measurements with precise values and units. Provide a detailed analysis following construction industry standards. Pay special attention to dimensions, scales, materials, and compliance requirements.
 
-${ragContext}
+${clientDescription ? `Client Description: ${clientDescription}
+
+` : ''}${ragContext}
 
 Drawing Content:
 ${extractedText}`
@@ -1201,66 +1203,6 @@ app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) 
         console.log('RAG data initialized successfully');
       }
       
-      // Generate RAG context string
-      console.log('Generating RAG context...');
-      const ragContext = ragModule.generateContextString(globalRagData);
-      console.log(`Generated RAG context with ${ragContext.length} characters`);
-      
-      // Read the PDF file
-      console.log(`Reading PDF file: ${req.file.path}`);
-      const dataBuffer = fs.readFileSync(req.file.path);
-      console.log(`Read ${dataBuffer.length} bytes from PDF file`);
-      
-      console.log('Parsing PDF with patched PDF parser...');
-      const pdfData = await PDFParser(dataBuffer);
-      const extractedText = pdfData.text;
-      
-      console.log(`Extracted ${extractedText.length} characters of text from the PDF`);
-      
-      // Call OpenAI with the RAG-enhanced prompt
-      console.log('Calling OpenAI API with RAG-enhanced prompt...');
-      const response = await openai.chat.completions.create({
-        model: "gpt-4-turbo",
-        messages: [
-          {
-            role: "system",
-            content: enhancedSystemPrompt.getArchitecturalDrawingSystemPrompt()
-          },
-          {
-            role: "user",
-            content: `Analyze this architectural drawing with the help of the provided context information. Extract all measurements and provide a detailed analysis following construction industry standards.\n\n${ragContext}\n\nDrawing Content:\n${extractedText}`
-          }
-        ],
-        temperature: 0.2,
-        max_tokens: 4000,
-        response_format: { type: "json_object" }
-      });
-      
-      console.log('Received response from OpenAI API');
-      
-      // Safely parse the JSON response
-      const responseContent = response.choices[0].message.content;
-      console.log(`Response content length: ${responseContent.length} characters`);
-      
-      // Parse the JSON response
-      try {
-        // Check if response is HTML
-        if (ragModule.isHtmlResponse(responseContent)) {
-          console.error('Received HTML instead of JSON from OpenAI');
-          throw new Error('Invalid response format (HTML received)');
-        }
-        
-        // Try to parse the JSON
-        console.log('Parsing JSON response...');
-        analysisResult = safeJsonParse(responseContent, createDefaultArchitecturalAnalysis());
-        console.log('Successfully parsed JSON response');
-      } catch (parseError) {
-        console.error('Error parsing analysis result:', parseError.message);
-        console.error('Response content:', responseContent.substring(0, 200) + '...');
-        console.log('Using default architectural analysis as fallback');
-        analysisResult = createDefaultArchitecturalAnalysis();
-      }
-      
       // Generate timestamp for output files
       const timestamp = Date.now();
       const outputDir = path.join(__dirname, 'output');
@@ -1418,8 +1360,12 @@ app.post('/api/process-drawing', upload.single('drawing'), async (req, res) => {
     try {
       console.log(`Analyzing drawing: ${fileInfo.path}`);
       
-      // Analyze the drawing using OpenAI
-      const analysisResult = await analyzeDrawingWithAI(req.file.path, fileInfo.type);
+      // Get client description if available
+      const clientDescription = req.body.clientDescription || '';
+      console.log(`Using client description for analysis: ${clientDescription.substring(0, 50)}...`);
+      
+      // Analyze the drawing using OpenAI with client description
+      const analysisResult = await analyzeDrawingWithAI(req.file.path, fileInfo.type, clientDescription);
       console.log('Analysis completed successfully');
       
       // Generate timestamp for output files
@@ -1608,8 +1554,12 @@ app.post('/api/process-multiple-drawings', upload.array('drawings', 10), async (
       try {
         console.log(`Analyzing drawing: ${fileInfo.path}`);
         
-        // Analyze the drawing using OpenAI
-        const analysisResult = await analyzeDrawingWithAI(file.path, fileInfo.type);
+        // Get client description if available
+        const clientDescription = req.body.clientDescription || projectInfo.description || '';
+        console.log(`Using client description for analysis: ${clientDescription.substring(0, 50)}...`);
+        
+        // Analyze the drawing using OpenAI with client description
+        const analysisResult = await analyzeDrawingWithAI(file.path, fileInfo.type, clientDescription);
         console.log(`Analysis completed for ${fileInfo.name}`);
         
         // Generate timestamp for output files

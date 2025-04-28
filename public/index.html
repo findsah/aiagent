@@ -97,9 +97,16 @@
                 <div class="card">
                     <div class="card-header">
                         <h2>Upload Architectural Drawings</h2>
-                        <div class="form-check form-switch mt-2">
+                        <div class="form-check form-switch mb-3">
                             <input class="form-check-input" type="checkbox" id="useAdvancedAnalysis">
-                            <label class="form-check-label" for="useAdvancedAnalysis">Use Advanced Analysis (Python AI Agent)</label>
+                            <label class="form-check-label" for="useAdvancedAnalysis">
+                                Use Advanced Analysis (Python AI Agent) <span class="badge bg-success">NEW</span>
+                            </label>
+                        </div>
+                        <div class="mb-3">
+                            <label for="clientDescription" class="form-label">Client Description <span class="badge bg-info">NEW</span></label>
+                            <textarea class="form-control" id="clientDescription" rows="3" placeholder="Provide a description of your project to improve analysis results..."></textarea>
+                            <div class="form-text">Adding project details helps the AI better understand your drawings.</div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -362,20 +369,46 @@
                 }
                 
                 const formData = new FormData();
-                selectedFiles.forEach(file => {
-                    formData.append('drawing', file);
-                });
+                
+                // Get client description
+                const clientDescription = document.getElementById('clientDescription').value || 'Architectural drawing analysis';
+                
+                // Determine if we're processing single or multiple files
+                if (selectedFiles.length > 1) {
+                    // Multiple files - use the process-multiple-drawings endpoint
+                    selectedFiles.forEach(file => {
+                        formData.append('drawings', file);
+                    });
+                    
+                    // Add project information
+                    formData.append('projectName', 'Suddeco Project');
+                    formData.append('projectDescription', clientDescription);
+                    formData.append('clientDescription', clientDescription);
+                } else {
+                    // Single file - use the process-drawing or advanced-analysis endpoint
+                    formData.append('drawing', selectedFiles[0]);
+                    formData.append('clientDescription', clientDescription);
+                }
                 
                 // Check if advanced analysis is enabled
                 const useAdvancedAnalysis = document.getElementById('useAdvancedAnalysis').checked;
+                
+                // Determine the endpoint based on advanced analysis toggle and file count
+                let endpoint;
+                if (selectedFiles.length > 1) {
+                    // For multiple files, use the process-multiple-drawings endpoint
+                    endpoint = '/api/process-multiple-drawings';
+                } else {
+                    // For a single file, use either advanced-analysis or process-drawing
+                    endpoint = useAdvancedAnalysis ? '/api/advanced-analysis' : '/api/process-drawing';
+                }
                 
                 // Show loading indicator
                 loadingSection.style.display = 'block';
                 resultsSection.style.display = 'none';
                 
                 try {
-                    // Use different endpoint based on analysis mode
-                    const endpoint = useAdvancedAnalysis ? '/api/advanced-analysis' : '/api/process-drawing';
+                    // Use the determined endpoint
                     
                     const response = await fetch(endpoint, {
                         method: 'POST',
