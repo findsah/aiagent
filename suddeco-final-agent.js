@@ -1848,17 +1848,53 @@ app.post('/api/advanced-analysis', upload.single('drawing'), async (req, res) =>
     console.log('Received request to /api/advanced-analysis');
     
     // Check if Python environment is available
-    const pythonAvailable = await pythonBridge.checkEnvironment().catch(err => {
-      console.error('Error checking Python environment:', err);
-      return false;
-    });
-    
-    if (!pythonAvailable) {
-      console.error('Python environment is not properly configured');
+    console.log('Checking Python environment availability...');
+    try {
+      // First check if the Python executable is available
+      const pythonPath = pythonBridge.pythonPath;
+      console.log(`Using Python path: ${pythonPath}`);
+      
+      // Try to run a simple Python command to check if Python is installed
+      const { spawnSync } = require('child_process');
+      const pythonVersionResult = spawnSync(pythonPath, ['--version'], { timeout: 5000 });
+      
+      if (pythonVersionResult.error || pythonVersionResult.status !== 0) {
+        console.error('Python version check failed:', 
+          pythonVersionResult.error || 
+          `Exit code: ${pythonVersionResult.status}, Output: ${pythonVersionResult.stdout} ${pythonVersionResult.stderr}`);
+        
+        return res.status(500).json({
+          success: false,
+          error: 'Python environment not available',
+          message: 'The Python executable could not be found or returned an error. Advanced analysis features are not available.'
+        });
+      }
+      
+      console.log(`Python version check successful: ${pythonVersionResult.stdout.toString().trim() || pythonVersionResult.stderr.toString().trim()}`);
+      
+      // Now check if all required packages are available
+      const pythonAvailable = await pythonBridge.checkEnvironment().catch(err => {
+        console.error('Error checking Python environment:', err);
+        return false;
+      });
+      
+      if (!pythonAvailable) {
+        console.error('Python environment is not properly configured - missing required packages');
+        return res.status(500).json({
+          success: false,
+          error: 'Python packages not available',
+          message: 'Python is installed, but required packages are missing. Advanced analysis features are not available.'
+        });
+      }
+      
+      console.log('Python environment check successful - all required packages are available');
+      
+    } catch (pythonCheckError) {
+      console.error('Error checking Python environment:', pythonCheckError);
       return res.status(500).json({
         success: false,
-        error: 'Python environment not available',
-        message: 'The server is not properly configured to use the advanced analysis features. Please contact the administrator.'
+        error: 'Python environment check failed',
+        message: 'An error occurred while checking the Python environment. Advanced analysis features are not available.'
       });
     }
     

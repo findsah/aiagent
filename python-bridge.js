@@ -18,7 +18,7 @@ const mkdirAsync = util.promisify(fs.mkdir);
  */
 class PythonBridge {
   constructor() {
-    this.pythonPath = process.env.PYTHON_PATH || 'python';
+    this.pythonPath = process.env.PYTHON_PATH || 'python3';
     this.scriptPath = path.join(__dirname, 'fixit_all_agent.py');
     this.tempDir = path.join(__dirname, 'temp');
     

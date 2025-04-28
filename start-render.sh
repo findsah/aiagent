@@ -63,9 +63,30 @@ export NODE_ENV=production
 # Log environment information
 echo "Node.js version: $(node -v)"
 echo "NPM version: $(npm -v)"
+echo "Python version: $(python3 --version)"
+echo "Pip version: $(pip3 --version)"
 echo "Current directory: $(pwd)"
 echo "Files in current directory:"
 ls -la
+
+# Check for Python files
+echo "Checking for Python files..."
+for file in fixit_all_agent.py python-bridge.js requirements.txt; do
+  if [ -f "$file" ]; then
+    echo "✓ $file exists ($(wc -l < $file) lines)"
+  else
+    echo "✗ $file is missing!"
+  fi
+done
+
+# Verify Python environment
+echo "Verifying Python environment..."
+if [ -f "setup-python.js" ]; then
+  echo "Running Python environment setup script..."
+  node setup-python.js
+else
+  echo "setup-python.js is missing, skipping Python environment setup"
+fi
 
 # Run the dependency verification script if it exists
 if [ -f "verify-dependencies.js" ]; then
