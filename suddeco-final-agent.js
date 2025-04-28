@@ -1124,7 +1124,39 @@ function createDefaultArchitecturalAnalysis() {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
+/**
+ * @swagger
+ * /api/rag/process-drawing:
+ *   post:
+ *     summary: Process architectural drawing with RAG enhancement
+ *     description: Upload and process an architectural drawing file with RAG enhancement
+ *     tags: [RAG]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - drawing
+ *             properties:
+ *               drawing:
+ *                 type: string
+ *                 format: binary
+ *                 description: The drawing file to process
+ *               clientDescription:
+ *                 type: string
+ *                 description: Client description to provide context for the analysis
+ *     responses:
+ *       200:
+ *         description: Drawing processed successfully with RAG enhancement
+ *       400:
+ *         description: No file uploaded or invalid file
+ *       500:
+ *         description: Server error
+ */
 app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) => {
+  // Outer try-catch block for handling all errors
   try {
     console.log('Received request to /api/rag/process-drawing');
     
@@ -1190,9 +1222,11 @@ app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) 
       timestamp: Date.now()
     };
     
-    // Process the drawing with RAG
-    let analysisResult;
+    // Get client description if available
+    const clientDescription = req.body.clientDescription || '';
+    console.log(`Using client description for analysis: ${clientDescription.substring(0, 50)}...`);
     
+    // Inner try-catch block for processing the drawing with RAG
     try {
       console.log(`Analyzing drawing with RAG: ${fileInfo.path}`);
       
@@ -1201,6 +1235,67 @@ app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) 
         console.log('Waiting for RAG data to be initialized...');
         globalRagData = await ragDataPromise;
         console.log('RAG data initialized successfully');
+      }
+      
+      // Generate RAG context string
+      console.log('Generating RAG context...');
+      const ragContext = ragModule.generateContextString(globalRagData);
+      console.log(`Generated RAG context with ${ragContext.length} characters`);
+      
+      // Read the PDF file
+      console.log(`Reading PDF file: ${req.file.path}`);
+      const dataBuffer = fs.readFileSync(req.file.path);
+      console.log(`Read ${dataBuffer.length} bytes from PDF file`);
+      
+      console.log('Parsing PDF with patched PDF parser...');
+      const pdfData = await PDFParser(dataBuffer);
+      const extractedText = pdfData.text;
+      
+      console.log(`Extracted ${extractedText.length} characters of text from the PDF`);
+      
+      // Call OpenAI with the RAG-enhanced prompt
+      console.log('Calling OpenAI API with RAG-enhanced prompt...');
+      const response = await openai.chat.completions.create({
+        model: "gpt-4-turbo",
+        messages: [
+          {
+            role: "system",
+            content: enhancedSystemPrompt.getArchitecturalDrawingSystemPrompt()
+          },
+          {
+            role: "user",
+            content: `Analyze this architectural drawing. Extract ALL measurements with precise values and units. Provide a detailed analysis following construction industry standards. Pay special attention to dimensions, scales, materials, and compliance requirements.\n\n${clientDescription ? `Client Description: ${clientDescription}\n\n` : ''}${ragContext}\n\nDrawing Content:\n${extractedText}`
+          }
+        ],
+        temperature: 0.2,
+        max_tokens: 4000,
+        response_format: { type: "json_object" }
+      });
+      
+      console.log('Received response from OpenAI API');
+      
+      // Safely parse the JSON response
+      const responseContent = response.choices[0].message.content;
+      console.log(`Response content length: ${responseContent.length} characters`);
+      let analysisResult;
+      
+      // Parse the JSON response with error handling
+      try {
+        // Check if response is HTML
+        if (ragModule.isHtmlResponse(responseContent)) {
+          console.error('Received HTML instead of JSON from OpenAI');
+          throw new Error('Invalid response format (HTML received)');
+        }
+        
+        // Try to parse the JSON
+        console.log('Parsing JSON response...');
+        analysisResult = safeJsonParse(responseContent, createDefaultArchitecturalAnalysis());
+        console.log('Successfully parsed JSON response');
+      } catch (parseError) {
+        console.error('Error parsing analysis result:', parseError.message);
+        console.error('Response content:', responseContent.substring(0, 200) + '...');
+        console.log('Using default architectural analysis as fallback');
+        analysisResult = createDefaultArchitecturalAnalysis();
       }
       
       // Generate timestamp for output files
@@ -1223,8 +1318,8 @@ app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) 
         analysis: analysisResult,
         outputPath: `/output/rag_analysis_${timestamp}.json`
       });
-      
     } catch (processingError) {
+      // Handle errors in the processing
       console.error('Error processing drawing with RAG:', processingError.message);
       return res.status(500).json({
         success: false,
@@ -1233,6 +1328,7 @@ app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) 
       });
     }
   } catch (outerError) {
+    // Handle any other errors
     console.error('Outer error in RAG process-drawing endpoint:', outerError.message);
     console.error(outerError.stack);
     return res.status(500).json({
