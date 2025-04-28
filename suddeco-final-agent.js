@@ -1231,6 +1231,110 @@ app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) 
   }
 });
 
+/**
+ * @swagger
+ * /api/process-drawing:
+ *   post:
+ *     summary: Process architectural drawing
+ *     description: Upload and process an architectural drawing file
+ *     tags: [Drawing Processing]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               drawing:
+ *                 type: string
+ *                 format: binary
+ *                 description: Drawing file (PDF)
+ *     responses:
+ *       200:
+ *         description: Drawing processed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 fileInfo:
+ *                   type: object
+ *                 analysis:
+ *                   type: object
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+app.post('/api/process-drawing', upload.single('drawing'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+    
+    console.log(`Processing file: ${req.file.originalname}`);
+    
+    // Extract file information
+    const fileInfo = {
+      name: req.file.originalname,
+      path: req.file.path,
+      type: path.extname(req.file.originalname).toLowerCase().substring(1),
+      size: req.file.size,
+      timestamp: Date.now()
+    };
+    
+    try {
+      // Analyze the drawing using OpenAI
+      const analysisResult = await analyzeDrawingWithAI(req.file.path, fileInfo.type);
+      
+      // Generate timestamp for output files
+      const timestamp = Date.now();
+      const outputDir = path.join(__dirname, 'output');
+      if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true });
+      }
+      
+      // Save the result to a file
+      const outputPath = path.join(outputDir, `analysis_${timestamp}.json`);
+      fs.writeFileSync(outputPath, JSON.stringify(analysisResult, null, 2));
+      
+      res.json({
+        success: true,
+        message: 'Drawing processed successfully',
+        fileInfo,
+        analysis: analysisResult,
+        outputPath: `/output/analysis_${timestamp}.json`
+      });
+    } catch (processingError) {
+      console.error('Error processing drawing:', processingError.message);
+      res.status(500).json({
+        success: false,
+        error: 'Error processing drawing',
+        details: processingError.message
+      });
+    }
+  } catch (error) {
+    console.error('Error in process-drawing endpoint:', error.message);
+    res.status(500).json({
+      success: false,
+      error: 'Server error',
+      details: error.message
+    });
+  }
+});
+
 // Import the schema API router
 const schemaApiRouter = require('./suddeco-schema-api');
 
