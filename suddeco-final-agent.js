@@ -1285,6 +1285,15 @@ app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) 
         message: processingError.message
       });
     }
+  } catch (outerError) {
+    console.error('Outer error in RAG process-drawing endpoint:', outerError.message);
+    console.error(outerError.stack);
+    return res.status(500).json({
+      success: false,
+      error: 'Server error',
+      message: 'An unexpected error occurred while processing your request.',
+      details: outerError.message
+    });
   }
 });
 
