@@ -1163,7 +1163,8 @@ function enhanceMockDataWithExtractedText(mockData, extractedText) {
   
   try {
     // Extract dimensions with units (e.g., 10.5m, 120m², 2.4m x 3.6m)
-    const dimensionRegex = /\b(\d+(?:\.\d+)?\s*(?:m|mm|cm|m²|m2|mm²|mm2|cm²|cm2))\b/gi;
+    // Improved regex to avoid matching extremely large numbers and to be more precise
+    const dimensionRegex = /\b(\d{1,5}(?:\.\d{1,2})?\s*(?:m|mm|cm|m\u00b2|m2|mm\u00b2|mm2|cm\u00b2|cm2))\b/gi;
     const dimensions = extractedText.match(dimensionRegex) || [];
     console.log(`Found ${dimensions.length} dimensions in extracted text`);
     
@@ -1175,11 +1176,22 @@ function enhanceMockDataWithExtractedText(mockData, extractedText) {
       siteExtensionMatches.push(match[0]);
     }
     
-    // Extract structural calculations
-    const structuralRegex = /\b(?:structural|load[\s-]*bearing|foundation|beam|column|joist)\s*(?:[^\n.]*?)(\d+(?:\.\d+)?\s*(?:m|mm|cm|kN|kN\/m²|kN\/m2))/gi;
+    // Extract structural calculations with improved precision
+    const structuralRegex = /\b(?:structural|load[\s-]*bearing|foundation|beam|column|joist)\s*(?:[^\n.]*?)\s*(\d{1,5}(?:\.\d{1,2})?\s*(?:m|mm|cm|kN|kN\/m\u00b2|kN\/m2))\b/gi;
     const structuralMatches = [];
     while ((match = structuralRegex.exec(extractedText)) !== null) {
-      structuralMatches.push(match[0]);
+      // Only add if the match doesn't contain extremely large numbers
+      if (match[0].length < 100) {
+        structuralMatches.push(match[0]);
+      }
+    }
+    
+    // Extract specific beam dimensions with better precision
+    const beamRegex = /\bbeam\s+(?:length|width|height|depth|size)\s*[=:]?\s*(\d{1,5}(?:\.\d{1,2})?\s*(?:m|mm|cm))\b/gi;
+    while ((match = beamRegex.exec(extractedText)) !== null) {
+      if (match[0].length < 100) {
+        structuralMatches.push(match[0]);
+      }
     }
     
     // Update site extension data if found
@@ -1200,22 +1212,82 @@ function enhanceMockDataWithExtractedText(mockData, extractedText) {
     
     // Update structural calculations if found
     if (structuralMatches.length > 0) {
-      enhancedData.structural_calculations.note = `Structural information found in drawing: ${structuralMatches.join('; ')}`;
+      // Limit the number of matches to display in the note to avoid overwhelming
+      const displayMatches = structuralMatches.length > 15 ? 
+        structuralMatches.slice(0, 15).concat([`...and ${structuralMatches.length - 15} more`]) : 
+        structuralMatches;
       
-      // Try to extract specific structural details
-      const foundationMatch = extractedText.match(/foundation\s+(?:depth|thickness|size)\s*[:\-]?\s*(\d+(?:\.\d+)?\s*(?:m|mm|cm))/i);
-      const loadMatch = extractedText.match(/(?:load|bearing)\s+capacity\s*[:\-]?\s*(\d+(?:\.\d+)?\s*(?:kN|kN\/m²|kN\/m2))/i);
-      const roofMatch = extractedText.match(/roof\s+(?:structure|thickness|insulation)\s*[:\-]?\s*(\d+(?:\.\d+)?\s*(?:m|mm|cm))/i);
+      enhancedData.structural_calculations.note = `Structural information found in drawing: ${displayMatches.join('; ')}`;
+      
+      // Try to extract specific structural details with more precise patterns
+      // Foundation details
+      const foundationPatterns = [
+        /foundation\s+(?:depth|thickness|size)\s*[:\-=]?\s*(\d{1,4}(?:\.\d{1,2})?\s*(?:m|mm|cm))/i,
+        /(?:strip|pad|raft|pile)\s+foundation\s*[:\-=]?\s*(\d{1,4}(?:\.\d{1,2})?\s*(?:m|mm|cm))/i,
+        /foundation\s*[:\-=]?\s*(\d{1,4}(?:\.\d{1,2})?\s*(?:m|mm|cm)\s+(?:deep|thick|width|depth))/i
+      ];
+      
+      // Load bearing details
+      const loadPatterns = [
+        /(?:load|bearing)\s+capacity\s*[:\-=]?\s*(\d{1,4}(?:\.\d{1,2})?\s*(?:kN|kN\/m\u00b2|kN\/m2))/i,
+        /(?:maximum|design|calculated)\s+load\s*[:\-=]?\s*(\d{1,4}(?:\.\d{1,2})?\s*(?:kN|kN\/m\u00b2|kN\/m2))/i,
+        /(?:beam|column|wall)\s+load\s*[:\-=]?\s*(\d{1,4}(?:\.\d{1,2})?\s*(?:kN|kN\/m\u00b2|kN\/m2))/i
+      ];
+      
+      // Roof structure details
+      const roofPatterns = [
+        /roof\s+(?:structure|thickness|insulation)\s*[:\-=]?\s*(\d{1,4}(?:\.\d{1,2})?\s*(?:m|mm|cm))/i,
+        /(?:roof|rafter|truss)\s+(?:depth|thickness)\s*[:\-=]?\s*(\d{1,4}(?:\.\d{1,2})?\s*(?:m|mm|cm))/i,
+        /(?:roof|rafter|truss)\s+spacing\s*[:\-=]?\s*(\d{1,4}(?:\.\d{1,2})?\s*(?:m|mm|cm))/i
+      ];
+      
+      // Try each pattern and use the first match found
+      let foundationMatch = null;
+      for (const pattern of foundationPatterns) {
+        const match = extractedText.match(pattern);
+        if (match) {
+          foundationMatch = match;
+          break;
+        }
+      }
+      
+      let loadMatch = null;
+      for (const pattern of loadPatterns) {
+        const match = extractedText.match(pattern);
+        if (match) {
+          loadMatch = match;
+          break;
+        }
+      }
+      
+      let roofMatch = null;
+      for (const pattern of roofPatterns) {
+        const match = extractedText.match(pattern);
+        if (match) {
+          roofMatch = match;
+          break;
+        }
+      }
+      
+      // Extract beam specifications
+      const beamSpecs = extractedText.match(/beam\s+(?:size|section|type|specification)\s*[:\-=]?\s*([^\n.]+)/i);
       
       if (foundationMatch) enhancedData.structural_calculations.foundation = foundationMatch[1];
       if (loadMatch) enhancedData.structural_calculations.load_bearing = loadMatch[1];
       if (roofMatch) enhancedData.structural_calculations.roof_structure = roofMatch[1];
+      if (beamSpecs) enhancedData.structural_calculations.beam_specifications = beamSpecs[1].trim();
     }
     
     // If we have at least 5 dimensions, try to update building analysis
     if (dimensions.length >= 5) {
+      // Filter out unrealistic dimensions (greater than 100m)
+      const filteredDimensions = dimensions.filter(d => {
+        const numMatch = d.match(/(\d+(?:\.\d+)?)/); 
+        return numMatch && parseFloat(numMatch[1]) <= 100;
+      });
+      
       // Sort dimensions by size (assuming larger dimensions are for the building)
-      const sortedDimensions = dimensions
+      const sortedDimensions = filteredDimensions
         .map(d => {
           const numMatch = d.match(/(\d+(?:\.\d+)?)/); 
           return { 
@@ -1225,26 +1297,49 @@ function enhanceMockDataWithExtractedText(mockData, extractedText) {
         })
         .sort((a, b) => b.value - a.value);
       
-      // Use the largest dimensions for the building
-      if (sortedDimensions.length >= 3) {
-        enhancedData.building_analysis.total_external_dimensions.length = sortedDimensions[0].text;
-        enhancedData.building_analysis.total_external_dimensions.width = sortedDimensions[1].text;
-        enhancedData.building_analysis.total_external_dimensions.height = sortedDimensions[2].text;
+      // Use the largest dimensions for the building, but only if they're realistic
+      if (sortedDimensions.length >= 3 && 
+          sortedDimensions[0].value > 0 && sortedDimensions[0].value <= 100 &&
+          sortedDimensions[1].value > 0 && sortedDimensions[1].value <= 100) {
         
-        // Estimate internal dimensions (slightly smaller)
-        const internalLength = sortedDimensions[0].value * 0.95;
-        const internalWidth = sortedDimensions[1].value * 0.95;
-        enhancedData.building_analysis.total_internal_dimensions.length = `${internalLength.toFixed(1)}m`;
-        enhancedData.building_analysis.total_internal_dimensions.width = `${internalWidth.toFixed(1)}m`;
-        enhancedData.building_analysis.total_internal_dimensions.height = sortedDimensions[2].text;
+        // Check if the unit is appropriate (should be meters for building dimensions)
+        const unit0 = sortedDimensions[0].text.match(/[a-z]+$/i)?.[0] || 'm';
+        const unit1 = sortedDimensions[1].text.match(/[a-z]+$/i)?.[0] || 'm';
+        const unit2 = sortedDimensions[2].text.match(/[a-z]+$/i)?.[0] || 'm';
         
-        // Estimate floor areas
-        const externalArea = sortedDimensions[0].value * sortedDimensions[1].value;
-        const internalArea = internalLength * internalWidth;
-        enhancedData.building_analysis.total_floor_area.external = `${externalArea.toFixed(1)}m²`;
-        enhancedData.building_analysis.total_floor_area.internal = `${internalArea.toFixed(1)}m²`;
+        // Convert to meters if needed
+        const length = unit0 === 'mm' ? sortedDimensions[0].value / 1000 : 
+                      (unit0 === 'cm' ? sortedDimensions[0].value / 100 : sortedDimensions[0].value);
+        const width = unit1 === 'mm' ? sortedDimensions[1].value / 1000 : 
+                     (unit1 === 'cm' ? sortedDimensions[1].value / 100 : sortedDimensions[1].value);
+        const height = unit2 === 'mm' ? sortedDimensions[2].value / 1000 : 
+                      (unit2 === 'cm' ? sortedDimensions[2].value / 100 : sortedDimensions[2].value);
         
-        enhancedData.building_analysis.note = "Measurements estimated from drawing text. Please verify for accuracy.";
+        // Only use values if they're reasonable for a building
+        if (length > 0 && length <= 100 && width > 0 && width <= 100 && height > 0 && height <= 10) {
+          enhancedData.building_analysis.total_external_dimensions.length = `${length.toFixed(1)}m`;
+          enhancedData.building_analysis.total_external_dimensions.width = `${width.toFixed(1)}m`;
+          enhancedData.building_analysis.total_external_dimensions.height = `${height.toFixed(1)}m`;
+          
+          // Estimate internal dimensions (slightly smaller)
+          const internalLength = length * 0.95;
+          const internalWidth = width * 0.95;
+          enhancedData.building_analysis.total_internal_dimensions.length = `${internalLength.toFixed(1)}m`;
+          enhancedData.building_analysis.total_internal_dimensions.width = `${internalWidth.toFixed(1)}m`;
+          enhancedData.building_analysis.total_internal_dimensions.height = `${height.toFixed(1)}m`;
+          
+          // Estimate floor areas
+          const externalArea = length * width;
+          const internalArea = internalLength * internalWidth;
+          enhancedData.building_analysis.total_floor_area.external = `${externalArea.toFixed(1)}m\u00b2`;
+          enhancedData.building_analysis.total_floor_area.internal = `${internalArea.toFixed(1)}m\u00b2`;
+          
+          enhancedData.building_analysis.note = "Measurements estimated from drawing text. Please verify for accuracy.";
+        } else {
+          enhancedData.building_analysis.note = "Could not determine realistic building dimensions from the drawing.";
+        }
+      } else {
+        enhancedData.building_analysis.note = "Could not extract sufficient realistic dimensions from the drawing.";
       }
     }
     
