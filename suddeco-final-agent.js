@@ -757,31 +757,9 @@ async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '') 
             
             // Select the appropriate prompt based on the analysis type
             let systemPromptContent;
-            
-            if (CONFIG.ENABLE_ENHANCED_DESCRIPTIONS) {
-
-              
-              // Select the appropriate prompt based on the analysis type
-              // Always use detailed analysis prompt; analysisPromptType logic removed.
-                case 'material':
-                  systemPromptContent = agentPrompts.getMaterialAnalysisPrompt();
-                  break;
-                case 'compliance':
-                  systemPromptContent = agentPrompts.getComplianceAnalysisPrompt();
-                  break;
-                case 'construction':
-                  systemPromptContent = agentPrompts.getConstructionPlanningPrompt();
-                  break;
-                case 'sustainability':
-                  systemPromptContent = agentPrompts.getSustainabilityAnalysisPrompt();
-                  break;
-                case 'newbuild':
-                  systemPromptContent = agentPrompts.getNewBuildAnalysisPrompt();
-                  break;
-                case 'general':
-                default:
-                  systemPromptContent = agentPrompts.getGeneralAnalysisPrompt();
-              }
+                       if (CONFIG.ENABLE_ENHANCED_DESCRIPTIONS) {
+              // Always use the detailed general analysis prompt
+              systemPromptContent = agentPrompts.getGeneralAnalysisPrompt();
             } else {
               // Fall back to the basic system prompt if enhanced descriptions are disabled
               systemPromptContent = require('./suddeco_system_prompt');
