@@ -1088,7 +1088,6 @@ ${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parse
             
             return enhancedAnalysis;
           }
-      }
       } else {
           console.log('Extracted text is too short or empty, using default analysis');
           
