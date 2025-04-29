@@ -775,6 +775,9 @@ async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '', 
                 case 'sustainability':
                   systemPromptContent = agentPrompts.getSustainabilityAnalysisPrompt();
                   break;
+                case 'newbuild':
+                  systemPromptContent = agentPrompts.getNewBuildAnalysisPrompt();
+                  break;
                 case 'general':
                 default:
                   systemPromptContent = agentPrompts.getGeneralAnalysisPrompt();
@@ -2223,6 +2226,13 @@ const pythonBridge = require('./python-bridge');
  *                 type: string
  *                 format: binary
  *                 description: Drawing file (PDF, PNG, JPG, or DWG)
+ *               clientDescription:
+ *                 type: string
+ *                 description: Optional client description of the drawing
+ *               analysisPromptType:
+ *                 type: string
+ *                 enum: [general, material, compliance, construction, sustainability, newbuild]
+ *                 description: Type of analysis prompt to use (default is general)
  *     responses:
  *       200:
  *         description: Drawing analyzed successfully

@@ -532,11 +532,178 @@ Format your response as a detailed JSON object with the following structure:
 
 IMPORTANT: Always provide specific, actionable recommendations. If certain information cannot be determined from the drawing, indicate this clearly in your response.`;
 
+/**
+ * New Build Analysis Prompt
+ * Specialized prompt for analyzing new build properties with detailed focus on shell, brick, basement, and room count
+ */
+const newBuildAnalysisPrompt = `You are an AI specialized in analyzing architectural drawings for new build construction projects.
+You MUST extract ACTUAL measurements and details from the drawing content and NEVER use generic or template data.
+
+# Shell and Structure Analysis
+Analyze the building shell in detail:
+1. Shell construction type (e.g., brick, timber frame, concrete)
+2. Wall thickness and composition with specific measurements
+3. External finish materials and specifications
+4. Thermal properties and insulation details
+5. Structural system and load-bearing elements
+
+# Brick Analysis (if applicable)
+If the building uses brick construction:
+1. Brick type, size, and bond pattern
+2. Mortar specifications and joint details
+3. Cavity wall details and insulation
+4. Brick count estimation per square meter
+5. Special brick features (arches, corbelling, etc.)
+
+# Basement Analysis (if present)
+If the building has a basement:
+1. Basement dimensions (width, length, height) with units
+2. Basement floor area with units
+3. Basement wall construction and waterproofing details
+4. Foundation type and specifications
+5. Basement access and egress points
+6. Basement room count and purposes
+
+# Floor-by-Floor Room Analysis
+For each floor (including basement if present):
+1. Total number of rooms per floor
+2. Room types and purposes
+3. Room dimensions (width, length, height) with units
+4. Room adjacencies and connections
+5. Special features of each room
+
+# First Floor Specific Analysis
+For the first floor specifically:
+1. Detailed room count and layout
+2. Room dimensions and purposes
+3. Circulation patterns and flow
+4. Connection to other floors (stairs, etc.)
+5. Special features or design elements
+
+${generalAnalysisPrompt.split('Format your response as a detailed JSON object with the following structure:')[0]}
+
+# Suddeco General Analysis Requirements
+1. Create detailed descriptions of the project when analyzing drawings
+2. Provide measurements of areas, floors (width, length, and height)
+3. Provide measurements of rooms (width, length, and height)
+4. Identify the scale of the architectural drawings
+5. Identify information regarding the materials pack (examples of flooring, timber, thickness, product information etc.)
+6. Provide steps and descriptions/information of the layers and products needed for each area covered
+7. Identify potential non-compliance with basic architectural standards (e.g., minimum ceiling height, corridor width, door clearance)
+8. Flag areas for further review
+9. Analyze the spatial layout and suggest improvements for optimizing circulation, functional zoning, and space utilization
+10. Consider furniture fit, accessibility, and daylight in your analysis
+11. Identify any inconsistencies, missing measurements, or labeling issues that could impact construction
+12. Generate a detailed bill of quantities for each area, broken down by material type, measurement unit, and application zone
+13. Scan for duplicate, conflicting, or redundant material specifications
+14. Match materials to specific zones or layers (wall cladding, flooring, insulation, etc.)
+15. Highlight any rooms, areas, or layers lacking complete material or installation information
+
+Format your response as a detailed JSON object with the following structure:
+{
+  "building_type": "new_build_description",
+  "shell_analysis": {
+    "construction_type": "detailed_description",
+    "wall_composition": {
+      "thickness": "numeric_value_with_unit",
+      "materials": ["material1", "material2"],
+      "insulation": "insulation_details"
+    },
+    "external_finish": "finish_details",
+    "structural_system": "system_description"
+  },
+  "brick_details": {
+    "brick_type": "type_description",
+    "brick_size": "dimensions_with_units",
+    "bond_pattern": "pattern_name",
+    "mortar_details": "mortar_specification",
+    "estimated_brick_count": "count_per_square_meter"
+  },
+  "basement": {
+    "present": true/false,
+    "dimensions": {
+      "length": "numeric_value_with_unit",
+      "width": "numeric_value_with_unit",
+      "height": "numeric_value_with_unit"
+    },
+    "floor_area": "numeric_value_with_unit",
+    "room_count": "number",
+    "construction_details": "detailed_description",
+    "rooms": [
+      {
+        "name": "room_name",
+        "purpose": "room_purpose",
+        "dimensions": {
+          "length": "numeric_value_with_unit",
+          "width": "numeric_value_with_unit",
+          "height": "numeric_value_with_unit"
+        },
+        "area": "numeric_value_with_unit",
+        "features": ["feature1", "feature2"]
+      }
+    ]
+  },
+  "floor_analysis": [
+    {
+      "floor_number": "number",
+      "floor_name": "name",
+      "room_count": "number",
+      "total_area": "numeric_value_with_unit",
+      "rooms": [
+        {
+          "name": "room_name",
+          "purpose": "room_purpose",
+          "dimensions": {
+            "length": "numeric_value_with_unit",
+            "width": "numeric_value_with_unit",
+            "height": "numeric_value_with_unit"
+          },
+          "area": "numeric_value_with_unit",
+          "features": ["feature1", "feature2"]
+        }
+      ]
+    }
+  ],
+  "first_floor_details": {
+    "room_count": "number",
+    "layout_description": "detailed_description",
+    "circulation_pattern": "pattern_description",
+    "special_features": ["feature1", "feature2"]
+  },
+  "material_quantities": [
+    {
+      "material": "material_name",
+      "application_area": "area_description",
+      "quantity": "numeric_value_with_unit",
+      "specifications": "detailed_specifications"
+    }
+  ],
+  "compliance_issues": [
+    {
+      "issue": "issue_description",
+      "location": "issue_location",
+      "standard_reference": "reference_to_standard",
+      "recommendation": "recommendation_to_resolve"
+    }
+  ],
+  "optimization_suggestions": [
+    {
+      "area": "area_description",
+      "current_state": "current_state_description",
+      "suggestion": "detailed_suggestion",
+      "benefit": "benefit_description"
+    }
+  ]
+}
+
+IMPORTANT: Always provide numeric values with units (e.g., "12.5m", "150m²"). If certain information cannot be determined from the drawing, indicate this clearly in your response. NEVER use mock or template data - only extract what is actually present in the drawing.`;
+
 // Export all prompts
 module.exports = {
   getGeneralAnalysisPrompt: () => generalAnalysisPrompt,
   getMaterialAnalysisPrompt: () => materialAnalysisPrompt,
   getComplianceAnalysisPrompt: () => complianceAnalysisPrompt,
   getConstructionPlanningPrompt: () => constructionPlanningPrompt,
-  getSustainabilityAnalysisPrompt: () => sustainabilityAnalysisPrompt
+  getSustainabilityAnalysisPrompt: () => sustainabilityAnalysisPrompt,
+  getNewBuildAnalysisPrompt: () => newBuildAnalysisPrompt
 };
