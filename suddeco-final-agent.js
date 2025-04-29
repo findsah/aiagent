@@ -1077,18 +1077,7 @@ ${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parse
             analysisCache.set(cacheKey, enhancedAnalysis);
             
             return enhancedAnalysis;
-          } catch (openaiError) {
-            console.error('Error analyzing with OpenAI:', openaiError);
-            
-            // If OpenAI analysis fails, use fallback
-            const defaultAnalysis = createDefaultArchitecturalAnalysis();
-            const enhancedAnalysis = enhanceMockDataWithExtractedText(defaultAnalysis, extractedText);
-            enhancedAnalysis.note = `OpenAI analysis failed: ${openaiError.message}. This is enhanced fallback data.`;
-            
-            // Cache the result
-            analysisCache.set(cacheKey, enhancedAnalysis);
-            
-            return enhancedAnalysis;
+          }
           }
         } else {
           console.log('Extracted text is too short or empty, using default analysis');
