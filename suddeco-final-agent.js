@@ -21,6 +21,7 @@ const ExcelJS = require('exceljs');
 const PDFParser = require('pdf-parse');
 const ragModule = require('./rag-module');
 const enhancedSystemPrompt = require('./enhanced_system_prompt');
+const agentPrompts = require('./agent_prompts');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./swagger-config');
 
@@ -615,7 +616,7 @@ const upload = multer({
 });
 
 // Analyze drawing with OpenAI
-async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '') {
+async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '', analysisPromptType = 'general') {
   console.log(`Analyzing drawing with AI (type: ${fileType})...`);
   
   try {
@@ -752,10 +753,34 @@ async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '') 
               console.log('RAG context generation disabled');
             }
             
-            // Use enhanced system prompt if enabled
-            const systemPromptContent = CONFIG.ENABLE_ENHANCED_DESCRIPTIONS ? 
-              enhancedSystemPrompt.getArchitecturalDrawingSystemPrompt() : 
-              require('./suddeco_system_prompt');
+            // Select the appropriate prompt based on the analysis type
+            let systemPromptContent;
+            
+            if (CONFIG.ENABLE_ENHANCED_DESCRIPTIONS) {
+              console.log(`Using ${analysisPromptType} analysis prompt type`);
+              
+              // Select the appropriate prompt based on the analysis type
+              switch (analysisPromptType) {
+                case 'material':
+                  systemPromptContent = agentPrompts.getMaterialAnalysisPrompt();
+                  break;
+                case 'compliance':
+                  systemPromptContent = agentPrompts.getComplianceAnalysisPrompt();
+                  break;
+                case 'construction':
+                  systemPromptContent = agentPrompts.getConstructionPlanningPrompt();
+                  break;
+                case 'sustainability':
+                  systemPromptContent = agentPrompts.getSustainabilityAnalysisPrompt();
+                  break;
+                case 'general':
+                default:
+                  systemPromptContent = agentPrompts.getGeneralAnalysisPrompt();
+              }
+            } else {
+              // Fall back to the basic system prompt if enhanced descriptions are disabled
+              systemPromptContent = require('./suddeco_system_prompt');
+            }
             
             // Prepare API data context for the prompt
             let apiDataContext = '';
@@ -1976,12 +2001,55 @@ app.post('/api/advanced-analysis', upload.single('drawing'), async (req, res) =>
       });
       
       if (!pythonAvailable) {
-        console.error('Python environment is not properly configured - missing required packages');
-        return res.status(500).json({
-          success: false,
-          error: 'Python packages not available',
-          message: 'Python is installed, but required packages are missing. Advanced analysis features are not available.'
-        });
+        console.log('Python environment is not properly configured - missing required packages');
+        console.log('Falling back to standard OpenAI analysis with specialized prompt...');
+        
+        // Get client description and analysis prompt type
+        const clientDescription = req.body.clientDescription || '';
+        const analysisPromptType = req.body.analysisPromptType || 'general';
+        
+        try {
+          // Use standard OpenAI analysis with the specialized prompt as a fallback
+          const result = await analyzeDrawingWithAI(req.file.path, path.extname(req.file.originalname).toLowerCase().substring(1), clientDescription, analysisPromptType);
+          
+          // Generate timestamp for output files
+          const timestamp = Date.now();
+          const outputDir = path.join(__dirname, 'output');
+          if (!fs.existsSync(outputDir)) {
+            fs.mkdirSync(outputDir, { recursive: true });
+          }
+          
+          // Save the result to a file
+          const fileInfo = {
+            name: req.file.originalname,
+            path: req.file.path,
+            type: path.extname(req.file.originalname).toLowerCase().substring(1),
+            size: req.file.size,
+            timestamp: Date.now()
+          };
+          
+          const outputPath = path.join(outputDir, `fallback_analysis_${fileInfo.name.replace(/\s+/g, '_')}_${timestamp}.json`);
+          fs.writeFileSync(outputPath, JSON.stringify(result, null, 2));
+          
+          console.log(`Fallback analysis saved to ${outputPath}`);
+          
+          // Return the result with a note about the fallback
+          return res.json({
+            success: true,
+            message: 'Drawing analyzed using fallback OpenAI analysis (Python environment not available)',
+            fileInfo,
+            analysis: result,
+            outputPath: `/output/fallback_analysis_${fileInfo.name.replace(/\s+/g, '_')}_${timestamp}.json`,
+            fallback: true
+          });
+        } catch (fallbackError) {
+          console.error('Error in fallback analysis:', fallbackError);
+          return res.status(500).json({
+            success: false,
+            error: 'Analysis failed',
+            message: 'Both advanced and fallback analysis methods failed. Please try again later.'
+          });
+        }
       }
       
       console.log('Python environment check successful - all required packages are available');

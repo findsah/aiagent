@@ -103,6 +103,19 @@
                                 Use Advanced Analysis (Python AI Agent) <span class="badge bg-success">NEW</span>
                             </label>
                         </div>
+                        
+                        <div class="mb-3">
+                            <label for="analysisPromptType" class="form-label">Analysis Type <span class="badge bg-success">NEW</span></label>
+                            <select class="form-select" id="analysisPromptType">
+                                <option value="general" selected>General Architectural Analysis</option>
+                                <option value="material">Material & Quantity Analysis</option>
+                                <option value="compliance">Compliance & Regulation Analysis</option>
+                                <option value="construction">Construction Planning Analysis</option>
+                                <option value="sustainability">Sustainability & Energy Analysis</option>
+                            </select>
+                            <div class="form-text">Select the type of analysis you want the AI to perform on your drawings.</div>
+                        </div>
+                        
                         <div class="mb-3">
                             <label for="clientDescription" class="form-label">Client Description <span class="badge bg-info">NEW</span></label>
                             <textarea class="form-control" id="clientDescription" rows="3" placeholder="Provide a description of your project to improve analysis results..."></textarea>
@@ -370,8 +383,9 @@
                 
                 const formData = new FormData();
                 
-                // Get client description
+                // Get client description and analysis type
                 const clientDescription = document.getElementById('clientDescription').value || 'Architectural drawing analysis';
+                const analysisPromptType = document.getElementById('analysisPromptType').value;
                 
                 // Determine if we're processing single or multiple files and set the appropriate endpoint
                 let endpoint;
@@ -390,6 +404,7 @@
                     formData.append('projectName', 'Suddeco Project');
                     formData.append('projectDescription', clientDescription);
                     formData.append('clientDescription', clientDescription);
+                    formData.append('analysisPromptType', analysisPromptType);
                 } else {
                     // Single file - use the process-drawing or advanced-analysis endpoint
                     endpoint = useAdvancedAnalysis ? '/api/advanced-analysis' : '/api/process-drawing';
@@ -397,6 +412,7 @@
                     // For single file, the field name must be 'drawing'
                     formData.append('drawing', selectedFiles[0]);
                     formData.append('clientDescription', clientDescription);
+                    formData.append('analysisPromptType', analysisPromptType);
                 }
                 
                 // Show loading indicator
@@ -431,9 +447,20 @@
             
             // Display results function
             function displayResults(data, isAdvancedAnalysis = false) {
+                // Check if there's a fallback notification to display
+                if (data.fallback) {
+                    const fallbackAlert = document.createElement('div');
+                    fallbackAlert.className = 'alert alert-warning alert-dismissible fade show mb-4';
+                    fallbackAlert.innerHTML = `
+                        <strong>Notice:</strong> ${data.message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    `;
+                    document.getElementById('resultsContent').prepend(fallbackAlert);
+                }
+                
                 // Handle different response formats based on analysis mode
-                if (isAdvancedAnalysis && data.analysis) {
-                    // Display advanced analysis results from Python agent
+                if ((isAdvancedAnalysis || data.fallback) && data.analysis) {
+                    // Display advanced analysis results from Python agent or fallback analysis
                     displayAdvancedAnalysisResults(data.analysis);
                 } else if (data.architectural_analysis) {
                     // Display standard analysis
