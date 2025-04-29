@@ -1019,51 +1019,72 @@ ${extractedText}
 IMPORTANT: DO NOT return generic or mock data. If you cannot find specific measurements or details in the drawing content, explicitly state that they are not provided in the drawing rather than making up values. For each measurement you provide, include a brief note about where in the drawing you found it.
 
 ${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parsed as valid JSON. Please ensure your entire response is valid JSON. Do not include markdown code blocks, just return a clean JSON object.' : ''}`
-                    }
-                  ],
-                  temperature: 0.1,
-                  max_tokens: 2000,
-                  response_format: { type: "json_object" }
-                });
-                  
-                const simplifiedResult = simplifiedResponse.choices[0].message.content;
-                
-                // Safely parse the JSON result
-                let parsedResult;
-                try {
-                  // First try direct parsing
-                  parsedResult = JSON.parse(simplifiedResult);
-                } catch (jsonError) {
-                  console.log('Error parsing simplified response JSON, attempting to clean the response...');
-                  try {
-                    // Try to extract JSON if there's any extra text
-                    const jsonMatch = simplifiedResult.match(/\{[\s\S]*\}/);
-                    if (jsonMatch) {
-                      parsedResult = JSON.parse(jsonMatch[0]);
-                    } else {
-                      throw new Error('Could not extract valid JSON from response');
-                    }
-                  } catch (extractError) {
-                    console.error('Failed to extract valid JSON:', extractError);
-                    // Create a minimal valid result
-                    parsedResult = {
-                      drawing_scale: 'Not available',
-                      building_analysis: {
-                        description: 'Analysis could not be completed due to parsing errors.'
                       }
-                    };
+                    ],
+                    temperature: 0.1,
+                    max_tokens: 2000,
+                    response_format: { type: "json_object" }
+                  });
+                  
+                  const simplifiedResult = simplifiedResponse.choices[0].message.content;
+                  
+                  // Safely parse the JSON result
+                  let parsedResult;
+                  try {
+                    // First try direct parsing
+                    parsedResult = JSON.parse(simplifiedResult);
+                  } catch (jsonError) {
+                    console.log('Error parsing simplified response JSON, attempting to clean the response...');
+                    try {
+                      // Try to extract JSON if there's any extra text
+                      const jsonMatch = simplifiedResult.match(/\{[\s\S]*\}/);
+                      if (jsonMatch) {
+                        parsedResult = JSON.parse(jsonMatch[0]);
+                      } else {
+                        throw new Error('Could not extract valid JSON from response');
+                      }
+                    } catch (extractError) {
+                      console.error('Failed to extract valid JSON:', extractError);
+                      // Create a minimal valid result
+                      parsedResult = {
+                        drawing_scale: 'Not available',
+                        building_analysis: {
+                          description: 'Analysis could not be completed due to parsing errors.'
+                        }
+                      };
+                    }
                   }
+                  
+                  // Add a note about the simplified analysis
+                  parsedResult.note = 'This is a simplified analysis after previous attempts failed.';
+                  
+                  // Cache the result
+                  analysisCache.set(cacheKey, parsedResult);
+                  
+                  return parsedResult;
+                } catch (finalError) {
+                  console.error('Final simplified attempt failed:', finalError);
+                  // Return fallback data instead of throwing
+                  const defaultAnalysis = createDefaultArchitecturalAnalysis();
+                  const enhancedAnalysis = enhanceMockDataWithExtractedText(defaultAnalysis, extractedText);
+                  enhancedAnalysis.note = `Final simplified attempt failed: ${finalError.message}. This is enhanced fallback data.`;
+                  
+                  // Cache the result
+                  analysisCache.set(cacheKey, enhancedAnalysis);
+                  
+                  return enhancedAnalysis;
                 }
-                
-                // Add a note about the simplified analysis
-                parsedResult.note = 'This is a simplified analysis after previous attempts failed.';
-                
-                // Cache the result
-                analysisCache.set(cacheKey, parsedResult);
-                
-                return parsedResult;
               } catch (finalError) {
                 console.error('Final simplified attempt failed:', finalError);
+                // Return fallback data instead of throwing
+                const defaultAnalysis = createDefaultArchitecturalAnalysis();
+                const enhancedAnalysis = enhanceMockDataWithExtractedText(defaultAnalysis, extractedText);
+                enhancedAnalysis.note = `Final simplified attempt failed: ${finalError.message}. This is enhanced fallback data.`;
+                
+                // Cache the result
+                analysisCache.set(cacheKey, enhancedAnalysis);
+                
+                return enhancedAnalysis;
               }
             }
             
@@ -1078,7 +1099,7 @@ ${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parse
             
             return enhancedAnalysis;
           }
-          }
+      }
       } else {
           console.log('Extracted text is too short or empty, using default analysis');
           
