@@ -618,7 +618,7 @@ const upload = multer({
 });
 
 // Analyze drawing with OpenAI
-async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '', analysisPromptType = 'general') {
+async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '') {
   console.log(`Analyzing drawing with AI (type: ${fileType})...`);
   
   try {
@@ -759,10 +759,10 @@ async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '', 
             let systemPromptContent;
             
             if (CONFIG.ENABLE_ENHANCED_DESCRIPTIONS) {
-              console.log(`Using ${analysisPromptType} analysis prompt type`);
+
               
               // Select the appropriate prompt based on the analysis type
-              switch (analysisPromptType) {
+              // Always use detailed analysis prompt; analysisPromptType logic removed.
                 case 'material':
                   systemPromptContent = agentPrompts.getMaterialAnalysisPrompt();
                   break;
@@ -862,19 +862,20 @@ async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '', 
                     },
                     {
                       role: "user",
-                      content: `Analyze this architectural drawing in detail. Extract ALL measurements with precise values and units from the actual drawing content, not from templates. This is CRITICAL - use ONLY the measurements found in the drawing content.
+                      content: `Analyze this architectural drawing in detail. Extract ALL measurements with precise values and explicit units (e.g., meters, mm, cm, m², m³, units) from the actual drawing content, not from templates. This is CRITICAL - use ONLY the measurements found in the drawing content.
 
 IMPORTANT INSTRUCTIONS:
 1. Always include IDs from the database when referencing materials, tasks, stages, or rooms.
-2. Pay special attention to structural details, dimensions, and measurements in the drawing.
-3. For each room, provide exact dimensions (width, length, height) with units.
-4. If the drawing includes site extensions, provide precise extension dimensions.
-5. If the drawing includes structural calculations, extract and analyze them.
-6. Look for shell construction type, brick details, and basement information if present.
-7. Count the number of rooms on each floor and provide detailed analysis.
-8. Ensure all measurements are extracted directly from the drawing, never use generic values.
-9. Format your response as valid JSON with all required fields including IDs.
-10. If information is not available in the drawing, clearly indicate this rather than inventing data.
+2. For EVERY measurement (length, width, height, area, volume, etc.), always provide the value AND unit (e.g., "width": "2.5 meters").
+3. Pay special attention to structural details, dimensions, and measurements in the drawing.
+4. For each room, provide exact dimensions (width, length, height) with units.
+5. If the drawing includes site extensions, provide precise extension dimensions with units.
+6. If the drawing includes structural calculations, extract and analyze them.
+7. Look for shell construction type, brick details, and basement information if present.
+8. Count the number of rooms on each floor and provide detailed analysis.
+9. Ensure all measurements are extracted directly from the drawing, never use generic values.
+10. Format your response as valid JSON with all required fields including IDs and units.
+11. If information is not available in the drawing, clearly indicate this rather than inventing data.
 
 Pay special attention to:
 1. Site extension measurements and dimensions
@@ -1044,15 +1045,16 @@ ${apiDataContext}
 
 CRITICAL INSTRUCTIONS:
 1. Extract ONLY actual measurements from the drawing content.
-2. If you cannot determine a measurement, state "Not determined from drawing".
-3. Include IDs from the database when referencing materials, tasks, stages, or rooms.
-4. Pay special attention to structural details, dimensions, and measurements.
-5. For each room, provide exact dimensions (width, length, height) with units.
-6. Look for shell construction type, brick details, and basement information.
-7. Count the number of rooms on each floor and provide detailed analysis.
-8. Return a valid JSON object with all required fields including IDs.
-9. Do not include any markdown formatting in your response.
-10. If information is not available in the drawing, clearly indicate this rather than inventing data.`
+2. For EVERY measurement (length, width, height, area, volume, etc.), always provide the value AND unit (e.g., "width": "2.5 meters").
+3. If you cannot determine a measurement, state "Not determined from drawing".
+4. Include IDs from the database when referencing materials, tasks, stages, or rooms.
+5. Pay special attention to structural details, dimensions, and measurements.
+6. For each room, provide exact dimensions (width, length, height) with units.
+7. Look for shell construction type, brick details, and basement information.
+8. Count the number of rooms on each floor and provide detailed analysis.
+9. Return a valid JSON object with all required fields including IDs and units.
+10. Do not include any markdown formatting in your response.
+11. If information is not available in the drawing, clearly indicate this rather than inventing data.`
                       }
                     ],
                     temperature: 0.1,
@@ -2326,7 +2328,7 @@ const pythonBridge = require('./python-bridge');
  *               clientDescription:
  *                 type: string
  *                 description: Optional client description of the drawing
- *               analysisPromptType:
+
  *                 type: string
  *                 enum: [general, material, compliance, construction, sustainability, newbuild]
  *                 description: Type of analysis prompt to use (default is general)
@@ -2400,11 +2402,11 @@ app.post('/api/advanced-analysis', upload.single('drawing'), async (req, res) =>
         
         // Get client description and analysis prompt type
         const clientDescription = req.body.clientDescription || '';
-        const analysisPromptType = req.body.analysisPromptType || 'general';
+
         
         try {
           // Use standard OpenAI analysis with the specialized prompt as a fallback
-          const result = await analyzeDrawingWithAI(req.file.path, path.extname(req.file.originalname).toLowerCase().substring(1), clientDescription, analysisPromptType);
+          const result = await analyzeDrawingWithAI(req.file.path, path.extname(req.file.originalname).toLowerCase().substring(1), clientDescription);
           
           // Generate timestamp for output files
           const timestamp = Date.now();

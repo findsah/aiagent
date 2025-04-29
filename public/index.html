@@ -105,8 +105,7 @@
                         </div>
                         
                         <div class="mb-3">
-                            <label for="analysisPromptType" class="form-label">Analysis Type <span class="badge bg-success">NEW</span></label>
-                            <select class="form-select" id="analysisPromptType">
+
                                 <option value="general" selected>General Architectural Analysis</option>
                                 <option value="material">Material & Quantity Analysis</option>
                                 <option value="compliance">Compliance & Regulation Analysis</option>
@@ -385,7 +384,7 @@
                 
                 // Get client description and analysis type
                 const clientDescription = document.getElementById('clientDescription').value || 'Architectural drawing analysis';
-                const analysisPromptType = document.getElementById('analysisPromptType').value;
+
                 
                 // Determine if we're processing single or multiple files and set the appropriate endpoint
                 let endpoint;
@@ -404,7 +403,7 @@
                     formData.append('projectName', 'Suddeco Project');
                     formData.append('projectDescription', clientDescription);
                     formData.append('clientDescription', clientDescription);
-                    formData.append('analysisPromptType', analysisPromptType);
+
                 } else {
                     // Single file - use the process-drawing or advanced-analysis endpoint
                     endpoint = useAdvancedAnalysis ? '/api/advanced-analysis' : '/api/process-drawing';
@@ -412,7 +411,7 @@
                     // For single file, the field name must be 'drawing'
                     formData.append('drawing', selectedFiles[0]);
                     formData.append('clientDescription', clientDescription);
-                    formData.append('analysisPromptType', analysisPromptType);
+
                 }
                 
                 // Show loading indicator
