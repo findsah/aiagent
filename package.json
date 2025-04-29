@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "render-start": "node server.js",
+    "render-start": "node -e \"require('./suddeco-final-agent')\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

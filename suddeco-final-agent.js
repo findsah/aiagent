@@ -36,6 +36,8 @@ const CONFIG = {
   DEBUG_MODE: true,                   // Enable detailed logging
   MAX_RETRIES: 3,                     // Maximum retries for API calls
   CACHE_DURATION: 3600000,            // Cache duration in milliseconds (1 hour)
+  FORCE_OPENAI: true,                 // Always use OpenAI for analysis, even if fallback would be triggered
+  RETRY_ON_ERROR: true,               // Retry OpenAI calls with modified prompts if parsing fails
   API_ENDPOINTS: {
     MATERIALS: 'https://api.suddeco.com/syed/materials',
     TASKS: 'https://api.suddeco.com/syed/tasks',
@@ -836,17 +838,24 @@ async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '', 
             
             console.log(`Generated API data context with ${apiDataContext.length} characters`);
             
-            // Create a clean OpenAI instance for this specific call
-            const response = await openai.chat.completions.create({
-              model: "gpt-4-turbo",
-              messages: [
-                {
-                  role: "system",
-                  content: systemPromptContent
-                },
-                {
-                  role: "user",
-                  content: `Analyze this architectural drawing in detail. Extract ALL measurements with precise values and units from the actual drawing content, not from templates. This is CRITICAL - use ONLY the measurements found in the drawing content.
+            // Create a clean OpenAI instance for this specific call with retry logic
+            const callOpenAIWithRetry = async (retryCount = 0) => {
+              try {
+                console.log(`OpenAI analysis attempt ${retryCount + 1}/${CONFIG.MAX_RETRIES + 1}`);
+                
+                // Adjust temperature based on retry count
+                const temperature = retryCount > 0 ? 0.4 : 0.2;
+                
+                const response = await openai.chat.completions.create({
+                  model: "gpt-4-turbo",
+                  messages: [
+                    {
+                      role: "system",
+                      content: systemPromptContent
+                    },
+                    {
+                      role: "user",
+                      content: `Analyze this architectural drawing in detail. Extract ALL measurements with precise values and units from the actual drawing content, not from templates. This is CRITICAL - use ONLY the measurements found in the drawing content.
 
 Pay special attention to:
 1. Site extension measurements and dimensions
@@ -864,97 +873,145 @@ ${clientDescription ? `Client Description: ${clientDescription}
 Drawing Content:
 ${extractedText}
 
-IMPORTANT: DO NOT return generic or mock data. If you cannot find specific measurements or details in the drawing content, explicitly state that they are not provided in the drawing rather than making up values. For each measurement you provide, include a brief note about where in the drawing you found it.`
+IMPORTANT: DO NOT return generic or mock data. If you cannot find specific measurements or details in the drawing content, explicitly state that they are not provided in the drawing rather than making up values. For each measurement you provide, include a brief note about where in the drawing you found it.
+
+${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parsed as valid JSON. Please ensure your entire response is valid JSON. Do not include markdown code blocks, just return a clean JSON object.' : ''}`
+                    }
+                  ],
+                  temperature: temperature,
+                  max_tokens: 4000,
+                  response_format: { type: "json_object" }
+                });
+                
+                // Get the response content
+                const responseContent = response.choices[0].message.content;
+                console.log('Received analysis from OpenAI');
+                
+                // Log a sample of the response for debugging
+                console.log('Response sample:', responseContent.substring(0, 100) + '...');
+                
+                // Parse the JSON response
+                try {
+                  // Check if response is HTML instead of JSON
+                  if (typeof responseContent === 'string' && 
+                      (responseContent.trim().startsWith('<!DOCTYPE') || 
+                       responseContent.trim().startsWith('<html') || 
+                       responseContent.includes('<body') || 
+                       responseContent.includes('<head'))) {
+                    console.error('Received HTML instead of JSON from OpenAI');
+                    throw new Error('Invalid response format: HTML received');
+                  }
+                  
+                  // Clean up the JSON string if needed
+                  let jsonStr = responseContent;
+                  
+                  // Validate the JSON string before parsing
+                  if (!jsonStr || jsonStr.trim() === '') {
+                    console.error('Empty JSON string');
+                    throw new Error('Empty JSON response');
+                  }
+                  
+                  // Additional safety check for HTML content
+                  if (jsonStr.includes('<!DOCTYPE') || jsonStr.includes('<html')) {
+                    console.error('JSON string contains HTML');
+                    throw new Error('Invalid JSON: contains HTML');
+                  }
+                  
+                  // Parse the JSON
+                  const analysisResult = JSON.parse(jsonStr);
+                  
+                  // Verify we have a valid object
+                  if (!analysisResult || typeof analysisResult !== 'object') {
+                    console.error('Invalid analysis result:', analysisResult);
+                    throw new Error('Invalid analysis result structure');
+                  }
+                  
+                  // Replace any N/A values with realistic estimates
+                  const cleanedResult = replaceNAValues(analysisResult);
+                  return cleanedResult;
+                } catch (jsonError) {
+                  console.error('Error parsing JSON response:', jsonError);
+                  throw jsonError; // Propagate the error for retry logic
                 }
-              ],
-              temperature: 0.2,
-              max_tokens: 4000,
-              response_format: { type: "json_object" }
-            });
+              } catch (error) {
+                // If we've reached max retries or FORCE_OPENAI is false, throw the error
+                if (retryCount >= CONFIG.MAX_RETRIES || !CONFIG.RETRY_ON_ERROR) {
+                  throw error;
+                }
+                
+                console.log(`Retrying OpenAI analysis (attempt ${retryCount + 2}/${CONFIG.MAX_RETRIES + 1})`);
+                return await callOpenAIWithRetry(retryCount + 1);
+              }
+            };
             
-            // Get the response content
-            const responseContent = response.choices[0].message.content;
-            console.log('Received analysis from OpenAI');
-            
-            // Log a sample of the response for debugging
-            console.log('Response sample:', responseContent.substring(0, 100) + '...');
-            
-            // Parse the JSON response
             try {
-              // Check if response is HTML instead of JSON
-              if (typeof responseContent === 'string' && 
-                  (responseContent.trim().startsWith('<!DOCTYPE') || 
-                   responseContent.trim().startsWith('<html') || 
-                   responseContent.includes('<body') || 
-                   responseContent.includes('<head'))) {
-                console.error('Received HTML instead of JSON from OpenAI');
-                throw new Error('Invalid response format: HTML received');
-              }
-              
-              // Try to extract JSON from the response
-              let jsonMatch = responseContent.match(/```json\s*([\s\S]*?)\s*```/);
-              let jsonStr = jsonMatch ? jsonMatch[1] : responseContent;
-              
-              // Clean up the JSON string
-              jsonStr = jsonStr.replace(/^```json\s*/, '').replace(/\s*```$/, '');
-              
-              // Validate the JSON string before parsing
-              if (!jsonStr || jsonStr.trim() === '') {
-                console.error('Empty JSON string');
-                throw new Error('Empty JSON response');
-              }
-              
-              // Additional safety check for HTML content
-              if (jsonStr.includes('<!DOCTYPE') || jsonStr.includes('<html')) {
-                console.error('JSON string contains HTML');
-                throw new Error('Invalid JSON: contains HTML');
-              }
-              
-              // Parse the JSON
-              const analysisResult = JSON.parse(jsonStr);
-              
-              // Verify we have a valid object
-              if (!analysisResult || typeof analysisResult !== 'object') {
-                console.error('Invalid analysis result:', analysisResult);
-                throw new Error('Invalid analysis result structure');
-              }
-              
-              // Replace any N/A values with realistic estimates
-              const cleanedResult = replaceNAValues(analysisResult);
+              // Call OpenAI with retry logic
+              const analysisResult = await callOpenAIWithRetry();
               
               // Cache the result
-              analysisCache.set(cacheKey, cleanedResult);
+              analysisCache.set(cacheKey, analysisResult);
               
-              return cleanedResult;
-            } catch (jsonError) {
-              console.error('Error parsing JSON response:', jsonError);
-              console.log('Response content:', responseContent);
+              return analysisResult;
+            } catch (openaiError) {
+              console.error('All OpenAI analysis attempts failed:', openaiError);
               
-              // If parsing fails, return default analysis
+              // If FORCE_OPENAI is true, make one final simplified attempt
+              if (CONFIG.FORCE_OPENAI) {
+                console.log('Making final attempt with simplified prompt...');
+                
+                try {
+                  const simplifiedResponse = await openai.chat.completions.create({
+                    model: "gpt-4-turbo",
+                    messages: [
+                      {
+                        role: "system",
+                        content: "You are an architectural analysis assistant that returns only valid JSON."
+                      },
+                      {
+                        role: "user",
+                        content: `Analyze this architectural drawing and provide only the essential measurements and structural details.
+
+EXTRACTED TEXT FROM DRAWING:
+${extractedText.substring(0, 4000)}
+
+CRITICAL INSTRUCTIONS:
+1. Extract ONLY actual measurements from the drawing content.
+2. If you cannot determine a measurement, state "Not determined from drawing".
+3. Return a simple, valid JSON object with the key measurements and structural details.
+4. Do not include any markdown formatting in your response.`
+                      }
+                    ],
+                    temperature: 0.1,
+                    max_tokens: 2000,
+                    response_format: { type: "json_object" }
+                  });
+                  
+                  const simplifiedResult = simplifiedResponse.choices[0].message.content;
+                  const parsedResult = JSON.parse(simplifiedResult);
+                  
+                  // Add a note about the simplified analysis
+                  parsedResult.note = 'This is a simplified analysis after previous attempts failed.';
+                  
+                  // Cache the result
+                  analysisCache.set(cacheKey, parsedResult);
+                  
+                  return parsedResult;
+                } catch (finalError) {
+                  console.error('Final simplified attempt failed:', finalError);
+                }
+              }
+              
+              // Only use fallback if all OpenAI attempts fail
+              console.log('Using enhanced fallback data with extracted text');
               const defaultAnalysis = createDefaultArchitecturalAnalysis();
-              
-              // Enhance the default analysis with extracted text if possible
               const enhancedAnalysis = enhanceMockDataWithExtractedText(defaultAnalysis, extractedText);
+              enhancedAnalysis.note = `OpenAI analysis failed: ${openaiError.message}. This is enhanced fallback data.`;
               
               // Cache the result
               analysisCache.set(cacheKey, enhancedAnalysis);
               
               return enhancedAnalysis;
             }
-          } catch (openaiError) {
-            console.error('Error calling OpenAI API:', openaiError);
-            
-            // If OpenAI API call fails, return default analysis
-            const defaultAnalysis = createDefaultArchitecturalAnalysis();
-            
-            // Enhance the default analysis with extracted text if possible
-            const enhancedAnalysis = enhanceMockDataWithExtractedText(defaultAnalysis, extractedText);
-            
-            // Cache the result
-            analysisCache.set(cacheKey, enhancedAnalysis);
-            
-            return enhancedAnalysis;
-          }
         } else {
           console.log('Extracted text is too short or empty, using default analysis');
           
