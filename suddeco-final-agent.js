@@ -1074,17 +1074,6 @@ ${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parse
                   
                   return enhancedAnalysis;
                 }
-              } catch (finalError) {
-                console.error('Final simplified attempt failed:', finalError);
-                // Return fallback data instead of throwing
-                const defaultAnalysis = createDefaultArchitecturalAnalysis();
-                const enhancedAnalysis = enhanceMockDataWithExtractedText(defaultAnalysis, extractedText);
-                enhancedAnalysis.note = `Final simplified attempt failed: ${finalError.message}. This is enhanced fallback data.`;
-                
-                // Cache the result
-                analysisCache.set(cacheKey, enhancedAnalysis);
-                
-                return enhancedAnalysis;
               }
             }
             
