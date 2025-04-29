@@ -1,0 +1,1752 @@
+[
+  {
+    "id": 1,
+    "name": "kitchen",
+    "type": "room"
+  },
+  {
+    "id": 2,
+    "name": "4 bed apartment",
+    "type": "room"
+  },
+  {
+    "id": 3,
+    "name": "Bathroom",
+    "type": "room"
+  },
+  {
+    "id": 4,
+    "name": "Bathroom - Client supply sanitaryware",
+    "type": "room"
+  },
+  {
+    "id": 5,
+    "name": "Bedroom",
+    "type": "room"
+  },
+  {
+    "id": 6,
+    "name": "Boiler Cupboard",
+    "type": "room"
+  },
+  {
+    "id": 7,
+    "name": "Boot Room / Cloakroom",
+    "type": "room"
+  },
+  {
+    "id": 8,
+    "name": "Cafe Fit Out",
+    "type": "room"
+  },
+  {
+    "id": 9,
+    "name": "Communal area within flats",
+    "type": "room"
+  },
+  {
+    "id": 10,
+    "name": "Consulting Room",
+    "type": "room"
+  },
+  {
+    "id": 11,
+    "name": "Corridor / hall",
+    "type": "room"
+  },
+  {
+    "id": 12,
+    "name": "Den",
+    "type": "room"
+  },
+  {
+    "id": 13,
+    "name": "Dining Room",
+    "type": "room"
+  },
+  {
+    "id": 14,
+    "name": "Dressing Room / Walk in closet / Walk in Wardrobe",
+    "type": "room"
+  },
+  {
+    "id": 15,
+    "name": "Driveway / parking area",
+    "type": "room"
+  },
+  {
+    "id": 16,
+    "name": "Eaves Storage",
+    "type": "room"
+  },
+  {
+    "id": 17,
+    "name": "En-suite",
+    "type": "room"
+  },
+  {
+    "id": 18,
+    "name": "Entrance Hall",
+    "type": "room"
+  },
+  {
+    "id": 19,
+    "name": "External courtyard / Patio",
+    "type": "room"
+  },
+  {
+    "id": 20,
+    "name": "Garage",
+    "type": "room"
+  },
+  {
+    "id": 21,
+    "name": "Garden",
+    "type": "room"
+  },
+  {
+    "id": 22,
+    "name": "Gym",
+    "type": "room"
+  },
+  {
+    "id": 23,
+    "name": "Hot Water Cylinder Cupboard",
+    "type": "room"
+  },
+  {
+    "id": 24,
+    "name": "Swimming pool",
+    "type": "room"
+  },
+  {
+    "id": 25,
+    "name": "Kitchen",
+    "type": "room"
+  },
+  {
+    "id": 26,
+    "name": "Kitchen / Living / Dining",
+    "type": "room"
+  },
+  {
+    "id": 27,
+    "name": "Kitchenette",
+    "type": "room"
+  },
+  {
+    "id": 28,
+    "name": "Landing excl. stairs",
+    "type": "room"
+  },
+  {
+    "id": 29,
+    "name": "Landing incl. stairs",
+    "type": "room"
+  },
+  {
+    "id": 30,
+    "name": "Lightwell / courtyard",
+    "type": "room"
+  },
+  {
+    "id": 31,
+    "name": "Living room / family room ",
+    "type": "room"
+  },
+  {
+    "id": 32,
+    "name": "Lounge",
+    "type": "room"
+  },
+  {
+    "id": 33,
+    "name": "Media room / Cinema room",
+    "type": "room"
+  },
+  {
+    "id": 34,
+    "name": "Meeting room",
+    "type": "room"
+  },
+  {
+    "id": 35,
+    "name": "Office Reception / Waiting Area",
+    "type": "room"
+  },
+  {
+    "id": 36,
+    "name": "Pantry",
+    "type": "room"
+  },
+  {
+    "id": 37,
+    "name": "Passenger Lift",
+    "type": "room"
+  },
+  {
+    "id": 38,
+    "name": "Plant Room",
+    "type": "room"
+  },
+  {
+    "id": 39,
+    "name": "Play room / Games room",
+    "type": "room"
+  },
+  {
+    "id": 40,
+    "name": "Porch",
+    "type": "room"
+  },
+  {
+    "id": 41,
+    "name": "Pricing clarifications",
+    "type": "room"
+  },
+  {
+    "id": 42,
+    "name": "Raised Terrace",
+    "type": "room"
+  },
+  {
+    "id": 43,
+    "name": "Retail Unit",
+    "type": "room"
+  },
+  {
+    "id": 44,
+    "name": "Roof terrace",
+    "type": "room"
+  },
+  {
+    "id": 45,
+    "name": "Sauna",
+    "type": "room"
+  },
+  {
+    "id": 46,
+    "name": "Shop Fit Out",
+    "type": "room"
+  },
+  {
+    "id": 47,
+    "name": "Shower room",
+    "type": "room"
+  },
+  {
+    "id": 48,
+    "name": "Snug",
+    "type": "room"
+  },
+  {
+    "id": 49,
+    "name": "Storage Cupboard",
+    "type": "room"
+  },
+  {
+    "id": 50,
+    "name": "Storage Room",
+    "type": "room"
+  },
+  {
+    "id": 51,
+    "name": "Studio Apartment",
+    "type": "room"
+  },
+  {
+    "id": 52,
+    "name": "Studio room",
+    "type": "room"
+  },
+  {
+    "id": 53,
+    "name": "Study / Office",
+    "type": "room"
+  },
+  {
+    "id": 54,
+    "name": "Therapy Room",
+    "type": "room"
+  },
+  {
+    "id": 55,
+    "name": "Utility",
+    "type": "room"
+  },
+  {
+    "id": 56,
+    "name": "Void / 2nd level of double height space",
+    "type": "room"
+  },
+  {
+    "id": 57,
+    "name": "WC",
+    "type": "room"
+  },
+  {
+    "id": 58,
+    "name": "Wet room",
+    "type": "room"
+  },
+  {
+    "id": 59,
+    "name": "Basement",
+    "type": "shell"
+  },
+  {
+    "id": 60,
+    "name": "Bin store - blockwork",
+    "type": "shell"
+  },
+  {
+    "id": 61,
+    "name": "Brick Porch",
+    "type": "shell"
+  },
+  {
+    "id": 62,
+    "name": "Bungalow",
+    "type": "shell"
+  },
+  {
+    "id": 63,
+    "name": "Car port / carport",
+    "type": "shell"
+  },
+  {
+    "id": 64,
+    "name": "Coach house - pitched roof, brick/block + 1 bed flat",
+    "type": "shell"
+  },
+  {
+    "id": 65,
+    "name": "Coach house - pitched roof, timber/brick + 1 bed flat",
+    "type": "shell"
+  },
+  {
+    "id": 66,
+    "name": "Conservatory",
+    "type": "shell"
+  },
+  {
+    "id": 67,
+    "name": "Crown roof",
+    "type": "shell"
+  },
+  {
+    "id": 68,
+    "name": "Dormer window with flat roof",
+    "type": "shell"
+  },
+  {
+    "id": 69,
+    "name": "Dormer window with pitched roof",
+    "type": "shell"
+  },
+  {
+    "id": 70,
+    "name": "External Storage",
+    "type": "shell"
+  },
+  {
+    "id": 71,
+    "name": "First Floor Bay Window",
+    "type": "shell"
+  },
+  {
+    "id": 72,
+    "name": "Flat roof",
+    "type": "shell"
+  },
+  {
+    "id": 73,
+    "name": "Gable end wall - brick/block",
+    "type": "shell"
+  },
+  {
+    "id": 74,
+    "name": "Garage - flat roof",
+    "type": "shell"
+  },
+  {
+    "id": 75,
+    "name": "Garage - pitched roof",
+    "type": "shell"
+  },
+  {
+    "id": 76,
+    "name": "Garden store - blockwork",
+    "type": "shell"
+  },
+  {
+    "id": 77,
+    "name": "Garden Studio - brick/block wall construction",
+    "type": "shell"
+  },
+  {
+    "id": 78,
+    "name": "Garden Studio - timber",
+    "type": "shell"
+  },
+  {
+    "id": 79,
+    "name": "Ground Floor - block/block/render",
+    "type": "shell"
+  },
+  {
+    "id": 80,
+    "name": "Ground Floor - brick/block",
+    "type": "shell"
+  },
+  {
+    "id": 81,
+    "name": "Ground Floor - ICF block/block/render",
+    "type": "shell"
+  },
+  {
+    "id": 82,
+    "name": "Ground Floor - timber ext walls with timber cladding",
+    "type": "shell"
+  },
+  {
+    "id": 83,
+    "name": "Ground Floor - timber/block/render",
+    "type": "shell"
+  },
+  {
+    "id": 84,
+    "name": "Ground Floor - timber/brick",
+    "type": "shell"
+  },
+  {
+    "id": 85,
+    "name": "Ground Floor Bay Window with flat roof",
+    "type": "shell"
+  },
+  {
+    "id": 86,
+    "name": "Ground Floor Bay Window with pitched roof",
+    "type": "shell"
+  },
+  {
+    "id": 87,
+    "name": "Hip to GF. Gable Extension",
+    "type": "shell"
+  },
+  {
+    "id": 88,
+    "name": "Middle floor - block/block/render",
+    "type": "shell"
+  },
+  {
+    "id": 89,
+    "name": "Middle floor - brick/block",
+    "type": "shell"
+  },
+  {
+    "id": 90,
+    "name": "Middle floor - ICF block/block/render",
+    "type": "shell"
+  },
+  {
+    "id": 91,
+    "name": "Middle floor - timber ext walls with timber cladding",
+    "type": "shell"
+  },
+  {
+    "id": 92,
+    "name": "Middle floor - timber/block/render",
+    "type": "shell"
+  },
+  {
+    "id": 93,
+    "name": "Middle floor - timber/brick",
+    "type": "shell"
+  },
+  {
+    "id": 94,
+    "name": "Open Porch",
+    "type": "shell"
+  },
+  {
+    "id": 95,
+    "name": "Pillar supported balcony",
+    "type": "shell"
+  },
+  {
+    "id": 96,
+    "name": "Pitched roof",
+    "type": "shell"
+  },
+  {
+    "id": 97,
+    "name": "Pitched roof with 2nr gable end wall",
+    "type": "shell"
+  },
+  {
+    "id": 98,
+    "name": "Pitched roof with gable end wall",
+    "type": "shell"
+  },
+  {
+    "id": 99,
+    "name": "Pricing clarifications",
+    "type": "shell"
+  },
+  {
+    "id": 100,
+    "name": "Render Porch",
+    "type": "shell"
+  },
+  {
+    "id": 101,
+    "name": "Roof terrace",
+    "type": "shell"
+  },
+  {
+    "id": 102,
+    "name": "Stubbed attic / roof in the roof incl. pitched roof",
+    "type": "shell"
+  },
+  {
+    "id": 103,
+    "name": "Three storey house",
+    "type": "shell"
+  },
+  {
+    "id": 104,
+    "name": "Timber Porch",
+    "type": "shell"
+  },
+  {
+    "id": 105,
+    "name": "Top floor - brick/block",
+    "type": "shell"
+  },
+  {
+    "id": 106,
+    "name": "Top floor - timber ext walls with timber cladding",
+    "type": "shell"
+  },
+  {
+    "id": 107,
+    "name": "Top floor - timber/brick",
+    "type": "shell"
+  },
+  {
+    "id": 108,
+    "name": "Two storey house",
+    "type": "shell"
+  },
+  {
+    "id": 109,
+    "name": "4 bed apartment",
+    "type": "room"
+  },
+  {
+    "id": 110,
+    "name": "Bathroom",
+    "type": "room"
+  },
+  {
+    "id": 111,
+    "name": "Bathroom - Client supply sanitaryware",
+    "type": "room"
+  },
+  {
+    "id": 112,
+    "name": "Bedroom",
+    "type": "room"
+  },
+  {
+    "id": 113,
+    "name": "Boiler Cupboard",
+    "type": "room"
+  },
+  {
+    "id": 114,
+    "name": "Boot Room / Cloakroom",
+    "type": "room"
+  },
+  {
+    "id": 115,
+    "name": "Cafe Fit Out",
+    "type": "room"
+  },
+  {
+    "id": 116,
+    "name": "Communal area within flats",
+    "type": "room"
+  },
+  {
+    "id": 117,
+    "name": "Consulting Room",
+    "type": "room"
+  },
+  {
+    "id": 118,
+    "name": "Corridor / hall",
+    "type": "room"
+  },
+  {
+    "id": 119,
+    "name": "Den",
+    "type": "room"
+  },
+  {
+    "id": 120,
+    "name": "Dining Room",
+    "type": "room"
+  },
+  {
+    "id": 121,
+    "name": "Dressing Room / Walk in closet / Walk in Wardrobe",
+    "type": "room"
+  },
+  {
+    "id": 122,
+    "name": "Driveway / parking area",
+    "type": "room"
+  },
+  {
+    "id": 123,
+    "name": "Eaves Storage",
+    "type": "room"
+  },
+  {
+    "id": 124,
+    "name": "En-suite",
+    "type": "room"
+  },
+  {
+    "id": 125,
+    "name": "Entrance Hall",
+    "type": "room"
+  },
+  {
+    "id": 126,
+    "name": "External courtyard / Patio",
+    "type": "room"
+  },
+  {
+    "id": 127,
+    "name": "Garage",
+    "type": "room"
+  },
+  {
+    "id": 128,
+    "name": "Garage conversion (shell)",
+    "type": "room"
+  },
+  {
+    "id": 129,
+    "name": "Garden",
+    "type": "room"
+  },
+  {
+    "id": 130,
+    "name": "Gym",
+    "type": "room"
+  },
+  {
+    "id": 131,
+    "name": "Hot Water Cylinder Cupboard",
+    "type": "room"
+  },
+  {
+    "id": 132,
+    "name": "Swimming pool",
+    "type": "room"
+  },
+  {
+    "id": 133,
+    "name": "Kitchen",
+    "type": "room"
+  },
+  {
+    "id": 134,
+    "name": "Kitchen / Living / Dining",
+    "type": "room"
+  },
+  {
+    "id": 135,
+    "name": "Kitchenette",
+    "type": "room"
+  },
+  {
+    "id": 136,
+    "name": "Landing excl. stairs",
+    "type": "room"
+  },
+  {
+    "id": 137,
+    "name": "Landing incl. stairs",
+    "type": "room"
+  },
+  {
+    "id": 138,
+    "name": "Lightwell / courtyard",
+    "type": "room"
+  },
+  {
+    "id": 139,
+    "name": "Living room / family room",
+    "type": "room"
+  },
+  {
+    "id": 140,
+    "name": "Lounge",
+    "type": "room"
+  },
+  {
+    "id": 141,
+    "name": "Media room / Cinema room",
+    "type": "room"
+  },
+  {
+    "id": 142,
+    "name": "Meeting room",
+    "type": "room"
+  },
+  {
+    "id": 143,
+    "name": "Office Reception / Waiting Area",
+    "type": "room"
+  },
+  {
+    "id": 144,
+    "name": "Pantry",
+    "type": "room"
+  },
+  {
+    "id": 145,
+    "name": "Passenger Lift",
+    "type": "room"
+  },
+  {
+    "id": 146,
+    "name": "Plant Room",
+    "type": "room"
+  },
+  {
+    "id": 147,
+    "name": "Play room / Games room",
+    "type": "room"
+  },
+  {
+    "id": 148,
+    "name": "Porch",
+    "type": "room"
+  },
+  {
+    "id": 149,
+    "name": "Pricing clarifications",
+    "type": "room"
+  },
+  {
+    "id": 150,
+    "name": "Raised Terrace",
+    "type": "room"
+  },
+  {
+    "id": 151,
+    "name": "Retail Unit",
+    "type": "room"
+  },
+  {
+    "id": 152,
+    "name": "Roof terrace",
+    "type": "room"
+  },
+  {
+    "id": 153,
+    "name": "Sauna",
+    "type": "room"
+  },
+  {
+    "id": 154,
+    "name": "Shop Fit Out",
+    "type": "room"
+  },
+  {
+    "id": 155,
+    "name": "Shower room",
+    "type": "room"
+  },
+  {
+    "id": 156,
+    "name": "Snug",
+    "type": "room"
+  },
+  {
+    "id": 157,
+    "name": "Storage Cupboard",
+    "type": "room"
+  },
+  {
+    "id": 158,
+    "name": "Storage Room",
+    "type": "room"
+  },
+  {
+    "id": 159,
+    "name": "Studio Apartment",
+    "type": "room"
+  },
+  {
+    "id": 160,
+    "name": "Studio room",
+    "type": "room"
+  },
+  {
+    "id": 161,
+    "name": "Study / Office",
+    "type": "room"
+  },
+  {
+    "id": 162,
+    "name": "Therapy Room",
+    "type": "room"
+  },
+  {
+    "id": 163,
+    "name": "Utility",
+    "type": "room"
+  },
+  {
+    "id": 164,
+    "name": "Void / 2nd level of double height space",
+    "type": "room"
+  },
+  {
+    "id": 165,
+    "name": "WC",
+    "type": "room"
+  },
+  {
+    "id": 166,
+    "name": "Wet room",
+    "type": "room"
+  },
+  {
+    "id": 167,
+    "name": "Barn Conversion",
+    "type": "shell"
+  },
+  {
+    "id": 168,
+    "name": "Basement",
+    "type": "shell"
+  },
+  {
+    "id": 169,
+    "name": "Bin store - blockwork",
+    "type": "shell"
+  },
+  {
+    "id": 170,
+    "name": "Brick Porch",
+    "type": "shell"
+  },
+  {
+    "id": 171,
+    "name": "Car port / carport",
+    "type": "shell"
+  },
+  {
+    "id": 172,
+    "name": "Coach house - pitched roof, brick/block + 1 bed flat",
+    "type": "shell"
+  },
+  {
+    "id": 173,
+    "name": "Coach house - pitched roof, timber/brick + 1 bed flat",
+    "type": "shell"
+  },
+  {
+    "id": 174,
+    "name": "Conservatory",
+    "type": "shell"
+  },
+  {
+    "id": 175,
+    "name": "Crown roof",
+    "type": "shell"
+  },
+  {
+    "id": 176,
+    "name": "Dormer Loft",
+    "type": "shell"
+  },
+  {
+    "id": 177,
+    "name": "Dormer loft extension + loft conversion",
+    "type": "shell"
+  },
+  {
+    "id": 178,
+    "name": "Dormer window with flat roof",
+    "type": "shell"
+  },
+  {
+    "id": 179,
+    "name": "Dormer window with pitched roof",
+    "type": "shell"
+  },
+  {
+    "id": 180,
+    "name": "External Storage",
+    "type": "shell"
+  },
+  {
+    "id": 181,
+    "name": "First Floor Bay Window",
+    "type": "shell"
+  },
+  {
+    "id": 182,
+    "name": "First Floor Extension with flat roof",
+    "type": "shell"
+  },
+  {
+    "id": 183,
+    "name": "First Floor Extension with pitched roof",
+    "type": "shell"
+  },
+  {
+    "id": 184,
+    "name": "Flat roof",
+    "type": "shell"
+  },
+  {
+    "id": 185,
+    "name": "Form new structural opening / knock through wall",
+    "type": "shell"
+  },
+  {
+    "id": 186,
+    "name": "Four Storey Extension",
+    "type": "shell"
+  },
+  {
+    "id": 187,
+    "name": "Gable end wall - brick/block",
+    "type": "shell"
+  },
+  {
+    "id": 188,
+    "name": "Garage - flat roof",
+    "type": "shell"
+  },
+  {
+    "id": 189,
+    "name": "Garage - pitched roof",
+    "type": "shell"
+  },
+  {
+    "id": 190,
+    "name": "Garage conversion (shell)",
+    "type": "shell"
+  },
+  {
+    "id": 191,
+    "name": "Garden store - blockwork",
+    "type": "shell"
+  },
+  {
+    "id": 192,
+    "name": "Garden Studio - brick/block wall construction",
+    "type": "shell"
+  },
+  {
+    "id": 193,
+    "name": "Garden Studio - timber",
+    "type": "shell"
+  },
+  {
+    "id": 194,
+    "name": "GF Side Extension with flat roof, timber/brick ext walls",
+    "type": "shell"
+  },
+  {
+    "id": 195,
+    "name": "GF. Front Extension - flat roof, brick/block",
+    "type": "shell"
+  },
+  {
+    "id": 196,
+    "name": "GF. Front Extension - pitched roof, brick/block",
+    "type": "shell"
+  },
+  {
+    "id": 197,
+    "name": "GF. Infill Extension",
+    "type": "shell"
+  },
+  {
+    "id": 198,
+    "name": "GF. Rear Extension - crown roof, brick/block",
+    "type": "shell"
+  },
+  {
+    "id": 199,
+    "name": "GF. Rear Extension - flat roof, brick/block",
+    "type": "shell"
+  },
+  {
+    "id": 200,
+    "name": "GF. Rear Extension - pitched roof, brick/block",
+    "type": "shell"
+  },
+  {
+    "id": 201,
+    "name": "GF Rear Extension with flat roof, timber/brick ext walls",
+    "type": "shell"
+  },
+  {
+    "id": 202,
+    "name": "GF. Side Extension - flat roof, brick/block",
+    "type": "shell"
+  },
+  {
+    "id": 203,
+    "name": "GF. Side Extension - pitched roof, brick/block",
+    "type": "shell"
+  },
+  {
+    "id": 204,
+    "name": "Hip to Gable Loft",
+    "type": "shell"
+  },
+  {
+    "id": 205,
+    "name": "Loft conversion",
+    "type": "shell"
+  },
+  {
+    "id": 206,
+    "name": "Middle floor - brick/block",
+    "type": "shell"
+  },
+  {
+    "id": 207,
+    "name": "Middle floor - timber/brick",
+    "type": "shell"
+  },
+  {
+    "id": 208,
+    "name": "Open Porch",
+    "type": "shell"
+  },
+  {
+    "id": 209,
+    "name": "Pitched roof",
+    "type": "shell"
+  },
+  {
+    "id": 210,
+    "name": "Pricing clarifications",
+    "type": "shell"
+  },
+  {
+    "id": 211,
+    "name": "Render Porch",
+    "type": "shell"
+  },
+  {
+    "id": 212,
+    "name": "Roof terrace",
+    "type": "shell"
+  },
+  {
+    "id": 213,
+    "name": "Second Floor",
+    "type": "shell"
+  },
+  {
+    "id": 214,
+    "name": "Three Storey Extension",
+    "type": "shell"
+  },
+  {
+    "id": 215,
+    "name": "Timber Porch",
+    "type": "shell"
+  },
+  {
+    "id": 216,
+    "name": "Two Storey Extension, brick/block, pitched roof",
+    "type": "shell"
+  },
+  {
+    "id": 217,
+    "name": "Two Storey Infill Extension",
+    "type": "shell"
+  },
+  {
+    "id": 218,
+    "name": "Apartment; 4 bed",
+    "type": "room"
+  },
+  {
+    "id": 219,
+    "name": "Bathroom",
+    "type": "room"
+  },
+  {
+    "id": 220,
+    "name": "Bathroom - Client supply sanitaryware",
+    "type": "room"
+  },
+  {
+    "id": 221,
+    "name": "Bedroom",
+    "type": "room"
+  },
+  {
+    "id": 222,
+    "name": "Boiler Cupboard",
+    "type": "room"
+  },
+  {
+    "id": 223,
+    "name": "Boot Room / Cloakroom",
+    "type": "room"
+  },
+  {
+    "id": 224,
+    "name": "Bungalow; 4 bed",
+    "type": "room"
+  },
+  {
+    "id": 225,
+    "name": "Cafe Fit Out",
+    "type": "room"
+  },
+  {
+    "id": 226,
+    "name": "Communal area within flats",
+    "type": "room"
+  },
+  {
+    "id": 227,
+    "name": "Consulting Room",
+    "type": "room"
+  },
+  {
+    "id": 228,
+    "name": "Corridor / hall",
+    "type": "room"
+  },
+  {
+    "id": 229,
+    "name": "Den",
+    "type": "room"
+  },
+  {
+    "id": 230,
+    "name": "Dining Room",
+    "type": "room"
+  },
+  {
+    "id": 231,
+    "name": "Dressing Room / Walk in closet / Walk in Wardrobe",
+    "type": "room"
+  },
+  {
+    "id": 232,
+    "name": "Driveway / parking area",
+    "type": "room"
+  },
+  {
+    "id": 233,
+    "name": "Eaves Storage",
+    "type": "room"
+  },
+  {
+    "id": 234,
+    "name": "En-suite",
+    "type": "room"
+  },
+  {
+    "id": 235,
+    "name": "Entrance Hall",
+    "type": "room"
+  },
+  {
+    "id": 236,
+    "name": "External",
+    "type": "room"
+  },
+  {
+    "id": 237,
+    "name": "External courtyard",
+    "type": "room"
+  },
+  {
+    "id": 238,
+    "name": "Flat roof",
+    "type": "room"
+  },
+  {
+    "id": 239,
+    "name": "Form new structural opening / knock through wall",
+    "type": "room"
+  },
+  {
+    "id": 240,
+    "name": "Garage",
+    "type": "room"
+  },
+  {
+    "id": 241,
+    "name": "Garage conversion (shell)",
+    "type": "room"
+  },
+  {
+    "id": 242,
+    "name": "Garden",
+    "type": "room"
+  },
+  {
+    "id": 243,
+    "name": "Ground floor/intermediate floor chimney breast removal",
+    "type": "room"
+  },
+  {
+    "id": 244,
+    "name": "Gym",
+    "type": "room"
+  },
+  {
+    "id": 245,
+    "name": "Hairdressers",
+    "type": "room"
+  },
+  {
+    "id": 246,
+    "name": "Hot Water Cylinder Cupboard",
+    "type": "room"
+  },
+  {
+    "id": 247,
+    "name": "House to flat conversion",
+    "type": "room"
+  },
+  {
+    "id": 248,
+    "name": "Swimming pool",
+    "type": "room"
+  },
+  {
+    "id": 249,
+    "name": "Kitchen",
+    "type": "room"
+  },
+  {
+    "id": 250,
+    "name": "Kitchen / Living / Dining",
+    "type": "room"
+  },
+  {
+    "id": 251,
+    "name": "Kitchenette",
+    "type": "room"
+  },
+  {
+    "id": 252,
+    "name": "Landing excl. stairs",
+    "type": "room"
+  },
+  {
+    "id": 253,
+    "name": "Landing incl. new stairs",
+    "type": "room"
+  },
+  {
+    "id": 254,
+    "name": "Landing incl. stairs",
+    "type": "room"
+  },
+  {
+    "id": 255,
+    "name": "Lightwell / courtyard",
+    "type": "room"
+  },
+  {
+    "id": 256,
+    "name": "Living room / family room",
+    "type": "room"
+  },
+  {
+    "id": 257,
+    "name": "Lounge",
+    "type": "room"
+  },
+  {
+    "id": 258,
+    "name": "Media room / Cinema room",
+    "type": "room"
+  },
+  {
+    "id": 259,
+    "name": "Meeting room",
+    "type": "room"
+  },
+  {
+    "id": 260,
+    "name": "Office Reception / Waiting Area",
+    "type": "room"
+  },
+  {
+    "id": 261,
+    "name": "Office to flat conversion",
+    "type": "room"
+  },
+  {
+    "id": 262,
+    "name": "Pantry",
+    "type": "room"
+  },
+  {
+    "id": 263,
+    "name": "Pitched roof (replacement)",
+    "type": "room"
+  },
+  {
+    "id": 264,
+    "name": "Plant Room",
+    "type": "room"
+  },
+  {
+    "id": 265,
+    "name": "Play room / Games room",
+    "type": "room"
+  },
+  {
+    "id": 266,
+    "name": "Porch",
+    "type": "room"
+  },
+  {
+    "id": 267,
+    "name": "Pricing clarifications",
+    "type": "room"
+  },
+  {
+    "id": 268,
+    "name": "Raised Terrace",
+    "type": "room"
+  },
+  {
+    "id": 269,
+    "name": "Refurb prelims template",
+    "type": "room"
+  },
+  {
+    "id": 270,
+    "name": "Remodel floor plan",
+    "type": "room"
+  },
+  {
+    "id": 271,
+    "name": "Remodel prelims template",
+    "type": "room"
+  },
+  {
+    "id": 272,
+    "name": "Removal of chimney stack and repair of roof",
+    "type": "room"
+  },
+  {
+    "id": 273,
+    "name": "Retail Unit",
+    "type": "room"
+  },
+  {
+    "id": 274,
+    "name": "Roof terrace",
+    "type": "room"
+  },
+  {
+    "id": 275,
+    "name": "Sauna",
+    "type": "room"
+  },
+  {
+    "id": 276,
+    "name": "Shop Fit Out",
+    "type": "room"
+  },
+  {
+    "id": 277,
+    "name": "Shower room",
+    "type": "room"
+  },
+  {
+    "id": 278,
+    "name": "Snug",
+    "type": "room"
+  },
+  {
+    "id": 279,
+    "name": "Storage Cupboard",
+    "type": "room"
+  },
+  {
+    "id": 280,
+    "name": "Storage Room",
+    "type": "room"
+  },
+  {
+    "id": 281,
+    "name": "Studio Apartment",
+    "type": "room"
+  },
+  {
+    "id": 282,
+    "name": "Studio room",
+    "type": "room"
+  },
+  {
+    "id": 283,
+    "name": "Study / Office",
+    "type": "room"
+  },
+  {
+    "id": 284,
+    "name": "Therapy Room",
+    "type": "room"
+  },
+  {
+    "id": 285,
+    "name": "Utility",
+    "type": "room"
+  },
+  {
+    "id": 286,
+    "name": "Void / 2nd level of double height space",
+    "type": "room"
+  },
+  {
+    "id": 287,
+    "name": "WC",
+    "type": "room"
+  },
+  {
+    "id": 288,
+    "name": "Wet room",
+    "type": "room"
+  },
+  {
+    "id": 289,
+    "name": "Apartment; 4 bed",
+    "type": "room"
+  },
+  {
+    "id": 290,
+    "name": "Bathroom",
+    "type": "room"
+  },
+  {
+    "id": 291,
+    "name": "Bathroom - Client supply sanitaryware",
+    "type": "room"
+  },
+  {
+    "id": 292,
+    "name": "Bedroom",
+    "type": "room"
+  },
+  {
+    "id": 293,
+    "name": "Boot Room / Cloakroom",
+    "type": "room"
+  },
+  {
+    "id": 294,
+    "name": "Cafe Fit Out",
+    "type": "room"
+  },
+  {
+    "id": 295,
+    "name": "Commercial Office",
+    "type": "room"
+  },
+  {
+    "id": 296,
+    "name": "Communal area within flats",
+    "type": "room"
+  },
+  {
+    "id": 297,
+    "name": "Conservatory",
+    "type": "room"
+  },
+  {
+    "id": 298,
+    "name": "Consulting Room",
+    "type": "room"
+  },
+  {
+    "id": 299,
+    "name": "Corridor / hall",
+    "type": "room"
+  },
+  {
+    "id": 300,
+    "name": "Crown roof",
+    "type": "room"
+  },
+  {
+    "id": 301,
+    "name": "Den",
+    "type": "room"
+  },
+  {
+    "id": 302,
+    "name": "Dining Room",
+    "type": "room"
+  },
+  {
+    "id": 303,
+    "name": "Dressing Room / Walk in closet / Walk in Wardrobe",
+    "type": "room"
+  },
+  {
+    "id": 304,
+    "name": "Driveway / parking area",
+    "type": "room"
+  },
+  {
+    "id": 305,
+    "name": "Eaves Storage",
+    "type": "room"
+  },
+  {
+    "id": 306,
+    "name": "En-suite",
+    "type": "room"
+  },
+  {
+    "id": 307,
+    "name": "Entrance Hall",
+    "type": "room"
+  },
+  {
+    "id": 308,
+    "name": "External",
+    "type": "room"
+  },
+  {
+    "id": 309,
+    "name": "External courtyard",
+    "type": "room"
+  },
+  {
+    "id": 310,
+    "name": "Facade rennovation",
+    "type": "room"
+  },
+  {
+    "id": 311,
+    "name": "Flat roof",
+    "type": "room"
+  },
+  {
+    "id": 312,
+    "name": "Form new structural opening / knock through wall",
+    "type": "room"
+  },
+  {
+    "id": 313,
+    "name": "Garage / Out house",
+    "type": "room"
+  },
+  {
+    "id": 314,
+    "name": "Garden",
+    "type": "room"
+  },
+  {
+    "id": 315,
+    "name": "Gym",
+    "type": "room"
+  },
+  {
+    "id": 316,
+    "name": "Kitchen",
+    "type": "room"
+  },
+  {
+    "id": 317,
+    "name": "Kitchen / Living / Dining",
+    "type": "room"
+  },
+  {
+    "id": 318,
+    "name": "Kitchenette",
+    "type": "room"
+  },
+  {
+    "id": 319,
+    "name": "Landing excl. stairs",
+    "type": "room"
+  },
+  {
+    "id": 320,
+    "name": "Landing incl. stairs",
+    "type": "room"
+  },
+  {
+    "id": 321,
+    "name": "Lightwell / courtyard",
+    "type": "room"
+  },
+  {
+    "id": 322,
+    "name": "Living room / family room",
+    "type": "room"
+  },
+  {
+    "id": 323,
+    "name": "Lounge",
+    "type": "room"
+  },
+  {
+    "id": 324,
+    "name": "Media room / Cinema room",
+    "type": "room"
+  },
+  {
+    "id": 325,
+    "name": "Meeting room",
+    "type": "room"
+  },
+  {
+    "id": 326,
+    "name": "Office Reception / Waiting Area",
+    "type": "room"
+  },
+  {
+    "id": 327,
+    "name": "Pantry",
+    "type": "room"
+  },
+  {
+    "id": 328,
+    "name": "Pitched roof (replacement)",
+    "type": "room"
+  },
+  {
+    "id": 329,
+    "name": "Plant Room",
+    "type": "room"
+  },
+  {
+    "id": 330,
+    "name": "Play room / Games room",
+    "type": "room"
+  },
+  {
+    "id": 331,
+    "name": "Porch",
+    "type": "room"
+  },
+  {
+    "id": 332,
+    "name": "Preliminaries",
+    "type": "room"
+  },
+  {
+    "id": 333,
+    "name": "Pricing clarifications",
+    "type": "room"
+  },
+  {
+    "id": 334,
+    "name": "Raised Terrace",
+    "type": "room"
+  },
+  {
+    "id": 335,
+    "name": "Retail Unit",
+    "type": "room"
+  },
+  {
+    "id": 336,
+    "name": "Roof terrace",
+    "type": "room"
+  },
+  {
+    "id": 337,
+    "name": "Shop Fit Out",
+    "type": "room"
+  },
+  {
+    "id": 338,
+    "name": "Shower room",
+    "type": "room"
+  },
+  {
+    "id": 339,
+    "name": "Snug",
+    "type": "room"
+  },
+  {
+    "id": 340,
+    "name": "Storage Cupboard",
+    "type": "room"
+  },
+  {
+    "id": 341,
+    "name": "Storage Room",
+    "type": "room"
+  },
+  {
+    "id": 342,
+    "name": "Stubbed attic (room-in-the-roof') including pitched roof.",
+    "type": "room"
+  },
+  {
+    "id": 343,
+    "name": "Studio Apartment",
+    "type": "room"
+  },
+  {
+    "id": 344,
+    "name": "Studio room",
+    "type": "room"
+  },
+  {
+    "id": 345,
+    "name": "Study / Office",
+    "type": "room"
+  },
+  {
+    "id": 346,
+    "name": "Therapy Room",
+    "type": "room"
+  },
+  {
+    "id": 347,
+    "name": "Utility",
+    "type": "room"
+  },
+  {
+    "id": 348,
+    "name": "Void / 2nd level of double height space",
+    "type": "room"
+  },
+  {
+    "id": 349,
+    "name": "WC",
+    "type": "room"
+  },
+  {
+    "id": 350,
+    "name": "Wet room",
+    "type": "room"
+  }
+]

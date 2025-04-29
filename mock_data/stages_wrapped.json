@@ -1,0 +1,202 @@
+{"stages": [
+  {
+    "id": 1,
+    "stageId": 1,
+    "stage": "Ceiling structure and lining",
+    "priority": 1,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 2,
+    "stageId": 2,
+    "stage": "Floor structure and lining",
+    "priority": 2,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 3,
+    "stageId": 3,
+    "stage": "Roof structure and coverings",
+    "priority": 3,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 4,
+    "stageId": 4,
+    "stage": "Units, worktops and kitchen appliances",
+    "priority": 4,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 5,
+    "stageId": 5,
+    "stage": "Floor preparation and finishes",
+    "priority": 5,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 6,
+    "stageId": 6,
+    "stage": "Preliminaries",
+    "priority": 6,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 7,
+    "stageId": 7,
+    "stage": "Plumbed appliances",
+    "priority": 7,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 8,
+    "stageId": 8,
+    "stage": "Joinery",
+    "priority": 8,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 9,
+    "stageId": 9,
+    "stage": "Steel and structural supports",
+    "priority": 9,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 10,
+    "stageId": 10,
+    "stage": "Electric Wiring and fuseboards",
+    "priority": 10,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 11,
+    "stageId": 11,
+    "stage": "Foundations and substructure",
+    "priority": 11,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 12,
+    "stageId": 12,
+    "stage": "Wired appliances",
+    "priority": 12,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 13,
+    "stageId": 13,
+    "stage": "Fixtures and fittings",
+    "priority": 13,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 14,
+    "stageId": 14,
+    "stage": "Internal doors and frames",
+    "priority": 14,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 15,
+    "stageId": 15,
+    "stage": "Demolitions",
+    "priority": 15,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 16,
+    "stageId": 16,
+    "stage": "External windows and doors",
+    "priority": 16,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 17,
+    "stageId": 17,
+    "stage": "Pluming, Pipework and Drainage",
+    "priority": 17,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 18,
+    "stageId": 18,
+    "stage": "Decoration",
+    "priority": 18,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 19,
+    "stageId": 19,
+    "stage": "Wall preparation and finishes",
+    "priority": 19,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 20,
+    "stageId": 20,
+    "stage": "External wall structure and lining",
+    "priority": 20,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 21,
+    "stageId": 21,
+    "stage": "Heating and cooling",
+    "priority": 21,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 22,
+    "stageId": 22,
+    "stage": "External works",
+    "priority": 22,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 23,
+    "stageId": 23,
+    "stage": "Ceiling preparation and finishes",
+    "priority": 23,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 24,
+    "stageId": 24,
+    "stage": "Stairs, balustrades and lifts",
+    "priority": 24,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  },
+  {
+    "id": 25,
+    "stageId": 25,
+    "stage": "Internal wall structure and lining",
+    "priority": 25,
+    "createdAt": "2025-04-25T21:12:00Z",
+    "updatedAt": "2025-04-25T21:12:00Z"
+  }
+]}

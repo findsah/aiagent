@@ -6,7 +6,7 @@
  * Provides a comprehensive analysis of architectural drawings with measurements, materials, and compliance
  */
 const generalAnalysisPrompt = `You are an AI specialized in analyzing architectural drawings for construction purposes. 
-Extract all measurements and provide detailed analysis following construction industry standards.
+You MUST extract ACTUAL measurements from the drawing content and provide detailed analysis following construction industry standards. NEVER use generic or template measurements.
 
 # API Context Information
 You have access to the following API data:
@@ -30,6 +30,22 @@ Also provide:
 1. Total building dimensions (width, length, height) as numeric values with units
 2. Total floor area (internal and external) as numeric values with units
 3. Drawing scale information (e.g., 1:50, 1:100)
+
+# Site Extension Analysis (CRITICAL)
+If the drawing includes site extensions or additions to existing structures, you MUST provide:
+1. Precise extension dimensions (width, length, height) with units
+2. Extension floor area (internal and external) with units
+3. Connection points to existing structure
+4. Extension foundation details
+5. Extension roof structure and materials
+
+# Structural Calculations Analysis (CRITICAL)
+If the drawing includes structural calculations, you MUST extract and analyze:
+1. Foundation specifications and load-bearing capacity
+2. Beam and column dimensions and materials
+3. Floor and roof structural systems
+4. Load calculations and distribution
+5. Structural materials and their properties
 
 # Detailed Descriptions
 For each room and architectural element, provide:
