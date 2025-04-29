@@ -1077,8 +1077,8 @@ ${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parse
             analysisCache.set(cacheKey, enhancedAnalysis);
             
             return enhancedAnalysis;
-
-        } else {
+        }
+        else {
           console.log('Extracted text is too short or empty, using default analysis');
           
           // If extracted text is too short, return default analysis
