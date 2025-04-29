@@ -681,6 +681,8 @@ async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '') 
     } catch (apiError) {
       console.error('Error refreshing API data:', apiError.message);
       console.log('Using mock data instead');
+      
+      // Create fallback data
       globalApiData = {
         materials: { materials: createMockMaterials() },
         tasks: { tasks: createMockTasks() },
@@ -1012,81 +1014,69 @@ ${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parse
                         content: `Analyze this architectural drawing and provide only the essential measurements and structural details. Return ONLY a valid JSON object with no additional text.
 
 EXTRACTED TEXT FROM DRAWING:
-${extractedText.substring(0, 4000)}
+${extractedText}
 
-${apiDataContext}${ragContext}
+IMPORTANT: DO NOT return generic or mock data. If you cannot find specific measurements or details in the drawing content, explicitly state that they are not provided in the drawing rather than making up values. For each measurement you provide, include a brief note about where in the drawing you found it.
 
-CRITICAL INSTRUCTIONS:
-1. Extract ONLY actual measurements from the drawing content.
-2. For EVERY measurement (length, width, height, area, volume, etc.), always provide the value AND unit (e.g., "width": "2.5 meters").
-3. If you cannot determine a measurement, state "Not determined from drawing".
-4. Include IDs from the database when referencing materials, tasks, stages, or rooms.
-5. Pay special attention to structural details, dimensions, and measurements.
-6. For each room, provide exact dimensions (width, length, height) with units.
-7. Look for shell construction type, brick details, and basement information.
-8. Count the number of rooms on each floor and provide detailed analysis.
-9. Return a valid JSON object with all required fields including IDs and units.
-10. Do not include any markdown formatting in your response.
-11. If information is not available in the drawing, clearly indicate this rather than inventing data.`
-                      }
-                    ],
-                    temperature: 0.1,
-                    max_tokens: 2000,
-                    response_format: { type: "json_object" }
-                  });
-                  
-                  const simplifiedResult = simplifiedResponse.choices[0].message.content;
-                  
-                  // Safely parse the JSON result
-                  let parsedResult;
-                  try {
-                    // First try direct parsing
-                    parsedResult = JSON.parse(simplifiedResult);
-                  } catch (jsonError) {
-                    console.log('Error parsing simplified response JSON, attempting to clean the response...');
-                    try {
-                      // Try to extract JSON if there's any extra text
-                      const jsonMatch = simplifiedResult.match(/\{[\s\S]*\}/);
-                      if (jsonMatch) {
-                        parsedResult = JSON.parse(jsonMatch[0]);
-                      } else {
-                        throw new Error('Could not extract valid JSON from response');
-                      }
-                    } catch (extractError) {
-                      console.error('Failed to extract valid JSON:', extractError);
-                      // Create a minimal valid result
-                      parsedResult = {
-                        drawing_scale: 'Not available',
-                        building_analysis: {
-                          description: 'Analysis could not be completed due to parsing errors.'
-                        }
-                      };
+${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parsed as valid JSON. Please ensure your entire response is valid JSON. Do not include markdown code blocks, just return a clean JSON object.' : ''}`
                     }
+                  ],
+                  temperature: 0.1,
+                  max_tokens: 2000,
+                  response_format: { type: "json_object" }
+                });
+                  
+                const simplifiedResult = simplifiedResponse.choices[0].message.content;
+                
+                // Safely parse the JSON result
+                let parsedResult;
+                try {
+                  // First try direct parsing
+                  parsedResult = JSON.parse(simplifiedResult);
+                } catch (jsonError) {
+                  console.log('Error parsing simplified response JSON, attempting to clean the response...');
+                  try {
+                    // Try to extract JSON if there's any extra text
+                    const jsonMatch = simplifiedResult.match(/\{[\s\S]*\}/);
+                    if (jsonMatch) {
+                      parsedResult = JSON.parse(jsonMatch[0]);
+                    } else {
+                      throw new Error('Could not extract valid JSON from response');
+                    }
+                  } catch (extractError) {
+                    console.error('Failed to extract valid JSON:', extractError);
+                    // Create a minimal valid result
+                    parsedResult = {
+                      drawing_scale: 'Not available',
+                      building_analysis: {
+                        description: 'Analysis could not be completed due to parsing errors.'
+                      }
+                    };
                   }
-                  
-                  // Add a note about the simplified analysis
-                  parsedResult.note = 'This is a simplified analysis after previous attempts failed.';
-                  
-                  // Cache the result
-                  analysisCache.set(cacheKey, parsedResult);
-                  
-                  return parsedResult;
-                } catch (finalError) {
-                  console.error('Final simplified attempt failed:', finalError);
                 }
+                
+                // Add a note about the simplified analysis
+                parsedResult.note = 'This is a simplified analysis after previous attempts failed.';
+                
+                // Cache the result
+                analysisCache.set(cacheKey, parsedResult);
+                
+                return parsedResult;
+              } catch (finalError) {
+                console.error('Final simplified attempt failed:', finalError);
               }
-              
-              // Only use fallback if all OpenAI attempts fail
-              console.log('Using enhanced fallback data with extracted text');
-              const defaultAnalysis = createDefaultArchitecturalAnalysis();
-              const enhancedAnalysis = enhanceMockDataWithExtractedText(defaultAnalysis, extractedText);
-              enhancedAnalysis.note = `OpenAI analysis failed: ${openaiError.message}. This is enhanced fallback data.`;
-              
-              // Cache the result
-              analysisCache.set(cacheKey, enhancedAnalysis);
-              
-              return enhancedAnalysis;
             }
+            
+            // Only use fallback if all OpenAI attempts fail
+            console.log('Using enhanced fallback data with extracted text');
+            const defaultAnalysis = createDefaultArchitecturalAnalysis();
+            const enhancedAnalysis = enhanceMockDataWithExtractedText(defaultAnalysis, extractedText);
+            enhancedAnalysis.note = `OpenAI analysis failed: ${openaiError.message}. This is enhanced fallback data.`;
+            
+            // Cache the result
+            analysisCache.set(cacheKey, enhancedAnalysis);
+            
+            return enhancedAnalysis;
           } catch (openaiError) {
             console.error('Error analyzing with OpenAI:', openaiError);
             
@@ -1707,9 +1697,7 @@ app.post('/api/rag/process-drawing', upload.single('drawing'), async (req, res) 
       
       // Wait for RAG data to be initialized if it's still loading
       if (!globalRagData) {
-        console.log('Waiting for RAG data to be initialized...');
         globalRagData = await ragDataPromise;
-        console.log('RAG data initialized successfully');
       }
       
       // Generate RAG context string
@@ -2596,3 +2584,28 @@ app.listen(port, () => {
 
 // Export the Express app for use in server.js
 module.exports = app;
+
+const axios = require('axios');
+
+async function fetchDataAndExtractIds() {
+  try {
+    const materialsResponse = await axios.get(CONFIG.API_ENDPOINTS.MATERIALS);
+    const tasksResponse = await axios.get(CONFIG.API_ENDPOINTS.TASKS);
+    const stagesResponse = await axios.get(CONFIG.API_ENDPOINTS.STAGES);
+    const roomsResponse = await axios.get(CONFIG.API_ENDPOINTS.ROOMS);
+
+    const materialsIds = materialsResponse.data.materials.map(material => material.id);
+    const tasksIds = tasksResponse.data.tasks.map(task => task.id);
+    const stagesIds = stagesResponse.data.stages.map(stage => stage.id);
+    const roomsIds = roomsResponse.data.rooms.map(room => room.id);
+
+    console.log('Materials IDs:', materialsIds);
+    console.log('Tasks IDs:', tasksIds);
+    console.log('Stages IDs:', stagesIds);
+    console.log('Rooms IDs:', roomsIds);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
+
+fetchDataAndExtractIds();
