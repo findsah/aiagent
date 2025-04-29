@@ -854,15 +854,10 @@ IMPORTANT INSTRUCTIONS:
 9. Ensure all measurements are extracted directly from the drawing, never use generic values.
 10. Format your response as valid JSON with all required fields including IDs and units.
 11. If information is not available in the drawing, clearly indicate this rather than inventing data.
-
-Pay special attention to:
-1. Site extension measurements and dimensions
-2. Structural calculations and load-bearing specifications
-3. Foundation details and specifications
-4. Wall, floor, and roof construction details
-5. All room dimensions (width, length, height)
-
-You MUST use the Suddeco database materials, tasks, stages, and room types provided below when identifying elements in the drawing. Match materials and other elements to the closest items in the Suddeco database.
+12. If certain data is not directly available, provide the closest possible estimation and note the estimation.
+13. Use examples from the drawing to illustrate how measurements are derived.
+14. Prioritize extracting room names and dimensions as these are critical for compliance checks.
+15. If the drawing lacks specific data, suggest additional information that should be included in future submissions.
 
 ${clientDescription ? `Client Description: ${clientDescription}
 
@@ -1019,7 +1014,7 @@ ${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parse
 EXTRACTED TEXT FROM DRAWING:
 ${extractedText.substring(0, 4000)}
 
-${apiDataContext}
+${apiDataContext}${ragContext}
 
 CRITICAL INSTRUCTIONS:
 1. Extract ONLY actual measurements from the drawing content.
@@ -1593,25 +1588,16 @@ function createDefaultArchitecturalAnalysis() {
  *                 type: string
  *                 format: binary
  *                 description: The drawing file to process
+ *               clientDescription:
+ *                 type: string
+ *                 description: Client description to provide context for the analysis
  *     responses:
  *       200:
  *         description: Drawing processed successfully with RAG enhancement
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/AnalysisResult'
  *       400:
- *         description: No file uploaded
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
+ *         description: No file uploaded or invalid file
  *       500:
  *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  */
 /**
  * @swagger
@@ -2514,7 +2500,7 @@ app.post('/api/advanced-analysis', upload.single('drawing'), async (req, res) =>
       
       // Fetch all data in parallel
       const [materialsResponse, tasksResponse, stagesResponse, roomsResponse] = 
-        await Promise.allSettled([materialsPromise, tasksPromise, stagesPromise, roomsPromise]);
+        await Promise.allSettled([materialsPromise, tasksPromise, stagesPromise, roomsResponse]);
       
       // Process responses, falling back to mock data if any request fails
       apiData = {
