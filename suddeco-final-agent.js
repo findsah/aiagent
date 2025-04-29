@@ -657,7 +657,7 @@ async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '') 
       
       // Fetch all data in parallel
       const [materialsResponse, tasksResponse, stagesResponse, roomsResponse] = 
-        await Promise.allSettled([materialsPromise, tasksPromise, stagesPromise, roomsPromise]);
+        await Promise.allSettled([materialsPromise, tasksPromise, stagesPromise, roomsResponse]);
       
       // Process responses, falling back to mock data if any request fails
       const materials = materialsResponse.status === 'fulfilled' ? materialsResponse.value.data : { materials: createMockMaterials() };
@@ -1082,7 +1082,7 @@ ${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parse
             
             // If OpenAI analysis fails, use fallback
             const defaultAnalysis = createDefaultArchitecturalAnalysis();
-            const enhancedAnalysis = enhanceMockDataWithExtractedText(extractedText);
+            const enhancedAnalysis = enhanceMockDataWithExtractedText(defaultAnalysis, extractedText);
             enhancedAnalysis.note = `OpenAI analysis failed: ${openaiError.message}. This is enhanced fallback data.`;
             
             // Cache the result
