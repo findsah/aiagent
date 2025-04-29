@@ -983,35 +983,36 @@ ${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parse
               }
             };
             
-            try {
-              // Call OpenAI with retry logic
-              const analysisResult = await callOpenAIWithRetry();
-              
-              // Cache the result
-              analysisCache.set(cacheKey, analysisResult);
-              
-              return analysisResult;
-            } catch (openaiError) {
-              console.error('All OpenAI analysis attempts failed:', openaiError);
-              
-              // If FORCE_OPENAI is true, make one final simplified attempt
-              if (CONFIG.FORCE_OPENAI) {
-                console.log('Making final attempt with simplified prompt...');
+            if (extractedText && extractedText.length > 20) {
+              try {
+                // Call OpenAI with retry logic
+                const analysisResult = await callOpenAIWithRetry();
                 
-                try {
-                  // Use a smaller model for the simplified attempt to avoid rate limits
-                  const simplifiedResponse = await openai.chat.completions.create({
-                    model: "gpt-3.5-turbo", // Use a smaller model that has higher rate limits
-                    temperature: 0.2, // Lower temperature for more consistent output
-                    response_format: { type: "json_object" }, // Force JSON output
-                    messages: [
-                      {
-                        role: "system",
-                        content: "You are an architectural analysis assistant that returns only valid JSON. Your response MUST be a valid JSON object with no additional text or explanation."
-                      },
-                      {
-                        role: "user",
-                        content: `Analyze this architectural drawing and provide only the essential measurements and structural details. Return ONLY a valid JSON object with no additional text.
+                // Cache the result
+                analysisCache.set(cacheKey, analysisResult);
+                
+                return analysisResult;
+              } catch (openaiError) {
+                console.error('All OpenAI analysis attempts failed:', openaiError);
+                
+                // If FORCE_OPENAI is true, make one final simplified attempt
+                if (CONFIG.FORCE_OPENAI) {
+                  console.log('Making final attempt with simplified prompt...');
+                  
+                  try {
+                    // Use a smaller model for the simplified attempt to avoid rate limits
+                    const simplifiedResponse = await openai.chat.completions.create({
+                      model: "gpt-3.5-turbo", // Use a smaller model that has higher rate limits
+                      temperature: 0.2, // Lower temperature for more consistent output
+                      response_format: { type: "json_object" }, // Force JSON output
+                      messages: [
+                        {
+                          role: "system",
+                          content: "You are an architectural analysis assistant that returns only valid JSON. Your response MUST be a valid JSON object with no additional text or explanation."
+                        },
+                        {
+                          role: "user",
+                          content: `Analyze this architectural drawing and provide only the essential measurements and structural details. Return ONLY a valid JSON object with no additional text.
 
 EXTRACTED TEXT FROM DRAWING:
 ${extractedText}
@@ -1019,76 +1020,75 @@ ${extractedText}
 IMPORTANT: DO NOT return generic or mock data. If you cannot find specific measurements or details in the drawing content, explicitly state that they are not provided in the drawing rather than making up values. For each measurement you provide, include a brief note about where in the drawing you found it.
 
 ${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parsed as valid JSON. Please ensure your entire response is valid JSON. Do not include markdown code blocks, just return a clean JSON object.' : ''}`
-                      }
-                    ],
-                    temperature: 0.1,
-                    max_tokens: 2000,
-                    response_format: { type: "json_object" }
-                  });
-                  
-                  const simplifiedResult = simplifiedResponse.choices[0].message.content;
-                  
-                  // Safely parse the JSON result
-                  let parsedResult;
-                  try {
-                    // First try direct parsing
-                    parsedResult = JSON.parse(simplifiedResult);
-                  } catch (jsonError) {
-                    console.log('Error parsing simplified response JSON, attempting to clean the response...');
-                    try {
-                      // Try to extract JSON if there's any extra text
-                      const jsonMatch = simplifiedResult.match(/\{[\s\S]*\}/);
-                      if (jsonMatch) {
-                        parsedResult = JSON.parse(jsonMatch[0]);
-                      } else {
-                        throw new Error('Could not extract valid JSON from response');
-                      }
-                    } catch (extractError) {
-                      console.error('Failed to extract valid JSON:', extractError);
-                      // Create a minimal valid result
-                      parsedResult = {
-                        drawing_scale: 'Not available',
-                        building_analysis: {
-                          description: 'Analysis could not be completed due to parsing errors.'
                         }
-                      };
+                      ],
+                      temperature: 0.1,
+                      max_tokens: 2000,
+                      response_format: { type: "json_object" }
+                    });
+                    
+                    const simplifiedResult = simplifiedResponse.choices[0].message.content;
+                    
+                    // Safely parse the JSON result
+                    let parsedResult;
+                    try {
+                      // First try direct parsing
+                      parsedResult = JSON.parse(simplifiedResult);
+                    } catch (jsonError) {
+                      console.log('Error parsing simplified response JSON, attempting to clean the response...');
+                      try {
+                        // Try to extract JSON if there's any extra text
+                        const jsonMatch = simplifiedResult.match(/\{[\s\S]*\}/);
+                        if (jsonMatch) {
+                          parsedResult = JSON.parse(jsonMatch[0]);
+                        } else {
+                          throw new Error('Could not extract valid JSON from response');
+                        }
+                      } catch (extractError) {
+                        console.error('Failed to extract valid JSON:', extractError);
+                        // Create a minimal valid result
+                        parsedResult = {
+                          drawing_scale: 'Not available',
+                          building_analysis: {
+                            description: 'Analysis could not be completed due to parsing errors.'
+                          }
+                        };
+                      }
                     }
+                    
+                    // Add a note about the simplified analysis
+                    parsedResult.note = 'This is a simplified analysis after previous attempts failed.';
+                    
+                    // Cache the result
+                    analysisCache.set(cacheKey, parsedResult);
+                    
+                    return parsedResult;
+                  } catch (finalError) {
+                    console.error('Final simplified attempt failed:', finalError);
+                    // Return fallback data instead of throwing
+                    const defaultAnalysis = createDefaultArchitecturalAnalysis();
+                    const enhancedAnalysis = enhanceMockDataWithExtractedText(defaultAnalysis, extractedText);
+                    enhancedAnalysis.note = `Final simplified attempt failed: ${finalError.message}. This is enhanced fallback data.`;
+                    
+                    // Cache the result
+                    analysisCache.set(cacheKey, enhancedAnalysis);
+                    
+                    return enhancedAnalysis;
                   }
-                  
-                  // Add a note about the simplified analysis
-                  parsedResult.note = 'This is a simplified analysis after previous attempts failed.';
-                  
-                  // Cache the result
-                  analysisCache.set(cacheKey, parsedResult);
-                  
-                  return parsedResult;
-                } catch (finalError) {
-                  console.error('Final simplified attempt failed:', finalError);
-                  // Return fallback data instead of throwing
-                  const defaultAnalysis = createDefaultArchitecturalAnalysis();
-                  const enhancedAnalysis = enhanceMockDataWithExtractedText(defaultAnalysis, extractedText);
-                  enhancedAnalysis.note = `Final simplified attempt failed: ${finalError.message}. This is enhanced fallback data.`;
-                  
-                  // Cache the result
-                  analysisCache.set(cacheKey, enhancedAnalysis);
-                  
-                  return enhancedAnalysis;
                 }
+                
+                // Only use fallback if all OpenAI attempts fail
+                console.log('Using enhanced fallback data with extracted text');
+                const defaultAnalysis = createDefaultArchitecturalAnalysis();
+                const enhancedAnalysis = enhanceMockDataWithExtractedText(defaultAnalysis, extractedText);
+                enhancedAnalysis.note = `OpenAI analysis failed: ${openaiError.message}. This is enhanced fallback data.`;
+                
+                // Cache the result
+                analysisCache.set(cacheKey, enhancedAnalysis);
+                
+                return enhancedAnalysis;
               }
-            }
-            
-            // Only use fallback if all OpenAI attempts fail
-            console.log('Using enhanced fallback data with extracted text');
-            const defaultAnalysis = createDefaultArchitecturalAnalysis();
-            const enhancedAnalysis = enhanceMockDataWithExtractedText(defaultAnalysis, extractedText);
-            enhancedAnalysis.note = `OpenAI analysis failed: ${openaiError.message}. This is enhanced fallback data.`;
-            
-            // Cache the result
-            analysisCache.set(cacheKey, enhancedAnalysis);
-            
-            return enhancedAnalysis;
-          }
-      } else {
+            } else {
           console.log('Extracted text is too short or empty, using default analysis');
           
           // If extracted text is too short, return default analysis
