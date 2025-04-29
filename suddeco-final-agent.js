@@ -794,8 +794,9 @@ async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '', 
               // Add materials context
               if (globalApiData.materials?.materials?.length > 0) {
                 apiDataContext += '\n\n## AVAILABLE MATERIALS FROM SUDDECO DATABASE:\n';
+                apiDataContext += 'IMPORTANT: Always include the material ID when referencing materials in your analysis.\n';
                 globalApiData.materials.materials.slice(0, 15).forEach(material => {
-                  apiDataContext += `- ${material.name}: ${material.description || 'No description'} (Unit: ${material.unit || 'N/A'})\n`;
+                  apiDataContext += `- ID: ${material.id} | ${material.name}: ${material.description || 'No description'} (Unit: ${material.unit || 'N/A'}, Category: ${material.category || 'N/A'})\n`;
                 });
                 if (globalApiData.materials.materials.length > 15) {
                   apiDataContext += `- Plus ${globalApiData.materials.materials.length - 15} more materials...\n`;
@@ -805,8 +806,9 @@ async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '', 
               // Add tasks context
               if (globalApiData.tasks?.tasks?.length > 0) {
                 apiDataContext += '\n\n## AVAILABLE TASKS FROM SUDDECO DATABASE:\n';
+                apiDataContext += 'IMPORTANT: Always include the task ID when referencing tasks in your analysis.\n';
                 globalApiData.tasks.tasks.slice(0, 10).forEach(task => {
-                  apiDataContext += `- ${task.name}: ${task.description || 'No description'} (Duration: ${task.duration || 'N/A'} days)\n`;
+                  apiDataContext += `- ID: ${task.id} | ${task.name}: ${task.description || 'No description'} (Duration: ${task.duration || 'N/A'} days, Predecessors: ${task.predecessors ? task.predecessors.join(', ') : 'None'})\n`;
                 });
                 if (globalApiData.tasks.tasks.length > 10) {
                   apiDataContext += `- Plus ${globalApiData.tasks.tasks.length - 10} more tasks...\n`;
@@ -816,8 +818,9 @@ async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '', 
               // Add stages context
               if (globalApiData.stages?.stages?.length > 0) {
                 apiDataContext += '\n\n## AVAILABLE STAGES FROM SUDDECO DATABASE:\n';
+                apiDataContext += 'IMPORTANT: Always include the stage ID when referencing stages in your analysis.\n';
                 globalApiData.stages.stages.slice(0, 8).forEach(stage => {
-                  apiDataContext += `- ${stage.name}: ${stage.description || 'No description'}\n`;
+                  apiDataContext += `- ID: ${stage.id} | ${stage.name}: ${stage.description || 'No description'} (Tasks: ${stage.tasks ? stage.tasks.join(', ') : 'None'})\n`;
                 });
                 if (globalApiData.stages.stages.length > 8) {
                   apiDataContext += `- Plus ${globalApiData.stages.stages.length - 8} more stages...\n`;
@@ -827,11 +830,12 @@ async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '', 
               // Add rooms context
               if (globalApiData.rooms?.rooms?.length > 0) {
                 apiDataContext += '\n\n## AVAILABLE ROOM TYPES FROM SUDDECO DATABASE:\n';
+                apiDataContext += 'IMPORTANT: Always include the room ID when referencing rooms in your analysis.\n';
                 globalApiData.rooms.rooms.slice(0, 10).forEach(room => {
                   const dimensions = room.typical_dimensions ? 
                     `(Typical dimensions: ${room.typical_dimensions.length || 'N/A'} x ${room.typical_dimensions.width || 'N/A'} x ${room.typical_dimensions.height || 'N/A'})` : 
                     '';
-                  apiDataContext += `- ${room.name}: ${room.description || 'No description'} ${dimensions}\n`;
+                  apiDataContext += `- ID: ${room.id} | ${room.name}: ${room.description || 'No description'} ${dimensions}\n`;
                 });
                 if (globalApiData.rooms.rooms.length > 10) {
                   apiDataContext += `- Plus ${globalApiData.rooms.rooms.length - 10} more room types...\n`;
@@ -859,6 +863,18 @@ async function analyzeDrawingWithAI(filePath, fileType, clientDescription = '', 
                     {
                       role: "user",
                       content: `Analyze this architectural drawing in detail. Extract ALL measurements with precise values and units from the actual drawing content, not from templates. This is CRITICAL - use ONLY the measurements found in the drawing content.
+
+IMPORTANT INSTRUCTIONS:
+1. Always include IDs from the database when referencing materials, tasks, stages, or rooms.
+2. Pay special attention to structural details, dimensions, and measurements in the drawing.
+3. For each room, provide exact dimensions (width, length, height) with units.
+4. If the drawing includes site extensions, provide precise extension dimensions.
+5. If the drawing includes structural calculations, extract and analyze them.
+6. Look for shell construction type, brick details, and basement information if present.
+7. Count the number of rooms on each floor and provide detailed analysis.
+8. Ensure all measurements are extracted directly from the drawing, never use generic values.
+9. Format your response as valid JSON with all required fields including IDs.
+10. If information is not available in the drawing, clearly indicate this rather than inventing data.
 
 Pay special attention to:
 1. Site extension measurements and dimensions
@@ -1024,11 +1040,19 @@ ${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parse
 EXTRACTED TEXT FROM DRAWING:
 ${extractedText.substring(0, 4000)}
 
+${apiDataContext}
+
 CRITICAL INSTRUCTIONS:
 1. Extract ONLY actual measurements from the drawing content.
 2. If you cannot determine a measurement, state "Not determined from drawing".
-3. Return a simple, valid JSON object with the key measurements and structural details.
-4. Do not include any markdown formatting in your response.`
+3. Include IDs from the database when referencing materials, tasks, stages, or rooms.
+4. Pay special attention to structural details, dimensions, and measurements.
+5. For each room, provide exact dimensions (width, length, height) with units.
+6. Look for shell construction type, brick details, and basement information.
+7. Count the number of rooms on each floor and provide detailed analysis.
+8. Return a valid JSON object with all required fields including IDs.
+9. Do not include any markdown formatting in your response.
+10. If information is not available in the drawing, clearly indicate this rather than inventing data.`
                       }
                     ],
                     temperature: 0.1,
