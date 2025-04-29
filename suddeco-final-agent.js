@@ -3399,19 +3399,6 @@ function extractValueAndUnit(material, quantity) {
   return { value: quantity, unit: 'units' };
 }
 
-// Export functions as needed for Node.js
-module.exports = {
-  // Add all functions you want to export here
-  combineConstructionTasks,
-  replaceNATaskValues,
-  generateExcelReport,
-  generateCombinedExcelReport,
-  formatCategoryName,
-  formatMaterialName,
-  extractValueAndUnit
-};
-
-
 /**
  * Process multiple drawings in parallel
  * @param {Array} filePaths - Array of file paths
@@ -4531,4 +4518,22 @@ async function fetchDataAndExtractIds() {
 }
 
 fetchDataAndExtractIds();
+
+// Comprehensive exports for the entire module
+module.exports = {
+  app,                          // Express app for server.js
+  analyzeDrawing,               // Main drawing analysis function
+  processDrawing,               // Process drawing function
+  generateMaterialsQuantities,  // Materials calculation
+  generateConstructionTasks,    // Construction tasks generation
+  createAdditionalPhases,       // Additional phases creation
+  combineConstructionTasks,     // Combine tasks function
+  replaceNATaskValues,         // Replace N/A values
+  generateExcelReport,         // Excel report generation
+  generateCombinedExcelReport, // Combined report generation
+  formatCategoryName,          // Format category names
+  formatMaterialName,          // Format material names
+  extractValueAndUnit,         // Extract values and units
+  fetchDataAndExtractIds       // Fetch data function
+};
 
