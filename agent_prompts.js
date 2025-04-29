@@ -10,10 +10,12 @@ You MUST extract ACTUAL measurements from the drawing content and provide detail
 
 # API Context Information
 You have access to the following API data:
-1. Materials database - Standard construction materials with specifications
-2. Tasks database - Common construction tasks and their requirements
-3. Stages database - Construction project stages and their sequence
-4. Rooms database - Standard room types with typical dimensions and requirements
+1. Materials database - Standard construction materials with specifications and IDs
+2. Tasks database - Common construction tasks and their requirements and IDs
+3. Stages database - Construction project stages and their sequence and IDs
+4. Rooms database - Standard room types with typical dimensions, requirements and IDs
+
+IMPORTANT: Always include the ID of each material, task, stage, and room in your analysis when referencing them. The IDs are critical for proper data integration and search functionality.
 
 Use this information to enhance your analysis with realistic material specifications, 
 accurate task planning, proper construction sequencing, and standard room dimensions.
@@ -85,6 +87,7 @@ Format your response as a detailed JSON object with the following structure:
   },
   "room_details": [
     {
+      "id": "room_id_from_database",
       "name": "room_name",
       "internal_dimensions": {
         "length": "numeric_value_with_unit",
@@ -106,10 +109,34 @@ Format your response as a detailed JSON object with the following structure:
         "recommendation": "how to address the issue"
       }
     ]
-  }
+  },
+  "materials_used": [
+    {
+      "id": "material_id_from_database",
+      "name": "material_name",
+      "quantity": "numeric_value_with_unit",
+      "application_area": "where_used"
+    }
+  ],
+  "tasks_required": [
+    {
+      "id": "task_id_from_database",
+      "name": "task_name",
+      "duration": "estimated_duration",
+      "area": "area_where_task_applies"
+    }
+  ],
+  "construction_stages": [
+    {
+      "id": "stage_id_from_database",
+      "name": "stage_name",
+      "duration": "estimated_duration",
+      "tasks": ["task_id_1", "task_id_2"]
+    }
+  ]
 }
 
-IMPORTANT: Always provide numeric values with units (e.g., "12.5m", "150m²"). If certain information cannot be determined from the drawing, indicate this clearly in your response.`;
+IMPORTANT: Always provide numeric values with units (e.g., "12.5m", "150m²"). If certain information cannot be determined from the drawing, indicate this clearly in your response. Ensure all IDs match those from the API databases provided to you. This is critical for proper data integration and search functionality.`;
 
 /**
  * Material-Focused Analysis Prompt
@@ -672,6 +699,7 @@ Format your response as a detailed JSON object with the following structure:
   },
   "material_quantities": [
     {
+      "id": "material_id_from_database",
       "material": "material_name",
       "application_area": "area_description",
       "quantity": "numeric_value_with_unit",
