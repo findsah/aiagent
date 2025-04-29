@@ -1,0 +1,98 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "name": "62 Marmora Road",
+      "description": "Residential renovation project",
+      "status": "on_going",
+      "location": null,
+      "address": "62 Marmora Road",
+      "zipCode": "",
+      "city": "London",
+      "state": "",
+      "region": "",
+      "projectType": null,
+      "specification": "",
+      "totalCost": "0",
+      "startDate": "2025-04-25T18:26:09.792Z",
+      "endDate": "2025-05-25T18:26:09.799Z",
+      "duration": null,
+      "lat": null,
+      "lng": null,
+      "averageWorkers": 0,
+      "createdAt": "2025-04-25T18:26:09.799Z",
+      "updatedAt": "2025-04-25T18:26:09.799Z",
+      "createdFrom": "system@suddeco.com",
+      "createdFor": "client@example.com",
+      "updatedFrom": null,
+      "labourMargin": 0,
+      "materialMargin": 0
+    },
+    {
+      "id": 2,
+      "suddecoId": "suddeco_proj_2_m9xa9cha_bx4e",
+      "name": "62 Marmora Road Renovation",
+      "description": "Comprehensive renovation project for 62 Marmora Road",
+      "status": "on_going",
+      "location": null,
+      "address": "62 Marmora Road",
+      "zipCode": "",
+      "city": "London",
+      "state": "",
+      "region": "",
+      "projectType": null,
+      "specification": "",
+      "totalCost": "0",
+      "startDate": "2025-04-25T21:07:47.182Z",
+      "endDate": "2025-05-25T21:07:47.182Z",
+      "duration": null,
+      "lat": null,
+      "lng": null,
+      "averageWorkers": 0,
+      "createdAt": "2025-04-25T21:07:47.182Z",
+      "updatedAt": "2025-04-25T21:07:47.182Z",
+      "createdFrom": "system@suddeco.com",
+      "createdFor": "client@example.com",
+      "updatedFrom": null,
+      "labourMargin": 0,
+      "materialMargin": 0
+    }
+  ],
+  "elements": [
+    {
+      "elementId": 1,
+      "suddecoId": "suddeco_elem_1_m9xabsfn_ejbf",
+      "projectId": 2,
+      "roomId": 1,
+      "stageId": 3,
+      "taskId": 42,
+      "materialId": 105,
+      "qty": 24.8,
+      "margin": 10,
+      "materialCost": 1250,
+      "labourCost": 850,
+      "createdAt": "2025-04-25T21:09:41.171Z",
+      "updatedAt": "2025-04-25T21:09:41.171Z"
+    }
+  ],
+  "projectRooms": [
+    {
+      "id": 1,
+      "suddecoId": "suddeco_room_1_m9xabdct_lutj",
+      "name": "Living Room",
+      "description": "Main living area on ground floor",
+      "width": 5.2,
+      "height": 4.8,
+      "deepth": 2.8,
+      "projectId": 2,
+      "roomId": 1,
+      "createdAt": "2025-04-25T21:09:21.629Z",
+      "updatedAt": "2025-04-25T21:09:21.629Z"
+    }
+  ],
+  "nextIds": {
+    "project": 3,
+    "element": 2,
+    "projectRoom": 2
+  }
+}

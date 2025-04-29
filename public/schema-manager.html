@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suddeco Schema Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding-top: 20px; }
+        .section { margin-bottom: 30px; }
+        .card { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Suddeco Schema Manager</h1>
+        
+        <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="projects-tab" data-bs-toggle="tab" data-bs-target="#projects" type="button" role="tab">Projects</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="drawings-tab" data-bs-toggle="tab" data-bs-target="#drawings" type="button" role="tab">Drawings</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="stages-tab" data-bs-toggle="tab" data-bs-target="#stages" type="button" role="tab">Stages</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="tasks-tab" data-bs-toggle="tab" data-bs-target="#tasks" type="button" role="tab">Tasks</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="materials-tab" data-bs-toggle="tab" data-bs-target="#materials" type="button" role="tab">Materials</button>
+            </li>
+        </ul>
+        
+        <div class="tab-content" id="myTabContent">
+            <!-- Projects Tab -->
+            <div class="tab-pane fade show active" id="projects" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Create Project</div>
+                            <div class="card-body">
+                                <form id="create-project-form">
+                                    <div class="mb-3">
+                                        <label for="project-name" class="form-label">Name</label>
+                                        <input type="text" class="form-control" id="project-name" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="project-description" class="form-label">Description</label>
+                                        <textarea class="form-control" id="project-description"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="project-address" class="form-label">Address</label>
+                                        <input type="text" class="form-control" id="project-address" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="project-city" class="form-label">City</label>
+                                        <input type="text" class="form-control" id="project-city">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Create Project</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Projects List</div>
+                            <div class="card-body">
+                                <div id="projects-list" class="list-group">
+                                    <!-- Projects will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Drawings Tab -->
+            <div class="tab-pane fade" id="drawings" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">Upload Drawing</div>
+                    <div class="card-body">
+                        <form id="upload-drawing-form">
+                            <div class="mb-3">
+                                <label for="drawing-project" class="form-label">Project</label>
+                                <select class="form-control" id="drawing-project">
+                                    <!-- Projects will be loaded here -->
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="drawing-file" class="form-label">Drawing File (PDF or PNG)</label>
+                                <input type="file" class="form-control" id="drawing-file" accept=".pdf,.png" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Upload & Analyze</button>
+                        </form>
+                        
+                        <div class="mt-4">
+                            <h5>Analysis Results</h5>
+                            <div id="drawing-results" class="border p-3 bg-light">
+                                <p class="text-muted">Upload a drawing to see analysis results</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stages Tab -->
+            <div class="tab-pane fade" id="stages" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">Construction Stages</div>
+                    <div class="card-body">
+                        <div id="stages-list" class="list-group">
+                            <!-- Stages will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tasks Tab -->
+            <div class="tab-pane fade" id="tasks" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col">Construction Tasks</div>
+                            <div class="col-auto">
+                                <select id="task-stage-filter" class="form-select form-select-sm">
+                                    <option value="">All Stages</option>
+                                    <!-- Stages will be loaded here -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="tasks-list" class="list-group">
+                            <!-- Tasks will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Materials Tab -->
+            <div class="tab-pane fade" id="materials" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col">Construction Materials</div>
+                            <div class="col-auto">
+                                <select id="material-task-filter" class="form-select form-select-sm">
+                                    <option value="">All Tasks</option>
+                                    <!-- Tasks will be loaded here -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="materials-list" class="list-group">
+                            <!-- Materials will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Details Modal -->
+    <div class="modal fade" id="project-details-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Project Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="project-details-content">
+                    <!-- Project details will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // API Base URL - dynamically determine based on environment
+        const API_BASE = window.location.hostname.includes('netlify') ? 
+            '/.netlify/functions/api/api/schema' : 
+            '/api/schema';
+        
+        // DOM Elements
+        const projectsList = document.getElementById('projects-list');
+        const stagesList = document.getElementById('stages-list');
+        const tasksList = document.getElementById('tasks-list');
+        const materialsList = document.getElementById('materials-list');
+        const drawingProject = document.getElementById('drawing-project');
+        const taskStageFilter = document.getElementById('task-stage-filter');
+        const materialTaskFilter = document.getElementById('material-task-filter');
+        
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProjects();
+            loadStages();
+            loadTasks();
+            loadMaterials();
+            
+            // Setup form submissions
+            document.getElementById('create-project-form').addEventListener('submit', createProject);
+            document.getElementById('upload-drawing-form').addEventListener('submit', uploadDrawing);
+            
+            // Setup filters
+            taskStageFilter.addEventListener('change', () => loadTasks(taskStageFilter.value));
+            materialTaskFilter.addEventListener('change', () => loadMaterials(materialTaskFilter.value));
+        });
+        
+        // Load Projects
+        async function loadProjects() {
+            try {
+                const response = await fetch(`${API_BASE}/projects`);
+                const projects = await response.json();
+                
+                // Clear existing content
+                projectsList.innerHTML = '';
+                drawingProject.innerHTML = '<option value="">Select a project</option>';
+                
+                // Add projects to list and dropdown
+                projects.forEach(project => {
+                    // Add to projects list
+                    const item = document.createElement('a');
+                    item.href = '#';
+                    item.className = 'list-group-item list-group-item-action';
+                    item.innerHTML = `
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">${project.name}</h5>
+                            <small>${project.status}</small>
+                        </div>
+                        <p class="mb-1">${project.description || 'No description'}</p>
+                        <small>${project.address}, ${project.city}</small>
+                        <div class="text-muted mt-1"><small>ID: ${project.suddecoId || project.id}</small></div>
+                    `;
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        showProjectDetails(project.id);
+                    });
+                    projectsList.appendChild(item);
+                    
+                    // Add to dropdown
+                    const option = document.createElement('option');
+                    option.value = project.id;
+                    option.textContent = project.name;
+                    drawingProject.appendChild(option);
+                });
+                
+                if (projects.length === 0) {
+                    projectsList.innerHTML = '<p class="text-muted p-3">No projects found</p>';
+                }
+            } catch (error) {
+                console.error('Error loading projects:', error);
+                projectsList.innerHTML = '<p class="text-danger p-3">Error loading projects</p>';
+            }
+        }
+        
+        // Create Project
+        async function createProject(e) {
+            e.preventDefault();
+            
+            const projectData = {
+                name: document.getElementById('project-name').value,
+                description: document.getElementById('project-description').value,
+                address: document.getElementById('project-address').value,
+                city: document.getElementById('project-city').value,
+                status: 'on_going'
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/projects`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(projectData)
+                });
+                
+                if (response.ok) {
+                    // Reset form and reload projects
+                    document.getElementById('create-project-form').reset();
+                    loadProjects();
+                    alert('Project created successfully');
+                } else {
+                    const error = await response.json();
+                    alert(`Error: ${error.error || 'Unknown error'}`);
+                }
+            } catch (error) {
+                console.error('Error creating project:', error);
+                alert('Error creating project');
+            }
+        }
+        
+        // Show Project Details
+        async function showProjectDetails(projectId) {
+            try {
+                const response = await fetch(`${API_BASE}/projects/${projectId}`);
+                const project = await response.json();
+                
+                const modal = new bootstrap.Modal(document.getElementById('project-details-modal'));
+                const content = document.getElementById('project-details-content');
+                
+                // Format project details
+                content.innerHTML = `
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h4>${project.name}</h4>
+                            <p>${project.description || 'No description'}</p>
+                            <p><strong>Address:</strong> ${project.address}, ${project.city}, ${project.state} ${project.zipCode}</p>
+                            <p><strong>Status:</strong> ${project.status}</p>
+                            <p><strong>Dates:</strong> ${new Date(project.startDate).toLocaleDateString()} to ${new Date(project.endDate).toLocaleDateString()}</p>
+                            <p><strong>Suddeco ID:</strong> ${project.suddecoId || 'N/A'}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Total Cost:</strong> $${project.totalCost}</p>
+                            <p><strong>Labor Margin:</strong> ${project.labourMargin}%</p>
+                            <p><strong>Material Margin:</strong> ${project.materialMargin}%</p>
+                            <p><strong>Average Workers:</strong> ${project.averageWorkers}</p>
+                            <p><strong>Created:</strong> ${new Date(project.createdAt).toLocaleString()}</p>
+                        </div>
+                    </div>
+                    
+                    <h5>Rooms (${project.ProjectRooms?.length || 0})</h5>
+                    <div class="table-responsive mb-4">
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Dimensions</th>
+                                    <th>Suddeco ID</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${project.ProjectRooms?.map(room => `
+                                    <tr>
+                                        <td>${room.name}</td>
+                                        <td>${room.description || '-'}</td>
+                                        <td>${room.width}m × ${room.height}m × ${room.deepth}m</td>
+                                        <td><small>${room.suddecoId || 'N/A'}</small></td>
+                                    </tr>
+                                `).join('') || '<tr><td colspan="3" class="text-center">No rooms</td></tr>'}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h5>Elements (${project.Elements?.length || 0})</h5>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Room</th>
+                                    <th>Stage</th>
+                                    <th>Task</th>
+                                    <th>Material</th>
+                                    <th>Quantity</th>
+                                    <th>Cost</th>
+                                    <th>Suddeco ID</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${project.Elements?.map(element => `
+                                    <tr>
+                                        <td>Room ${element.roomId}</td>
+                                        <td>Stage ${element.stageId}</td>
+                                        <td>Task ${element.taskId}</td>
+                                        <td>Material ${element.materialId}</td>
+                                        <td>${element.qty}</td>
+                                        <td>$${element.materialCost + element.labourCost}</td>
+                                        <td><small>${element.suddecoId || 'N/A'}</small></td>
+                                    </tr>
+                                `).join('') || '<tr><td colspan="6" class="text-center">No elements</td></tr>'}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                
+                modal.show();
+            } catch (error) {
+                console.error('Error loading project details:', error);
+                alert('Error loading project details');
+            }
+        }
+        
+        // Upload Drawing
+        async function uploadDrawing(e) {
+            e.preventDefault();
+            
+            const projectId = document.getElementById('drawing-project').value;
+            const drawingFile = document.getElementById('drawing-file').files[0];
+            const resultsDiv = document.getElementById('drawing-results');
+            
+            if (!projectId) {
+                alert('Please select a project');
+                return;
+            }
+            
+            if (!drawingFile) {
+                alert('Please select a drawing file');
+                return;
+            }
+            
+            // Show loading state
+            resultsDiv.innerHTML = '<p class="text-info">Analyzing drawing... This may take a minute.</p>';
+            
+            const formData = new FormData();
+            formData.append('drawing', drawingFile);
+            formData.append('projectId', projectId);
+            
+            try {
+                const response = await fetch(`${API_BASE}/drawings/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Format and display results
+                    resultsDiv.innerHTML = `
+                        <div class="alert alert-success">Drawing processed successfully</div>
+                        <h6>File Information</h6>
+                        <p>Filename: ${result.fileInfo.filename}<br>
+                        Size: ${(result.fileInfo.size / 1024).toFixed(2)} KB<br>
+                        Type: ${result.fileInfo.type}</p>
+                        
+                        <h6>Analysis Results</h6>
+                        <pre class="bg-dark text-light p-3" style="max-height: 300px; overflow-y: auto;">${JSON.stringify(result.analysis, null, 2)}</pre>
+                    `;
+                    
+                    // Reload project data to show new elements
+                    loadProjects();
+                } else {
+                    resultsDiv.innerHTML = `
+                        <div class="alert alert-danger">Error: ${result.error}</div>
+                        <p>${result.details || ''}</p>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error uploading drawing:', error);
+                resultsDiv.innerHTML = `
+                    <div class="alert alert-danger">Error uploading drawing</div>
+                    <p>${error.message || ''}</p>
+                `;
+            }
+        }
+        
+        // Load Stages
+        async function loadStages() {
+            try {
+                const response = await fetch(`${API_BASE}/stages`);
+                const stages = await response.json();
+                
+                // Clear existing content
+                stagesList.innerHTML = '';
+                taskStageFilter.innerHTML = '<option value="">All Stages</option>';
+                
+                // Add stages to list and dropdown
+                stages.forEach(stage => {
+                    // Add to stages list
+                    const item = document.createElement('div');
+                    item.className = 'list-group-item';
+                    item.innerHTML = `
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">${stage.stage}</h5>
+                            <small>Priority: ${stage.priority}</small>
+                        </div>
+                        <p class="mb-1">Stage ID: ${stage.stageId}</p>
+                    `;
+                    stagesList.appendChild(item);
+                    
+                    // Add to dropdown
+                    const option = document.createElement('option');
+                    option.value = stage.stageId;
+                    option.textContent = stage.stage;
+                    taskStageFilter.appendChild(option);
+                });
+                
+                if (stages.length === 0) {
+                    stagesList.innerHTML = '<p class="text-muted p-3">No stages found</p>';
+                }
+            } catch (error) {
+                console.error('Error loading stages:', error);
+                stagesList.innerHTML = '<p class="text-danger p-3">Error loading stages</p>';
+            }
+        }
+        
+        // Load Tasks
+        async function loadTasks(stageId = '') {
+            try {
+                let url = `${API_BASE}/tasks`;
+                if (stageId) {
+                    url += `/search?stageId=${stageId}`;
+                }
+                
+                const response = await fetch(url);
+                const tasks = await response.json();
+                
+                // Clear existing content
+                tasksList.innerHTML = '';
+                materialTaskFilter.innerHTML = '<option value="">All Tasks</option>';
+                
+                // Add tasks to list and dropdown
+                tasks.forEach(task => {
+                    // Add to tasks list
+                    const item = document.createElement('div');
+                    item.className = 'list-group-item';
+                    item.innerHTML = `
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">${task.displayName || task.task}</h5>
+                            <small>Stage: ${task.stage}</small>
+                        </div>
+                        <p class="mb-1">Unit: ${task.unit} (${task.unitPlural})</p>
+                        <small>Task ID: ${task.taskId}, Element: ${task.cssElement}</small>
+                    `;
+                    tasksList.appendChild(item);
+                    
+                    // Add to dropdown
+                    const option = document.createElement('option');
+                    option.value = task.taskId;
+                    option.textContent = task.displayName || task.task;
+                    materialTaskFilter.appendChild(option);
+                });
+                
+                if (tasks.length === 0) {
+                    tasksList.innerHTML = '<p class="text-muted p-3">No tasks found</p>';
+                }
+            } catch (error) {
+                console.error('Error loading tasks:', error);
+                tasksList.innerHTML = '<p class="text-danger p-3">Error loading tasks</p>';
+            }
+        }
+        
+        // Load Materials
+        async function loadMaterials(taskId = '') {
+            try {
+                let url = `${API_BASE}/materials`;
+                if (taskId) {
+                    url += `/search?taskId=${taskId}`;
+                }
+                
+                const response = await fetch(url);
+                const materials = await response.json();
+                
+                // Clear existing content
+                materialsList.innerHTML = '';
+                
+                // Add materials to list
+                materials.forEach(material => {
+                    const item = document.createElement('div');
+                    item.className = 'list-group-item';
+                    item.innerHTML = `
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">${material.name}</h5>
+                            <small>Price: $${material.price}</small>
+                        </div>
+                        <p class="mb-1">Supplier: ${material.supplier}</p>
+                        <p class="mb-1">Category: ${material.category1} > ${material.category2}</p>
+                        <small>SKU: ${material.sku}, Material ID: ${material.materialId || material.id}</small>
+                    `;
+                    materialsList.appendChild(item);
+                });
+                
+                if (materials.length === 0) {
+                    materialsList.innerHTML = '<p class="text-muted p-3">No materials found</p>';
+                }
+            } catch (error) {
+                console.error('Error loading materials:', error);
+                materialsList.innerHTML = '<p class="text-danger p-3">Error loading materials</p>';
+            }
+        }
+    </script>
+</body>
+</html>

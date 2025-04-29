@@ -1,4 +1,8 @@
+
 # Environment variables
+
+# Environment variables (never commit these)
+
 .env
 
 # Node modules
@@ -36,6 +40,7 @@ jspm_packages/
 .env.test.local
 .env.production.local
 
+
 # Uploads folder content
 uploads/*
 !uploads/.gitkeep
@@ -43,3 +48,33 @@ uploads/*
 # Output folder content
 output/*
 !output/.gitkeep
+
+# Uploads folder content (but keep the folder)
+uploads/*
+!uploads/.gitkeep
+
+# Output folder content (but keep the folder)
+output/*
+!output/.gitkeep
+
+# PDF files (potentially containing sensitive information)
+*.pdf
+
+# Image files
+*.png
+*.jpg
+*.jpeg
+
+# Data files with sensitive information
+suddeco_data/
+
+# Backup folders
+backups/
+working-backup/
+final-backup/
+clean-project/
+
+# Temporary files
+*.tmp
+*.temp
+

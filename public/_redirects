@@ -1,0 +1,23 @@
+# Netlify redirects file
+
+# API routes
+/api/*  /.netlify/functions/api/:splat  200!
+
+# Schema API routes - explicit priority
+/api/schema/*  /.netlify/functions/api/api/schema/:splat  200!
+
+# Health check
+/health  /.netlify/functions/api/health  200!
+
+# Reports
+/reports/*  /.netlify/functions/api/reports/:splat  200!
+
+# Static pages
+/api-docs/*  /api-docs/:splat  200
+/construction-planner  /construction-planner.html  200
+/rag-chat  /rag-chat.html  200
+/schema-manager  /schema-manager.html  200
+/api-key-error  /api-key-error.html  200
+
+# Fallback
+/*  /index.html  200
