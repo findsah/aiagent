@@ -1077,18 +1077,7 @@ ${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parse
             analysisCache.set(cacheKey, enhancedAnalysis);
             
             return enhancedAnalysis;
-          } catch (error) {
-            console.error('Unexpected error in analysis process:', error);
-            // Use fallback in case of any unexpected errors
-            const defaultAnalysis = createDefaultArchitecturalAnalysis();
-            const enhancedAnalysis = enhanceMockDataWithExtractedText(defaultAnalysis, extractedText);
-            enhancedAnalysis.note = `Analysis process failed: ${error.message}. This is enhanced fallback data.`;
-            
-            // Cache the result
-            analysisCache.set(cacheKey, enhancedAnalysis);
-            
-            return enhancedAnalysis;
-          }
+
         } else {
           console.log('Extracted text is too short or empty, using default analysis');
           
