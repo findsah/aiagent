@@ -34,7 +34,7 @@ const CONFIG = {
   ENABLE_RAG: true,                   // Enable Retrieval-Augmented Generation
   ENABLE_ENHANCED_DESCRIPTIONS: true, // Enable detailed descriptions
   DEBUG_MODE: true,                   // Enable detailed logging
-  MAX_RETRIES: 3,                     // Maximum retries for API calls
+  MAX_RETRIES: 5,                     // Maximum retries for API calls
   CACHE_DURATION: 3600000,            // Cache duration in milliseconds (1 hour)
   FORCE_OPENAI: true,                 // Always use OpenAI for analysis, even if fallback would be triggered
   RETRY_ON_ERROR: true,               // Retry OpenAI calls with modified prompts if parsing fails
@@ -932,6 +932,36 @@ ${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parse
                   // Replace any N/A values with realistic estimates
                   const cleanedResult = replaceNAValues(analysisResult);
                   return cleanedResult;
+                  
+                  // Helper function to replace N/A values with more realistic estimates
+                  function replaceNAValues(obj) {
+                    if (!obj || typeof obj !== 'object') return obj;
+                    
+                    // Handle arrays
+                    if (Array.isArray(obj)) {
+                      return obj.map(item => replaceNAValues(item));
+                    }
+                    
+                    // Handle objects
+                    const result = {};
+                    for (const [key, value] of Object.entries(obj)) {
+                      if (value === 'N/A' || value === 'Not available' || value === 'Not specified') {
+                        // Replace with empty string or appropriate default value
+                        if (key.includes('dimension') || key.includes('length') || key.includes('width') || key.includes('height')) {
+                          result[key] = 'Not specified in drawing';
+                        } else if (key.includes('area')) {
+                          result[key] = 'Not specified in drawing';
+                        } else {
+                          result[key] = value;
+                        }
+                      } else if (typeof value === 'object' && value !== null) {
+                        result[key] = replaceNAValues(value);
+                      } else {
+                        result[key] = value;
+                      }
+                    }
+                    return result;
+                  }
                 } catch (jsonError) {
                   console.error('Error parsing JSON response:', jsonError);
                   throw jsonError; // Propagate the error for retry logic
@@ -940,6 +970,20 @@ ${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parse
                 // If we've reached max retries or FORCE_OPENAI is false, throw the error
                 if (retryCount >= CONFIG.MAX_RETRIES || !CONFIG.RETRY_ON_ERROR) {
                   throw error;
+                }
+                
+                // Special handling for rate limits
+                if (error.code === 'rate_limit_exceeded') {
+                  const retryAfterMs = error.headers?.['retry-after-ms'] || error.headers?.['retry-after'] * 1000 || 60000;
+                  console.log(`Rate limit exceeded. Waiting ${retryAfterMs/1000} seconds before retrying...`);
+                  
+                  // Wait for the recommended time before retrying
+                  await new Promise(resolve => setTimeout(resolve, retryAfterMs + 1000)); // Add 1 second buffer
+                } else {
+                  // For other errors, use exponential backoff
+                  const backoffTime = Math.min(1000 * Math.pow(2, retryCount), 30000); // Max 30 seconds
+                  console.log(`Error occurred. Backing off for ${backoffTime/1000} seconds before retry...`);
+                  await new Promise(resolve => setTimeout(resolve, backoffTime));
                 }
                 
                 console.log(`Retrying OpenAI analysis (attempt ${retryCount + 2}/${CONFIG.MAX_RETRIES + 1})`);
@@ -963,16 +1007,19 @@ ${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parse
                 console.log('Making final attempt with simplified prompt...');
                 
                 try {
+                  // Use a smaller model for the simplified attempt to avoid rate limits
                   const simplifiedResponse = await openai.chat.completions.create({
-                    model: "gpt-4-turbo",
+                    model: "gpt-3.5-turbo", // Use a smaller model that has higher rate limits
+                    temperature: 0.2, // Lower temperature for more consistent output
+                    response_format: { type: "json_object" }, // Force JSON output
                     messages: [
                       {
                         role: "system",
-                        content: "You are an architectural analysis assistant that returns only valid JSON."
+                        content: "You are an architectural analysis assistant that returns only valid JSON. Your response MUST be a valid JSON object with no additional text or explanation."
                       },
                       {
                         role: "user",
-                        content: `Analyze this architectural drawing and provide only the essential measurements and structural details.
+                        content: `Analyze this architectural drawing and provide only the essential measurements and structural details. Return ONLY a valid JSON object with no additional text.
 
 EXTRACTED TEXT FROM DRAWING:
 ${extractedText.substring(0, 4000)}
@@ -990,7 +1037,33 @@ CRITICAL INSTRUCTIONS:
                   });
                   
                   const simplifiedResult = simplifiedResponse.choices[0].message.content;
-                  const parsedResult = JSON.parse(simplifiedResult);
+                  
+                  // Safely parse the JSON result
+                  let parsedResult;
+                  try {
+                    // First try direct parsing
+                    parsedResult = JSON.parse(simplifiedResult);
+                  } catch (jsonError) {
+                    console.log('Error parsing simplified response JSON, attempting to clean the response...');
+                    try {
+                      // Try to extract JSON if there's any extra text
+                      const jsonMatch = simplifiedResult.match(/\{[\s\S]*\}/);
+                      if (jsonMatch) {
+                        parsedResult = JSON.parse(jsonMatch[0]);
+                      } else {
+                        throw new Error('Could not extract valid JSON from response');
+                      }
+                    } catch (extractError) {
+                      console.error('Failed to extract valid JSON:', extractError);
+                      // Create a minimal valid result
+                      parsedResult = {
+                        drawing_scale: 'Not available',
+                        building_analysis: {
+                          description: 'Analysis could not be completed due to parsing errors.'
+                        }
+                      };
+                    }
+                  }
                   
                   // Add a note about the simplified analysis
                   parsedResult.note = 'This is a simplified analysis after previous attempts failed.';
