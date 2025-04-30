@@ -1236,16 +1236,16 @@ ${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parse
                 return enhancedAnalysis;
               }
             } else {
-          console.log('Extracted text is too short or empty, using default analysis');
-          
-          // If extracted text is too short, return default analysis
-          const defaultAnalysis = createDefaultArchitecturalAnalysis();
-          
-          // Cache the result
-          analysisCache.set(cacheKey, defaultAnalysis);
-          
-          return defaultAnalysis;
-        }
+              console.log('Extracted text is too short or empty, using default analysis');
+              
+              // If extracted text is too short, return default analysis
+              const defaultAnalysis = createDefaultArchitecturalAnalysis();
+              
+              // Cache the result
+              analysisCache.set(cacheKey, defaultAnalysis);
+              
+              return defaultAnalysis;
+            }
       } catch (pdfError) {
         console.error('Error parsing PDF:', pdfError);
         
@@ -1257,17 +1257,18 @@ ${retryCount > 0 ? 'RETRY INSTRUCTION: Your previous response could not be parse
         
         return defaultAnalysis;
       }
-    } else {
-      console.log(`File type ${fileType} not supported for direct analysis, using default analysis`);
-      
-      // If file type is not supported, return default analysis
-      const defaultAnalysis = createDefaultArchitecturalAnalysis();
-      
-      // Cache the result
-      analysisCache.set(cacheKey, defaultAnalysis);
-      
-      return defaultAnalysis;
     }
+    
+    // Handle non-PDF file types
+    console.log(`File type ${fileType} not supported for direct analysis, using default analysis`);
+    
+    // If file type is not supported, return default analysis
+    const defaultAnalysis = createDefaultArchitecturalAnalysis();
+    
+    // Cache the result
+    analysisCache.set(cacheKey, defaultAnalysis);
+    
+    return defaultAnalysis;
 
   } catch (error) {
     console.error('Error analyzing drawing:', error);
